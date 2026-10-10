@@ -3,6 +3,7 @@
 This project is a 100% open-source, autonomous multi-agent system designed to act as an expert **Lead Solution & Enterprise Architect**, following the TOGAF ADM framework.
 
 ## Project Structure
+- `docs/craftsmanship-safe-testing-strategy.md`: Software Craftsmanship & SAFe 6 engineering strategy (Hexagonal Architecture, AI Testing Pyramid, DoD).
 - `docs/dossier-architecture-visuelle.md`: Complete visual & functional architecture dossier (living documentation with C4 and Sequence diagrams).
 - `docs/architecture-cible-togaf.md`: Target architecture dossier based on TOGAF ADM.
 - `docs/roadmap-implementation.md`: Step-by-step implementation roadmap (Bricks 1 to 5).
