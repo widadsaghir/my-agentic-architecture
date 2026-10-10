@@ -1,40 +1,80 @@
-import os
+import sys
 import argparse
-from crewai import Agent, Task, Crew, Process
+from pathlib import Path
 
-def run_architecture_platform():
-    parser = argparse.ArgumentParser(description="Multi-Agent Architecture Platform (AAP)")
-    parser.add_argument("--language", type=str, default="English", help="Target language for output (e.g. English, French)")
-    parser.add_argument("--input", type=str, required=True, help="Raw framing notes or project request")
-    args = parser.parse_args()
+# Assurer que le répertoire racine est bien dans le PYTHONPATH
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
 
-    print(f"Initializing Multi-Agent Architecture Platform in [{args.language}]...")
-    print(f"Input Request: {args.input}")
+from src.config import get_config
+from src.agents import create_manager_agent, create_solution_architect_agent
+from src.tasks import create_preliminary_design_task
+from crewai import Crew, Process
 
-    # Define Agent Manager (Orchestrator)
-    manager = Agent(
-        role='Lead Enterprise Architecture Manager',
-        goal='Orchestrate the multi-agent dream team to produce comprehensive TOGAF/SAFe compliant architecture deliverables.',
-        backstory='Experienced Enterprise Architect leading end-to-end IT transformations and multi-agent systems.',
-        verbose=True
+def parse_arguments():
+    parser = argparse.ArgumentParser(
+        description="Multi-Agent Architecture Platform (AAP) — Système Multi-Agents TOGAF ADM"
+    )
+    parser.add_argument(
+        "--language",
+        type=str,
+        default="English",
+        help="Langue cible pour les livrables d'architecture (ex : French, English, Spanish)"
+    )
+    parser.add_argument(
+        "--input",
+        type=str,
+        required=True,
+        help="Notes de cadrage brutes, expression de besoin ou fichier d'entrée"
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        default=None,
+        help="Chemin optionnel pour enregistrer le livrable Markdown produit"
+    )
+    return parser.parse_args()
+
+def main():
+    args = parse_arguments()
+
+    print("==================================================================")
+    print("  🚀 Multi-Agent Architecture Platform (AAP) — Initialisation")
+    print("==================================================================")
+    print(f"• Langue cible configurée : [{args.language}]")
+    print(f"• Requête d'entrée       : {args.input[:100]}..." if len(args.input) > 100 else f"• Requête d'entrée       : {args.input}")
+
+    # 1. Chargement de la configuration et des clés Gemini
+    try:
+        config = get_config()
+    except Exception as e:
+        print(f"\n❌ Erreur de configuration : {e}")
+        sys.exit(1)
+
+    print(f"• Modèle Worker (Spécialistes) : {config.worker_model}")
+    print(f"• Modèle Manager (Orchestrateur): {config.manager_model}")
+
+    # 2. Instanciation des modèles LLM Gemini
+    try:
+        worker_llm = config.get_worker_llm()
+        manager_llm = config.get_manager_llm()
+    except Exception as e:
+        print(f"\n❌ Erreur lors de l'initialisation des modèles Gemini : {e}")
+        sys.exit(1)
+
+    # 3. Création des agents
+    manager = create_manager_agent(manager_llm)
+    solution_architect = create_solution_architect_agent(worker_llm)
+
+    # 4. Création des tâches
+    design_task = create_preliminary_design_task(
+        agent=solution_architect,
+        user_input=args.input,
+        language=args.language
     )
 
-    # Define Solution Architect Agent
-    solution_architect = Agent(
-        role='Solution & Infrastructure Architect',
-        goal='Design robust, agnostic technical architectures (Cloud, Hybrid, or On-Premise).',
-        backstory='Expert in resilient systems design, well-architected frameworks, and infrastructure patterns.',
-        verbose=True
-    )
-
-    # Define Task
-    design_task = Task(
-        description=f"Analyze the following request: '{args.input}'. Propose a preliminary technical architecture approach in {args.language}.",
-        expected_output="A structured technical architecture outline containing infrastructure choices and rationale.",
-        agent=solution_architect
-    )
-
-    # Crew Setup
+    # 5. Assemblage de la Crew
     crew = Crew(
         agents=[solution_architect],
         tasks=[design_task],
@@ -43,9 +83,25 @@ def run_architecture_platform():
         verbose=True
     )
 
-    result = crew.kickoff()
-    print("\n=== EXECUTION RESULT ===")
+    print("\n▶️ Lancement de l'orchestration multi-agents...")
+    try:
+        result = crew.kickoff()
+    except Exception as e:
+        print(f"\n❌ Erreur lors de l'exécution de la Crew : {e}")
+        sys.exit(1)
+
+    print("\n==================================================================")
+    print("  ✅ LIVRABLE D'ARCHITECTURE GÉNÉRÉ")
+    print("==================================================================")
     print(result)
 
+    # Sauvegarde optionnelle
+    if args.output:
+        output_path = Path(args.output)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(str(result))
+        print(f"\n💾 Livrable enregistré avec succès dans : {output_path}")
+
 if __name__ == "__main__":
-    run_architecture_platform()
+    main()

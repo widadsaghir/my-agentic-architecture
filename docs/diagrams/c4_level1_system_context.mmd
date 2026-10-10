@@ -1,0 +1,18 @@
+flowchart TD
+    User["👤 Lead Architect (Human-in-the-Loop)"]
+    AAP["🖥️ Multi-Agent Architecture Platform (AAP)<br/><i>Plateforme multi-agents CrewAI & Gemini</i>"]
+    Knowledge["📚 Doctrine & Sources de Connaissance<br/><i>Blueprints, DAT templates, TOGAF</i>"]
+    GeminiAPI["☁️ Google Gemini API<br/><i>Gemini 1.5 Pro & 1.5 Flash</i>"]
+    GitRepo["📦 Dépôt Git & Livrables<br/><i>DAT.md, Schémas .puml, Decks</i>"]
+
+    User -->|"1. Paramètres (--language, --input) & validation HITL"| AAP
+    AAP -->|"2. Interrogation RAG"| Knowledge
+    AAP -->|"3. Requêtes d'inférence LLM"| GeminiAPI
+    AAP -->|"4. Sauvegarde des livrables"| GitRepo
+    AAP -->|"5. Restitution du rapport validé"| User
+
+    style User fill:#D4E6F1,stroke:#2980B9,stroke-width:2px
+    style AAP fill:#AED6F1,stroke:#1F618D,stroke-width:3px
+    style Knowledge fill:#D5F5E3,stroke:#27AE60,stroke-width:2px
+    style GeminiAPI fill:#FCF3CF,stroke:#F39C12,stroke-width:2px
+    style GitRepo fill:#EDBB99,stroke:#D35400,stroke-width:2px

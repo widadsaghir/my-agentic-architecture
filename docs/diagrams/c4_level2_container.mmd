@@ -1,0 +1,40 @@
+flowchart TB
+    User["👤 Lead Architect (Human-in-the-Loop)"]
+    GeminiService["☁️ Google Gemini Cloud Service<br/><i>gemini-1.5-flash & gemini-1.5-pro</i>"]
+    LocalFS["💾 Système de Fichiers & Git<br/><i>DAT.md, Schémas .puml, .env</i>"]
+
+    subgraph AAP ["🖥️ Multi-Agent Architecture Platform (AAP)"]
+        direction TB
+        CLI["💻 Interface CLI (main.py)<br/><i>argparse (--language, --input)</i>"]
+        ConfigMgr["⚙️ Config & LLM Manager (settings.py)<br/><i>dotenv, LangChain Google GenAI</i>"]
+        CrewEngine["🧠 Moteur CrewAI<br/><i>Processus d'orchestration</i>"]
+        
+        subgraph Fleet ["👥 Brigade d'Agents Spécialisés"]
+            ManagerAgent["👑 Manager (TOGAF Lead)"]
+            SolutionAgent["🏗️ Solution Architect"]
+            CisoAgent["🛡️ CISO (Sécurité/C2)"]
+            ChallengerAgent["🎯 Challenger (Red Team)"]
+        end
+
+        TaskFactory["📋 Fabrique de Tâches<br/><i>Injection langue & contraintes</i>"]
+        VectorDB["🗄️ Base RAG (ChromaDB)<br/><i>Indexation blueprints & normes</i>"]
+        Exporter["📤 Exportateur de Livrables<br/><i>Générateur DAT & PlantUML</i>"]
+    end
+
+    User -->|"Lance la commande CLI"| CLI
+    CLI -->|"Charge la config"| ConfigMgr
+    ConfigMgr -->|"Connecte les LLMs"| GeminiService
+    CLI -->|"Déclenche l'orchestration"| CrewEngine
+    CrewEngine -->|"Coordonne"| Fleet
+    Fleet -->|"Reçoit les instructions"| TaskFactory
+    Fleet -->|"Interroge les patterns"| VectorDB
+    Fleet -->|"Inférences LLM"| GeminiService
+    CrewEngine -->|"Consolide les livrables"| Exporter
+    Exporter -->|"Écrit les fichiers"| LocalFS
+    CLI -->|"Restitue la synthèse"| User
+
+    style User fill:#D4E6F1,stroke:#2980B9,stroke-width:2px
+    style GeminiService fill:#FCF3CF,stroke:#F39C12,stroke-width:2px
+    style LocalFS fill:#EDBB99,stroke:#D35400,stroke-width:2px
+    style AAP fill:#F2F4F4,stroke:#7F8C8D,stroke-width:2px
+    style Fleet fill:#E8F8F5,stroke:#1ABC9C,stroke-width:2px

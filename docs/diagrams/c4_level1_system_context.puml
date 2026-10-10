@@ -1,0 +1,45 @@
+@startuml
+skinparam defaultFontSize 16
+skinparam defaultFontColor #000000
+skinparam roundcorner 10
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 120
+skinparam ranksep 120
+
+top to bottom direction
+
+title C4 Model - Niveau 1 : Contexte Système - Multi-Agent Architecture Platform (AAP)
+
+actor "Lead Architect\n(Human-in-the-Loop)" as User #D4E6F1
+
+rectangle "==Multi-Agent Architecture Platform (AAP)\n\nPlateforme logicielle autonome d'ingénierie d'architecture basée sur CrewAI et l'API Gemini." as AAP #AED6F1
+
+rectangle "==Sources de Connaissance & Doctrine\n\nBlueprints d'architecture, templates de DAT, matrices de flux et référentiels TOGAF." as Knowledge #D5F5E3
+
+rectangle "==Google Gemini API (Cloud)\n\nModèles de langage pour le raisonnement (Gemini 1.5 Pro) et l'exécution spécialisée (Gemini 1.5 Flash)." as GeminiAPI #FCF3CF
+
+rectangle "==Dépôt Git & Livrables\n\nStockage des DATs, diagrammes PlantUML et dossiers d'arbitrage en Architecture-as-Code." as GitRepo #EDBB99
+
+' Relations
+User ---> AAP : 1. Fournit les paramètres (--language, --input)\net valide les arbitrages (HITL)
+AAP ---> Knowledge : 2. Interroge les patterns & doctrines (RAG)
+AAP ---> GeminiAPI : 3. Transmet les requêtes d'inférence et d'analyse
+AAP ---> GitRepo : 4. Exporte les dossiers d'architecture (DAT.md, .puml)
+AAP ---> User : 5. Restitue le rapport final validé
+
+legend right
+  |= Type de Ligne |= Signification |
+  | ---> | Échange synchrone / Dépendance directe |
+endlegend
+
+note bottom of AAP
+  **1. Type de Diagramme :** C4 Model - Niveau 1 (System Context Diagram).
+  **(Définition) :** Représente le système global dans son écosystème, ses utilisateurs et ses dépendances externes.
+  **2. Utilité :** Donner une vision macroscopique des interactions du système AAP sans entrer dans la technique interne.
+  **3. Standard :** C4 Model & TOGAF Business Architecture (Phase B).
+  **4. Équivalent UML :** Diagramme de Cas d'Utilisation / Diagramme de Composants UML.
+  **5. Résumé :** Montre comment le Lead Architect pilote la plateforme AAP via la CLI, comment celle-ci s'appuie sur la doctrine et Gemini, et génère les livrables dans Git.
+end note
+
+@enduml

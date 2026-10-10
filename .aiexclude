@@ -1,0 +1,16 @@
+# Ignore large dependency directories
+venv/
+.venv/
+__pycache__/
+
+# Ignore system or environment files
+.env
+.env.*
+*.key
+*.pem
+secrets/
+config/credentials/
+
+# Ignore database & cache
+chroma_db/
+private/

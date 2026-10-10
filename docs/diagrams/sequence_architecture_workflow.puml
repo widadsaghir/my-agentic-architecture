@@ -1,0 +1,95 @@
+@startuml
+skinparam defaultFontSize 16
+skinparam defaultFontColor #000000
+skinparam roundcorner 10
+skinparam shadowing false
+skinparam responseMessageBelowArrow true
+
+title Diagramme de Séquence - Workflow d'Exécution & Cycle Reflection/Critique (AAP)
+
+actor "Lead Architect\n(Human-in-the-Loop)" as User #D4E6F1
+participant "CLI Runner\n(src/main.py)" as CLI #D6EAF8
+participant "Configuration\n(settings.py)" as Config #E8F8F5
+participant "Manager Agent\n(TOGAF Lead)" as Manager #AED6F1
+participant "Solution Architect\n(Worker)" as SolutionAgent #A9DFBF
+participant "Base RAG\n(ChromaDB)" as RAG #FAD7A0
+participant "Challenger Agent\n(Red Team)" as Challenger #FADBD8
+participant "Google Gemini API\n(Flash / Pro)" as GeminiAPI #FCF3CF
+participant "Système de Fichiers\n(DAT / .puml)" as FileSystem #EDBB99
+
+== 1. Initialisation & Chargement ==
+User -> CLI : python src/main.py --language "French" --input "Notes de cadrage"
+activate CLI
+
+CLI -> Config : get_config() & instanciation des LLMs
+activate Config
+Config -> Config : Charge .env & valide GEMINI_API_KEY
+Config --> CLI : worker_llm (Flash) & manager_llm (Pro)
+deactivate Config
+
+CLI -> CLI : Instancie Manager & Solution Architect
+CLI -> CLI : Crée la tâche avec injection de la langue cible
+
+== 2. Orchestration & Conception Technique ==
+CLI -> Manager : crew.kickoff()
+activate Manager
+
+Manager -> SolutionAgent : Délègue l'analyse d'architecture technique
+activate SolutionAgent
+
+SolutionAgent -> RAG : Recherche de blueprints similaires (RAG Query)
+activate RAG
+RAG --> SolutionAgent : Retours sémantiques (patterns, règles TOGAF)
+deactivate RAG
+
+SolutionAgent -> GeminiAPI : Inférence LLM (Prompt + Notes + Contexte RAG) [Gemini Flash]
+activate GeminiAPI
+GeminiAPI --> SolutionAgent : Ébauche de proposition d'architecture
+deactivate GeminiAPI
+
+== 3. Boucle Reflection & Critique (Challenger / Red Team) ==
+SolutionAgent -> Challenger : Soumet la proposition pour revue contradictoire
+activate Challenger
+
+Challenger -> GeminiAPI : Audit sécurité, détection SPOF & sur-coûts [Gemini Flash]
+activate GeminiAPI
+GeminiAPI --> Challenger : Liste des faiblesses et contre-propositions
+deactivate GeminiAPI
+
+Challenger --> SolutionAgent : Feedback critique & recommandations d'ajustement
+deactivate Challenger
+
+SolutionAgent -> SolutionAgent : Ajuste et finalise la proposition technique
+SolutionAgent --> Manager : Restitue la proposition d'architecture consolidée
+deactivate SolutionAgent
+
+== 4. Synthèse, Validation HITL & Restitution ==
+Manager -> GeminiAPI : Synthèse globale du DAT en langue cible [Gemini 1.5 Pro]
+activate GeminiAPI
+GeminiAPI --> Manager : Document d'architecture finalisé
+deactivate GeminiAPI
+
+Manager --> CLI : Résultat final de la Crew
+deactivate Manager
+
+CLI -> User : 🛑 Présentation pour validation Human-in-the-Loop (HITL)
+User -> CLI : Approbation formelle
+
+CLI -> FileSystem : Enregistrement de DAT.md et des schémas C4 .puml
+activate FileSystem
+FileSystem --> CLI : Fichiers créés avec succès
+deactivate FileSystem
+
+CLI --> User : Affichage de la synthèse & confirmation de sauvegarde
+deactivate CLI
+
+note bottom of User
+  **1. Type de Diagramme :** Diagramme de Séquence UML.
+  **(Définition) :** Représente l'ordre chronologique des échanges et messages entre les acteurs et composants.
+  **2. Utilité :** Expliciter le cycle complet de traitement, depuis la commande CLI jusqu'à la production du livrable.
+  **3. Standard :** UML 2.5 / TOGAF Phase F (Plan de Transition & Exécution).
+  **4. Équivalent UML :** Diagramme de Séquence d'Interaction.
+  **5. Résumé :** Décrit les 4 étapes majeures : initialisation, conception enrichie par RAG, challenge contradictoire (Red Team), et validation humaine avant export.
+end note
+
+@enduml

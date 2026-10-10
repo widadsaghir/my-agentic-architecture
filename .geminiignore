@@ -1,0 +1,20 @@
+# Ignore dependency directories
+venv/
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+
+# Ignore environment and secret files
+.env
+.env.*
+*.key
+*.pem
+secrets/
+config/credentials/
+
+# Ignore local database & cache
+*.chroma/
+chroma_db/
+.cache/
+tmp/

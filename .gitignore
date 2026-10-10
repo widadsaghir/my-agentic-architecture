@@ -1,0 +1,30 @@
+# Environment variables & secrets
+.env
+.env.*
+*.key
+*.pem
+secrets/
+
+# Python & virtual environment
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+
+# Distribution & build
+dist/
+build/
+*.egg-info/
+
+# Local Vector DB & Caches
+chroma_db/
+.chroma/
+.cache/
+tmp/
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
