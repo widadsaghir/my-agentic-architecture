@@ -5,7 +5,8 @@
   1. *Architecture as Code (AaC)*: All deliverables are version-controlled as text (Markdown, PlantUML, Python) in Git.
   2. *Self-Evolution & Meta-Maintenance*: The system self-maintains via a Meta-Agent.
   3. *Human-in-the-Loop (HITL)*: Mandatory validation by the architect before any production/Git push.
-  4. *Zero-Trust & Data Classification*: Strict handling of data sensitivity and secrets.
+  4. *Zero-Trust & Data Classification*: Strict handling of data sensitivity (C0, C1, C2, C2 massive) and secrets.
+  5. *Multi-Framework Architecture Doctrine*: Hybrid approach combining TOGAF 10 ADM & SAFe 6 with Cloud Well-Architected Frameworks (WAF), Hexagonal/DDD patterns, NIST AI RMF, ISO/IEC 42001, and Agentic Design Patterns.
 
 ---
 
