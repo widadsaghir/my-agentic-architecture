@@ -3,10 +3,11 @@
 This project is a 100% open-source, autonomous multi-agent system designed to act as an expert **Lead Solution & Enterprise Architect**, following the TOGAF ADM framework.
 
 ## Project Structure
+- `docs/dossier-architecture-visuelle.md`: Complete visual & functional architecture dossier (living documentation with C4 and Sequence diagrams).
 - `docs/architecture-cible-togaf.md`: Target architecture dossier based on TOGAF ADM.
 - `docs/roadmap-implementation.md`: Step-by-step implementation roadmap (Bricks 1 to 5).
 - `docs/guide-installation-environnement.md`: Detailed environment & setup guide (Windows PowerShell).
-- `docs/diagrams/`: Architectural diagrams (C4 Model & Sequence diagrams in PlantUML & Mermaid).
+- `docs/diagrams/`: Raw source files (PlantUML `.puml`, Mermaid `.mmd`, Draw.io `.drawio`).
 - `src/main.py`: Main orchestration script using CrewAI and Gemini API.
 - `setup.ps1`: Automated 1-click PowerShell installation script.
 - `requirements.txt`: Project Python dependencies.
