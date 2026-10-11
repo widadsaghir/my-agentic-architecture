@@ -8,8 +8,15 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 from src.config import get_config
-from src.agents import create_manager_agent, create_solution_architect_agent
-from src.tasks import create_preliminary_design_task
+from src.agents import (
+    create_manager_agent,
+    create_solution_architect_agent,
+    create_ciso_agent
+)
+from src.tasks import (
+    create_preliminary_design_task,
+    create_security_audit_task
+)
 from crewai import Crew, Process
 
 def parse_arguments():
@@ -63,27 +70,34 @@ def main():
         print(f"\n❌ Erreur lors de l'initialisation des modèles Gemini : {e}")
         sys.exit(1)
 
-    # 3. Création des agents
+    # 3. Création de la brigade d'agents
     manager = create_manager_agent(manager_llm)
     solution_architect = create_solution_architect_agent(worker_llm)
+    ciso = create_ciso_agent(worker_llm)
 
-    # 4. Création des tâches
+    # 4. Création des tâches enchaînées (Conception -> Audit CISO)
     design_task = create_preliminary_design_task(
         agent=solution_architect,
         user_input=args.input,
         language=args.language
     )
 
+    security_task = create_security_audit_task(
+        agent=ciso,
+        context_tasks=[design_task],
+        language=args.language
+    )
+
     # 5. Assemblage de la Crew
     crew = Crew(
-        agents=[solution_architect],
-        tasks=[design_task],
+        agents=[solution_architect, ciso],
+        tasks=[design_task, security_task],
         process=Process.sequential,
         manager_agent=manager,
         verbose=True
     )
 
-    print("\n▶️ Lancement de l'orchestration multi-agents...")
+    print("\n▶️ Lancement de l'orchestration multi-agents (Solution Architect + CISO)...")
     try:
         result = crew.kickoff()
     except Exception as e:
@@ -91,7 +105,7 @@ def main():
         sys.exit(1)
 
     print("\n==================================================================")
-    print("  ✅ LIVRABLE D'ARCHITECTURE GÉNÉRÉ")
+    print("  ✅ DOSSIER D'ARCHITECTURE & AVIS CISO GÉNÉRÉS")
     print("==================================================================")
     print(result)
 

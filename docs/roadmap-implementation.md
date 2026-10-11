@@ -48,13 +48,20 @@ Construire une plateforme open-source autonome d'ingénierie d'architecture bas�
 ### Brique 2 : Brigade d'Agents Spécialisés
 *Objectif : Déployer les personas d'architecture selon les phases TOGAF B, C et D.*
 
-*   [ ] **2.1 Agent CISO / Sécurité :**
+*   [x] **2.1 Agent CISO / Sécurité :**
     *   Analyse des classifications de données (C1, C2, C2 massif).
-    *   Vérification des exigences de chiffrement au repos/en transit, gestion des secrets, conformité Zero-Trust.
-*   [ ] **2.2 Agent Challenger / Red Team (Pattern Reflection & Critique) :**
+    *   Vérification des exigences de chiffrement au repos/en transit, gestion des secrets, conformité Zero-Trust (NIST SP 800-207).
+    *   Tâche d'audit de sécurité et avis d'homologation DCA formel.
+*   [x] **2.2 Agent Software Crafter & Domain-Driven Design (DDD) :**
+    *   Maître des micro-patterns logiciels (Architecture Hexagonale Ports & Adapters, découplage métier).
+    *   Garantie de la testabilité unitaire (TDD), des principes SOLID et de la simplicité (KISS/YAGNI).
+*   [x] **2.3 Agent SAFe System Architect & Agile Delivery Enabler :**
+    *   Traduction automatique du DAT en éléments de backlog Jira (Enabler Epics, Enabler Features, User Stories techniques).
+    *   Critères d'acceptation opérationnels et Definition of Done (DoD) pour les trains SAFe (ART).
+*   [ ] **2.4 Agent Challenger / Red Team (Pattern Reflection & Critique) :**
     *   Identification proactive des SPOF (Single Points of Failure).
     *   Challenger les choix du Solution Architect (scalabilité, résilience, sur-ingénierie).
-*   [ ] **2.3 Agent Migration, FinOps & TCO :**
+*   [ ] **2.5 Agent Migration, FinOps & TCO :**
     *   Estimation des coûts comparatifs (On-premise vs Cloud IaaS/PaaS/SaaS).
     *   Scénarios de transition et jalons de bascule.
 

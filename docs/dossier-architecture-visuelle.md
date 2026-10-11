@@ -29,26 +29,43 @@ Dans un environnement d'entreprise moderne, aucun cadre unique ne peut couvrir l
     │                                  AGENT MANAGER (Orchestrateur)                              │
     │  • Méthode & Gouvernance : TOGAF 10 ADM (Phases A à G) + SAFe 6 for Architects             │
     │  • Éthique & Risques IA  : NIST AI RMF + ISO/IEC 42001 + EU AI Act (Transparence/Audits)    │
-    └──────────────┬───────────────────────────────┬───────────────────────────────┬──────────────┘
-                   │                               │                               │
-    ┌──────────────▼─────────────┐  ┌──────────────▼─────────────┐  ┌──────────────▼─────────────┐
-    │    SOLUTION ARCHITECT      │  │      CISO / SÉCURITÉ       │  │    CHALLENGER / RED TEAM    │
-    │ • Cloud Well-Architected   │  │ • Zero Trust Architecture  │  │ • Pattern Agentic          │
-    │   (AWS/Azure/GCP WAF)      │  │   (NIST SP 800-207)        │  │   Reflection & Critique    │
-    │ • Architecture Hexagonale  │  │ • Classification Données   │  │ • Détection des SPOF       │
-    │   (Ports & Adapters)       │  │   (C0, C1, C2, C2 massif)  │  │ • Anti-patterns logiciels  │
-    │ • Domain-Driven Design     │  │ • OWASP Top 10 for LLMs    │  │ • Traque de la             │
-    │ • Event-Driven (EDA/Kafka) │  │ • RGPD & Chiffrement (CMK) │  │   sur-ingénierie (YAGNI)   │
-    └──────────────┬─────────────┘  └──────────────┬─────────────┘  └──────────────┬─────────────┘
-                   │                               │                               │
-                   └───────────────────────────────┼───────────────────────────────┘
-                                                   │
-                           ┌───────────────────────▼───────────────────────┐
-                           │            AGENT MIGRATION & TCO              │
-                           │ • Well-Architected Pilier FinOps / Coûts      │
-                           │ • Modèles TCO Cloud Providers & Trajectoires  │
-                           └───────────────────────────────────────────────┘
+    └──────┬───────────────────────┬───────────────────────┬───────────────────────┬──────────────┘
+           │                       │                       │                       │
+┌──────────▼──────────┐ ┌──────────▼──────────┐ ┌──────────▼──────────┐ ┌──────────▼──────────┐
+│ SOLUTION ARCHITECT  │ │   CISO / SÉCURITÉ   │ │   SOFTWARE CRAFTER  │ │  SAFE SYSTEM ARCH   │
+│ (Macro-Patterns)    │ │ (Sécurité & C2)     │ │ (Micro-Patterns)    │ │ (Agile Delivery)    │
+│ • Cloud WAF         │ │ • Zero-Trust (NIST) │ │ • Arch. Hexagonale  │ │ • Enabler Epics     │
+│ • EDA / Kafka       │ │ • Classif. C2 massif│ │ • Domain Design DDD │ │ • Features & Stories│
+│ • Outbox & Strangler│ │ • Chiffrement (CMK) │ │ • TDD & Clean Code  │ │ • Backlog Jira      │
+│ • Circuit Breakers  │ │ • Conformité DCA    │ │ • SOLID, KISS, YAGNI│ │ • DoD opérationnelle│
+└──────────┬──────────┘ └──────────┬──────────┘ └──────────┬──────────┘ └──────────┬──────────┘
+           │                       │                       │                       │
+           └───────────────────────┼───────────────────────┴───────────────────────┘
+                                   │
+                    ┌──────────────▼─────────────┐
+                    │    CHALLENGER / RED TEAM   │
+                    │ • Pattern Reflection       │
+                    │ • Détection des SPOF       │
+                    │ • Traque de l'usine à gaz  │
+                    └──────────────┬─────────────┘
+                                   │
+                    ┌──────────────▼─────────────┐
+                    │    AGENT MIGRATION & TCO   │
+                    │ • Pilier FinOps & Coûts    │
+                    │ • Modèles TCO Cloud        │
+                    └────────────────────────────┘
 ```
+
+### Qui choisit les Patterns d'Architecture ? (La Matrice de Responsabilité)
+
+Le choix des patterns d'architecture s'articule à trois niveaux complémentaires :
+
+| Échelle du Pattern | Responsable | Patterns types sélectionnés | Source de Vérité |
+| :--- | :--- | :--- | :--- |
+| **1. Macro-Patterns**<br>*(Système, Flux, Résilience)* | **Solution Architect** | • **Event-Driven Architecture (EDA)** : découplage asynchrone Kafka pour charges massives.<br>• **Transactional Outbox** : cohérence BDD / broker d'événements.<br>• **Strangler Fig** : migration progressive vers le Cloud sans effet Big Bang.<br>• **Circuit Breaker** : isolation des pannes externes. | Catalogue Cloud WAF & Base RAG |
+| **2. Micro-Patterns**<br>*(Domaine, Code, Testabilité)* | **Software Crafter** | • **Architecture Hexagonale (Ports & Adapters)** : cœur métier indépendant des frameworks.<br>• **Domain-Driven Design (DDD)** : Aggregates, Entities, Value Objects.<br>• **Test Doubles & Inversion de dépendance** : testabilité TDD à 100%. | Standards Craftsmanship & Clean Code |
+| **3. Traque de la Sur-Ingénierie**<br>*(Challenge & Simplification)* | **Challenger (Red Team)** | • **Détection du Golden Hammer** : vérifier qu'on ne met pas un pattern complexe (ex: CQRS) là où un simple CRUD suffit.<br>• **Principe YAGNI / KISS** : élimination du code mort anticipé et des briques superflues. | Heuristiques SRE & Anti-patterns |
+| **4. Passage au Delivery**<br>*(Exécution dans les Sprints)* | **SAFe Agile Enabler** | • **Découpage vertical** : traduction de chaque pattern en tranches fines (Enabler Epics ➔ User Stories).<br>• **Definition of Done (DoD)** : critères d'acceptation précis pour les équipes de dev. | SAFe 6 Backlog Jira |
 
 ### Grille des 7 Référentiels Officiels Intégrés :
 
