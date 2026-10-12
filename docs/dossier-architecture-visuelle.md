@@ -167,7 +167,7 @@ flowchart TB
     User -->|"Donne approbation"| CLI
     CLI -->|"Déclenche publication"| GitPublisher
     GitPublisher -->|"git commit & push"| RemoteGit
-    MetaAgent ..>|"Supervise logs & santé"| CrewEngine
+    MetaAgent -.->|"Supervise logs & santé"| CrewEngine
 
     style User fill:#D4E6F1,stroke:#2980B9,stroke-width:2px
     style GeminiService fill:#FCF3CF,stroke:#F39C12,stroke-width:2px
