@@ -17,10 +17,11 @@ def create_manager_agent(llm) -> Agent:
         allow_delegation=True
     )
 
-def create_solution_architect_agent(llm) -> Agent:
+def create_solution_architect_agent(llm, tools=None) -> Agent:
     """
     Crée l'agent Architecte Solution & Infrastructure.
     Maître des Macro-Patterns (Système, Intégration, EDA/Kafka, Cloud WAF, Résilience).
+    Peut recevoir l'outil RAG pour interroger la doctrine d'entreprise.
     """
     return Agent(
         role="Solution & Infrastructure Architect",
@@ -33,14 +34,16 @@ def create_solution_architect_agent(llm) -> Agent:
             "Maître des architectures orientées événements, du découplage de flux asynchrones et des piliers Cloud WAF."
         ),
         llm=llm,
+        tools=tools or [],
         verbose=True,
         allow_delegation=False
     )
 
-def create_ciso_agent(llm) -> Agent:
+def create_ciso_agent(llm, tools=None) -> Agent:
     """
     Crée l'agent CISO & Architecte Sécurité / Protection des Données.
     Incarne les règles Zero-Trust, NIST SP 800-207, classification C2/C2 massif et conformité DCA.
+    Peut recevoir l'outil RAG pour vérifier les règles et politiques d'entreprise.
     """
     return Agent(
         role="Chief Information Security Officer & Data Protection Architect",
@@ -53,6 +56,7 @@ def create_ciso_agent(llm) -> Agent:
             "la gestion stricte des secrets (KMS/Vault), l'isolation réseau et l'homologation formelle des dossiers de conformité architecture (DCA)."
         ),
         llm=llm,
+        tools=tools or [],
         verbose=True,
         allow_delegation=False
     )
