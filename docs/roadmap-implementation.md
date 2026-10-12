@@ -19,7 +19,7 @@ Construire une plateforme open-source autonome d'ingénierie d'architecture bas�
 | **1** | **Socle Technique, Modularité & Connecteur Gemini** | P0 (Critique) | 🟢 **Terminé** | Clé API Gemini |
 | **2** | **Brigade d'Agents Spécialisés d'Architecture** | P1 (Haute) | 🟢 **Terminé** | Brique 1 |
 | **3** | **Module RAG & Base de Connaissances (ChromaDB)** | P1 (Haute) | 🟢 **Terminé** | Brique 1 |
-| **4** | **Générateurs de Livrables & Outil GitPublisher (HITL)** | P2 (Moyenne) | ⚪ En attente | Briques 2 & 3 |
+| **4** | **Générateurs de Livrables & Outil GitPublisher (HITL)** | P2 (Moyenne) | 🟢 **Terminé** | Briques 2 & 3 |
 | **5** | **Méta-Gouvernance (Meta-Agent) & Personal Branding** | P2 (Moyenne) | ⚪ En attente | Brique 4 |
 
 ---
@@ -88,19 +88,19 @@ Construire une plateforme open-source autonome d'ingénierie d'architecture bas�
 
 ---
 
-### Brique 4 : Générateurs de Livrables & Outil GitPublisher ⚪
+### Brique 4 : Générateurs de Livrables & Outil GitPublisher 🟢
 *Objectif : Automatiser la restitution sous des formats standardisés exploitables et la publication Git sécurisée.*
 
-*   [ ] **4.1 Générateur de Dossier d'Architecture Technique (`DAT.md`) :**
-    *   Structure normalisée (Vision, Besoins Non Fonctionnels, Architecture Applicative, Données, Déploiement).
-*   [ ] **4.2 Générateur de Schémas C4 PlantUML (`.puml`), Mermaid (`.mmd`) et Draw.io (`.drawio`) :**
-    *   Production de schémas autonomes sans `!include` externe (rendu garanti en réseau restreint).
-*   [ ] **4.3 Adaptateur déterministe `GitPublisher` (Non-IA) :**
-    *   Scan anti-secrets (détection de tokens, `.env`, clés privées).
-    *   Génération de message conventionnel (`Conventional Commits`).
+*   [x] **4.1 Générateur de Dossier d'Architecture Technique (`DAT.md`) :**
+    *   Structure normalisée et découpage modulaire automatique en pack complet multi-documents via `--study-dir`.
+*   [x] **4.2 Générateur de Schémas C4 PlantUML (`.puml`), Mermaid (`.mmd`) et Draw.io (`.drawio`) :**
+    *   Production des 3 formats sans `!include` externe via `DiagramExporter` (rendu garanti en réseau restreint).
+*   [x] **4.3 Adaptateur déterministe `GitPublisher` (Non-IA) :**
+    *   Scan anti-secrets (détection de tokens, clés privées, .env) via `GitPublisher`.
+    *   Formatage sous la norme `Conventional Commits`.
     *   Porte bloquante Human-in-the-Loop (`[O/N]`) avant tout `git push`.
-*   [ ] **4.4 Générateur d'export de backlog Jira :**
-    *   Export CSV/JSON des User Stories et DoD prêt pour import dans Jira.
+*   [x] **4.4 Générateur d'export de backlog Jira :**
+    *   Export CSV des User Stories et DoD avec séparateur point-virgule (;) et encodage UTF-8-sig pour Excel Français via `JiraBacklogExporter`.
 
 ---
 
