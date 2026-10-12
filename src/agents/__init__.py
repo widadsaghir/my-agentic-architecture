@@ -6,7 +6,8 @@ from .architect_agents import (
     create_solution_architect_agent,
     create_ciso_agent,
     create_crafter_agent,
-    create_safe_enabler_agent
+    create_safe_enabler_agent,
+    create_challenger_agent
 )
 
 __all__ = [
@@ -14,5 +15,6 @@ __all__ = [
     "create_solution_architect_agent",
     "create_ciso_agent",
     "create_crafter_agent",
-    "create_safe_enabler_agent"
+    "create_safe_enabler_agent",
+    "create_challenger_agent"
 ]

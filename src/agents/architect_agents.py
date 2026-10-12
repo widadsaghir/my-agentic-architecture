@@ -96,3 +96,26 @@ def create_safe_enabler_agent(llm) -> Agent:
         verbose=True,
         allow_delegation=False
     )
+
+def create_challenger_agent(llm) -> Agent:
+    """
+    Crée l'agent Challenger / Red Team (Brique 2.4).
+    Incarne la contradiction constructive, la détection des SPOF et la traque de la sur-ingénierie (KISS/YAGNI).
+    """
+    return Agent(
+        role="Challenger Architect & Red Team Evaluator",
+        goal=(
+            "Auditer de manière critique les propositions d'architecture pour traquer la sur-ingénierie (Golden Hammer), "
+            "identifier sans concession les points uniques de défaillance (SPOF) et imposer des alternatives pragmatiques "
+            "fondées sur la simplification et les principes KISS et YAGNI."
+        ),
+        backstory=(
+            "Expert SRE et architecte contradicteur d'élite. Adepte de la contradiction constructive et du pattern "
+            "de réflexion (Reflection & Critique). Déteste les architectures inutilement complexes et veille avec rigueur "
+            "à ce que chaque composant justifie sa valeur opérationnelle face aux risques de panne."
+        ),
+        llm=llm,
+        verbose=True,
+        allow_delegation=False
+    )
+

@@ -56,3 +56,35 @@ def create_security_audit_task(agent: Agent, context_tasks: list, language: str)
         agent=agent,
         context=context_tasks
     )
+
+def create_challenge_task(agent: Agent, context_tasks: list, language: str) -> Task:
+    """
+    Crée la tâche de revue contradictoire et de challenge par le Challenger / Red Team (Brique 2.4).
+    Prend en entrée la proposition du Solution Architect pour traquer les failles et la sur-ingénierie.
+    """
+    description = (
+        f"Analyser et challenger de manière impitoyable et constructive la proposition d'architecture formulée par le Solution Architect.\n"
+        f"Votre mission contradictoire consiste à :\n"
+        f"- Identifier chaque point unique de défaillance (SPOF) potentiel et tester les hypothèses de résilience.\n"
+        f"- Détecter les symptômes de sur-ingénierie et le syndrome du marteau doré (Golden Hammer) : y a-t-il des composants inutiles ?\n"
+        f"- Proposer des simplifications radicales et pragmatiques en appliquant les principes KISS (Keep It Simple, Stupid) et YAGNI (You Aren't Gonna Need It).\n"
+        f"- Formuler une liste de contre-propositions et d'arbitrages recommandés.\n\n"
+        f"IMPORTANT : Rédiger l'intégralité de votre rapport de challenge en langue [{language}]."
+    )
+
+    expected_output = (
+        f"Un rapport d'audit contradictoire (Red Team Review) en Markdown rédigé impérativement en [{language}], comprenant :\n"
+        f"1. Synthèse du niveau de risque et de complexité (Faible / Modéré / Critique)\n"
+        f"2. Matrice d'identification des SPOF et des risques de panne en cascade\n"
+        f"3. Traque de la sur-ingénierie : composants superflus ou surdimensionnés à éliminer\n"
+        f"4. Recommandations de simplification pragmatique (KISS/YAGNI) et alternatives sobres\n"
+        f"5. Avis consultatif pour l'arbitrage du Lead Architect."
+    )
+
+    return Task(
+        description=description,
+        expected_output=expected_output,
+        agent=agent,
+        context=context_tasks
+    )
+
