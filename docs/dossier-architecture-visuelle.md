@@ -2,22 +2,22 @@
 ## Multi-Agent Architecture Platform (AAP)
 
 **Auteur :** Lead Enterprise & Solution Architect (Software Crafter)  
-**Méta-Cadre Référentiel :** TOGAF 10 ADM, SAFe 6, Cloud Well-Architected (WAF), Zero-Trust (NIST), Architecture Hexagonale / DDD, Gouvernance IA (NIST AI RMF / EU AI Act), Classification C2 & Agentic Patterns  
-**Version :** 1.1 — Doctrine Multi-Référentiels & Cartographie  
+**Méta-Cadre Référentiel :** TOGAF 10 ADM (Phases A à G), SAFe 6 for Architects, Cloud Well-Architected (WAF), Zero-Trust (NIST SP 800-207), Architecture Hexagonale / DDD, Gouvernance IA (NIST AI RMF / ISO 42001), Classification C2 & Agentic Patterns  
+**Version :** 2.0 — Alignement exhaustif de la Brigade d'Agents & Adaptateur GitPublisher  
 **Date :** Octobre 2026  
 
 ---
 
 ## 📖 Guide de Lecture
-Ce document constitue la **Living Documentation** du projet : il ne se contente pas de présenter des boîtes et des flèches, mais explique **pourquoi** le système est conçu ainsi, **comment** chaque brique interagit, et **quel rôle** joue chaque acteur.
+Ce document constitue la **Living Documentation** du projet : il détaille l'articulation de l'ensemble de la flotte d'agents spécialisés, des adaptateurs déterministes et des processus de gouvernance.
 
-Tous les diagrammes ci-dessous s'affichent automatiquement dans votre navigateur GitHub ou dans VS Code (via le raccourci `Ctrl + Shift + V`). Les fichiers sources éditables (**Draw.io**, **PlantUML** et **Mermaid**) sont directement téléchargeables via les liens fournis.
+Tous les diagrammes s'affichent automatiquement en Markdown dans GitHub et VS Code (`Ctrl + Shift + V`). Les fichiers sources éditables (**Draw.io**, **PlantUML** et **Mermaid**) sont disponibles dans le dossier `docs/diagrams/`.
 
 ---
 
 ## 0. Le Méta-Cadre Global Multi-Référentiels (Architecture Doctrine)
 
-Dans un environnement d'entreprise moderne, aucun cadre unique ne peut couvrir l'ensemble des dimensions d'une architecture résiliente. La plateforme **AAP** adopte une approche hybride d'ingénierie où **TOGAF fournit le squelette méthodologique**, enrichi par **6 référentiels d'ingénierie et de gouvernance spécialisés**.
+Dans un environnement d'entreprise moderne, aucun cadre unique ne peut couvrir l'ensemble des dimensions d'une architecture résiliente. La plateforme **AAP** adopte une approche hybride où **TOGAF 10 fournit le squelette méthodologique**, enrichi par **6 référentiels d'ingénierie et de gouvernance spécialisés**.
 
 ```
                            ┌───────────────────────────────────────────────┐
@@ -53,242 +53,249 @@ Dans un environnement d'entreprise moderne, aucun cadre unique ne peut couvrir l
                     │    AGENT MIGRATION & TCO   │
                     │ • Pilier FinOps & Coûts    │
                     │ • Modèles TCO Cloud        │
+                    └──────────────┬─────────────┘
+                                   │
+        ┌──────────────────────────┴──────────────────────────┐
+        │                                                     │
+┌───────▼────────────────────────┐           ┌────────────────▼────────────────┐
+│      META-AGENT (Agent Zero)   │           │    AGENT CARRIÈRE & BRANDING    │
+│ • Self-Healing & Maintenance   │           │ • Mise à jour continue du CV    │
+│ • Surveillance logs d'erreurs  │           │ • Brouillons posts LinkedIn     │
+│ • Patch prompts dynamiques     │           │ • Veille & Certifications       │
+└────────────────────────────────┘           └─────────────────────────────────┘
+                                   │
+                    ┌──────────────▼─────────────┐
+                    │    GitPublisher (Outil)    │  <-- Outil Déterministe (Sans LLM)
+                    │ • Scan anti-secrets (.env) │
+                    │ • Commit conventionnel     │
+                    │ • Git push après HITL      │
                     └────────────────────────────┘
 ```
 
-### Qui choisit les Patterns d'Architecture ? (La Matrice de Responsabilité)
+### Grille des 8 Rôles & Responsabilités Validés
 
-Le choix des patterns d'architecture s'articule à trois niveaux complémentaires :
-
-| Échelle du Pattern | Responsable | Patterns types sélectionnés | Source de Vérité |
+| Rôle / Composant | Type d'Acteur | Référentiel Source | Responsabilité Majeure |
 | :--- | :--- | :--- | :--- |
-| **1. Macro-Patterns**<br>*(Système, Flux, Résilience)* | **Solution Architect** | • **Event-Driven Architecture (EDA)** : découplage asynchrone Kafka pour charges massives.<br>• **Transactional Outbox** : cohérence BDD / broker d'événements.<br>• **Strangler Fig** : migration progressive vers le Cloud sans effet Big Bang.<br>• **Circuit Breaker** : isolation des pannes externes. | Catalogue Cloud WAF & Base RAG |
-| **2. Micro-Patterns**<br>*(Domaine, Code, Testabilité)* | **Software Crafter** | • **Architecture Hexagonale (Ports & Adapters)** : cœur métier indépendant des frameworks.<br>• **Domain-Driven Design (DDD)** : Aggregates, Entities, Value Objects.<br>• **Test Doubles & Inversion de dépendance** : testabilité TDD à 100%. | Standards Craftsmanship & Clean Code |
-| **3. Traque de la Sur-Ingénierie**<br>*(Challenge & Simplification)* | **Challenger (Red Team)** | • **Détection du Golden Hammer** : vérifier qu'on ne met pas un pattern complexe (ex: CQRS) là où un simple CRUD suffit.<br>• **Principe YAGNI / KISS** : élimination du code mort anticipé et des briques superflues. | Heuristiques SRE & Anti-patterns |
-| **4. Passage au Delivery**<br>*(Exécution dans les Sprints)* | **SAFe Agile Enabler** | • **Découpage vertical** : traduction de chaque pattern en tranches fines (Enabler Epics ➔ User Stories).<br>• **Definition of Done (DoD)** : critères d'acceptation précis pour les équipes de dev. | SAFe 6 Backlog Jira |
-
-### Grille des 7 Référentiels Officiels Intégrés :
-
-| Domaine | Référentiel Officiel & Nom Exact | Rôle au sein de la Plateforme AAP |
-| :--- | :--- | :--- |
-| **1. Méthode & Cycle de Vie** | **TOGAF 10 ADM** & **SAFe 6 for Architects** | Cadre de gouvernance directeur : structure la démarche en phases (A à G), assure l'alignement stratégique et formalise les Enablers d'architecture. |
-| **2. Architecture Cloud** | **Well-Architected Frameworks (WAF)**<br>*(AWS, Azure, Google Cloud)* | Évalue chaque choix selon les 6 piliers : **Excellence opérationnelle, Sécurité, Fiabilité, Efficacité des performances, Optimisation des coûts, Durabilité**. |
-| **3. Patterns Logiciels & Données** | **Software Architecture Patterns**<br>*(DDD, Hexagonal, EDA, CQRS)* | Garantit le découplage métier : Ports & Adapters pour isoler le domaine, intégration événementielle asynchrone (Kafka) et patterns de cohérence à terme (Saga). |
-| **4. Gouvernance & Éthique de l'IA** | **NIST AI RMF** + **ISO/IEC 42001** + **EU AI Act** | Encadre l'utilisation des agents IA : maîtrise des risques d'hallucination, explicabilité des choix, auditabilité des prompts et traçabilité des décisions. |
-| **5. Cybersécurité & Confiance** | **Zero Trust (NIST SP 800-207)** + **OWASP Top 10 for LLMs** | Principe strict *« Never Trust, Always Verify »* : filtrage des entrées/sorties LLM contre le prompt injection, isolation des identités et absence de secrets en dur. |
-| **6. Classification des Données** | **Data Classification Standard**<br>*(C0, C1, C2, C2 massif, C3, RGPD)* | Conditionne l'éligibilité au Cloud public, impose le chiffrement au repos et en transit (CMK/HSM), et pré-instruit les Dossiers de Conformité Architecture (DCA). |
-| **7. Patterns d'Agents Autonomes** | **Agentic Design Patterns**<br>*(Andrew Ng, LangChain, Anthropic)* | Met en œuvre les 6 patterns d'agents modernes : **Reflection & Critique**, **Tool-Use**, **Planning**, **Orchestrator-Workers**, **Memory/RAG**, et **Human-in-the-Loop**. |
+| **Lead Architect** | **Humain (HITL)** | Gouvernance Entreprise | Arbitrage suprême, validation formelle avant commit/push. |
+| **Agent Manager** | Orchestrateur IA | TOGAF 10 & SAFe 6 | Cadrage Phase A, distribution des tâches, consolidation du DAT final (`gemini-1.5-pro`). |
+| **Solution Architect** | Worker IA (Macro) | Cloud Well-Architected | Conception macro-système (Cloud, EDA/Kafka, Outbox, Strangler Fig, Circuit Breakers). |
+| **Challenger (Red Team)** | Évaluateur IA | SRE, KISS & YAGNI | Critique contradictoire, traque de la sur-ingénierie (*Golden Hammer*), détection des SPOF. |
+| **CISO & Data Protection** | Évaluateur IA (Garde)| Zero-Trust (NIST 800-207) | Classification des données (C1, C2, C2 massif, RGPD), chiffrement CMK, avis DCA. |
+| **Software Crafter** | Worker IA (Micro) | Hexagonal & Clean Code | Architecture Hexagonale (Ports & Adapters), DDD, testabilité unitaire 100% TDD, SOLID. |
+| **SAFe Agile Enabler** | Worker IA (Delivery) | SAFe 6 for Architects | Découpage vertical en Enabler Epics, Features, Stories Jira avec Definition of Done (DoD). |
+| **Agent Migration & FinOps**| Spécialiste IA | FinOps Foundation | Dimensionnement économique, TCO comparatif (Cloud vs On-Premise), trajectoire de bascule. |
+| **Meta-Agent (Agent Zero)** | Méta-Supervision IA| NIST AI RMF / Self-Healing | Observabilité des logs, détection des dérives d'agents, affinage prompts et patch du code. |
+| **Agent Carrière & Branding**| Spécialiste IA | Career Growth | Mise à jour du CV, brouillons de posts LinkedIn (REX), veille certifications (TOGAF, SAFe). |
+| **GitPublisher** | **Outil Déterministe** | Python / Git CLI | Contrôle anti-secrets, `git add`, `git commit` conventionnel et `git push` après accord HITL. |
 
 ---
 
 ## 1. C4 Modèle — Niveau 1 : Contexte Système
 
-### A. La Scène (Le « Pourquoi »)
-La plateforme **AAP** a pour vocation d'automatiser la production des dossiers d'architecture (DAT), des cartographies techniques et des supports de comités d'arbitrage. Elle n'agit pas comme un simple générateur de texte, mais comme une **brigade d'ingénierie d'architecture** : elle prend des notes brutes en entrée, consulte la doctrine d'entreprise, interroge des modèles d'IA spécialisés, et soumet ses conclusions à la validation formelle de l'architecte humain avant tout enregistrement dans Git.
-
-### B. Le Schéma Visuel
 ```mermaid
 flowchart TD
     User["👤 Lead Architect (Human-in-the-Loop)"]
-    AAP["🖥️ Multi-Agent Architecture Platform (AAP)<br/><i>Plateforme multi-agents CrewAI & Gemini</i>"]
-    Knowledge["📚 Doctrine & Sources de Connaissance<br/><i>Blueprints, DAT templates, TOGAF</i>"]
-    GeminiAPI["☁️ Google Gemini API<br/><i>Gemini 1.5 Pro & 1.5 Flash</i>"]
-    GitRepo["📦 Dépôt Git & Livrables<br/><i>DAT.md, Schémas .puml, Decks</i>"]
+    AAP["🖥️ Multi-Agent Architecture Platform (AAP)<br/><i>Orchestration CrewAI & Flotte de 8 Agents</i>"]
+    Knowledge["📚 Doctrine & Sources de Connaissance<br/><i>ChromaDB Local : Blueprints, DAT templates, TOGAF</i>"]
+    GeminiAPI["☁️ Google Gemini API<br/><i>Gemini 1.5 Pro (Manager) & 1.5 Flash (Workers)</i>"]
+    GitPublisherTool["🛠️ GitPublisher (Outil Déterministe)<br/><i>Scan anti-secrets & Wrapper Git CLI</i>"]
+    GitRepo["📦 Dépôt Git Distant & Fichiers<br/><i>DAT.md, Schémas .puml, Backlog Jira, CV</i>"]
 
-    User -->|"1. Consignes (--language, --input) & validation HITL"| AAP
+    User -->|"1. Consignes (--language, --input)"| AAP
     AAP -->|"2. Interrogation documentaire (RAG)"| Knowledge
-    AAP -->|"3. Requêtes d'inférence LLM"| GeminiAPI
-    AAP -->|"4. Sauvegarde des livrables"| GitRepo
-    AAP -->|"5. Restitution du rapport validé"| User
+    AAP -->|"3. Inférences LLM spécialisées"| GeminiAPI
+    AAP -->|"4. Soumission pour arbitrage HITL"| User
+    User -->|"5. Approbation formelle [O/N]"| AAP
+    AAP -->|"6. Ordre de publication sécurisée"| GitPublisherTool
+    GitPublisherTool -->|"7. git commit & git push sécurisé"| GitRepo
+    AAP -->|"8. Restitution de synthèse"| User
 
     style User fill:#D4E6F1,stroke:#2980B9,stroke-width:2px
     style AAP fill:#AED6F1,stroke:#1F618D,stroke-width:3px
     style Knowledge fill:#D5F5E3,stroke:#27AE60,stroke-width:2px
     style GeminiAPI fill:#FCF3CF,stroke:#F39C12,stroke-width:2px
+    style GitPublisherTool fill:#FADBD8,stroke:#C0392B,stroke-width:2px
     style GitRepo fill:#EDBB99,stroke:#D35400,stroke-width:2px
 ```
-
-### C. Anatomie des Acteurs et Systèmes Externes
-
-| Composant | Nature / Rôle | Responsabilités majeures |
-| :--- | :--- | :--- |
-| **Lead Architect** | Utilisateur expert (*Human-in-the-Loop*) | Fournit les consignes de cadrage (`--input`), choisit la langue (`--language`), et valide les décisions techniques. |
-| **Plateforme AAP** | Système central (Python / CrewAI) | Coordonne la brigade d'agents, applique le framework TOGAF, et produit les livrables d'architecture. |
-| **Doctrine & Connaissances** | Base documentaire d'entreprise | Fournit les référentiels de normes, les règles de sécurité, les matrices de flux et les templates de DAT types. |
-| **Google Gemini API** | Fournisseur de LLM Cloud | Fournit la puissance de calcul IA : `gemini-1.5-flash` pour les tâches ouvrières rapides, `gemini-1.5-pro` pour le raisonnement. |
-| **Dépôt Git & Fichiers** | Cible de persistance (*Architecture-as-Code*) | Conserve l'historique des dossiers techniques, des schémas de modélisation et des présentations. |
-
-### D. Explication des Échanges (Flux pas à pas)
-1. **Consignes & Paramètres :** L'architecte lance la CLI en précisant la langue cible et son expression de besoin brute.
-2. **Interrogation RAG :** Le système recherche les précédents applicatifs et les normes d'architecture applicables.
-3. **Inférence LLM :** Les agents formulent leurs propositions en dialoguant avec les modèles Gemini via l'API sécurisée.
-4. **Persistance :** Les livrables approuvés sont écrits sur disque au format Markdown et PlantUML.
-5. **Restitution :** L'architecte reçoit le résultat final consolidé et prêt à l'emploi.
-
-🔗 **Fichiers sources :** [Draw.io (.drawio)](./diagrams/c4_level1_system_context.drawio) | [PlantUML (.puml)](./diagrams/c4_level1_system_context.puml) | [Mermaid (.mmd)](./diagrams/c4_level1_system_context.mmd)
 
 ---
 
 ## 2. C4 Modèle — Niveau 2 : Conteneurs Applicatifs
 
-### A. La Scène (Le « Comment »)
-Ce niveau décompose l'intérieur de l'application Python. On y observe le découpage modulaire respectant les principes du **Clean Architecture** et du **Software Craftsmanship** : l'interface utilisateur (CLI) est découplée de la gestion des configurations, du moteur d'orchestration multi-agents, et des outils d'exportation.
-
-### B. Le Schéma Visuel
 ```mermaid
 flowchart TB
     User["👤 Lead Architect (Human-in-the-Loop)"]
     GeminiService["☁️ Google Gemini Cloud Service<br/><i>gemini-1.5-flash & gemini-1.5-pro</i>"]
-    LocalFS["💾 Système de Fichiers & Git<br/><i>DAT.md, Schémas .puml, .env</i>"]
+    LocalFS["💾 Système de Fichiers Local<br/><i>DAT.md, Schémas .puml, .env, logs</i>"]
+    RemoteGit["🌐 Dépôt Git Distant<br/><i>GitLab / GitHub</i>"]
 
     subgraph AAP ["🖥️ Multi-Agent Architecture Platform (AAP)"]
         direction TB
-        CLI["💻 Interface CLI (main.py)<br/><i>argparse (--language, --input)</i>"]
-        ConfigMgr["⚙️ Config & LLM Manager (settings.py)<br/><i>dotenv, LangChain Google GenAI</i>"]
-        CrewEngine["🧠 Moteur CrewAI<br/><i>Processus d'orchestration</i>"]
+        CLI["💻 Interface CLI (main.py)<br/><i>argparse (--language, --input, --output)</i>"]
+        ConfigMgr["⚙️ Config & LLM Manager (settings.py)<br/><i>dotenv, validation clés, LangChain Gemini</i>"]
+        CrewEngine["🧠 Moteur CrewAI<br/><i>Orchestration séquentielle & hiérarchique</i>"]
         
-        subgraph Fleet ["👥 Brigade d'Agents Spécialisés"]
-            ManagerAgent["👑 Manager (TOGAF Lead)"]
-            SolutionAgent["🏗️ Solution Architect"]
-            CisoAgent["🛡️ CISO (Sécurité/C2)"]
-            ChallengerAgent["🎯 Challenger (Red Team)"]
+        subgraph Fleet ["👥 Flotte Complète d'Agents Spécialisés"]
+            ManagerAgent["👑 Manager (TOGAF/SAFe Lead)"]
+            SolutionAgent["🏗️ Solution Architect (Macro/WAF)"]
+            ChallengerAgent["🎯 Challenger (Red Team / Anti-SPOF)"]
+            CisoAgent["🛡️ CISO (Zero-Trust & C2)"]
+            CrafterAgent["💎 Software Crafter (Hexagonale & TDD)"]
+            SafeAgent["🚆 SAFe Agile Enabler (Jira & DoD)"]
+            FinopsAgent["💰 Migration & FinOps (TCO)"]
+            CareerAgent["📈 Carrière & Branding (CV & LinkedIn)"]
+            MetaAgent["🔧 Meta-Agent (Agent Zero / Self-Healing)"]
         end
 
-        TaskFactory["📋 Fabrique de Tâches<br/><i>Injection langue & contraintes</i>"]
-        VectorDB["🗄️ Base RAG (ChromaDB)<br/><i>Indexation blueprints & normes</i>"]
-        Exporter["📤 Exportateur de Livrables<br/><i>Générateur DAT & PlantUML</i>"]
+        TaskFactory["📋 Fabrique de Tâches<br/><i>Injection langue (--language) & contraintes</i>"]
+        VectorDB["🗄️ Base RAG (ChromaDB Local)<br/><i>Indexation blueprints & templates</i>"]
+        Exporter["📤 Exportateur de Livrables<br/><i>Générateur DAT.md, .puml, .mmd, .drawio</i>"]
+        GitPublisher["🛠️ GitPublisher (Outil Déterministe)<br/><i>Contrôle anti-secrets, commit conventionnel & push</i>"]
     end
 
     User -->|"Lance la commande CLI"| CLI
-    CLI -->|"Charge la config"| ConfigMgr
+    CLI -->|"Charge la configuration"| ConfigMgr
     ConfigMgr -->|"Connecte les LLMs"| GeminiService
-    CLI -->|"Déclenche l'orchestration"| CrewEngine
-    CrewEngine -->|"Coordonne"| Fleet
-    Fleet -->|"Reçoit les instructions"| TaskFactory
-    Fleet -->|"Interroge les patterns"| VectorDB
-    Fleet -->|"Inférences LLM"| GeminiService
+    CLI -->|"Initialise la Crew"| CrewEngine
+    CrewEngine -->|"Coordonne la flotte"| Fleet
+    Fleet -->|"Reçoit les tâches enrichies"| TaskFactory
+    Fleet -->|"Requête la doctrine RAG"| VectorDB
+    Fleet -->|"Inférences LLM spécialisées"| GeminiService
     CrewEngine -->|"Consolide les livrables"| Exporter
-    Exporter -->|"Écrit les fichiers"| LocalFS
-    CLI -->|"Restitue la synthèse"| User
+    Exporter -->|"Écrit les fichiers bruts"| LocalFS
+    CLI -->|"Demande validation HITL"| User
+    User -->|"Donne approbation"| CLI
+    CLI -->|"Déclenche publication"| GitPublisher
+    GitPublisher -->|"git commit & push"| RemoteGit
+    MetaAgent ..>|"Supervise logs & santé"| CrewEngine
 
     style User fill:#D4E6F1,stroke:#2980B9,stroke-width:2px
     style GeminiService fill:#FCF3CF,stroke:#F39C12,stroke-width:2px
     style LocalFS fill:#EDBB99,stroke:#D35400,stroke-width:2px
+    style RemoteGit fill:#EDBB99,stroke:#D35400,stroke-width:2px
     style AAP fill:#F2F4F4,stroke:#7F8C8D,stroke-width:2px
     style Fleet fill:#E8F8F5,stroke:#1ABC9C,stroke-width:2px
+    style GitPublisher fill:#FADBD8,stroke:#C0392B,stroke-width:2px
 ```
-
-### C. Anatomie des Briques Logicielles Internes
-
-| Brique Logicielle | Fichier source | Rôle & Responsabilité |
-| :--- | :--- | :--- |
-| **Interface CLI** | `src/main.py` | Parse les arguments en ligne de commande, gère le cycle de vie principal et affiche les résultats. |
-| **Config & LLMs** | `src/config/settings.py` | Charge le `.env`, vérifie la présence de la clé Gemini, instancie les objets `ChatGoogleGenerativeAI` avec les bons modèles. |
-| **Moteur CrewAI** | `crewai.Crew` | Moteur d'exécution séquentiel qui coordonne les agents, gère la mémoire contextuelle et passe les données entre étapes. |
-| **Brigade d'Agents** | `src/agents/architect_agents.py` | Définit les personas spécialisés (Manager, Solution Architect, et futurs CISO / Challenger). |
-| **Fabrique de Tâches**| `src/tasks/architecture_tasks.py`| Formalise les prompts techniques et force la rédaction dans la langue demandée (`--language`). |
-| **Base RAG** | `ChromaDB` (Local) | Stocke sous forme vectorielle les architectures passées et les règles TOGAF pour nourrir les requêtes. |
-| **Exportateur** | `src/tools/` | Génère les fichiers physiques sur disque (`DAT.md`, `.puml`, `.drawio`). |
-
-🔗 **Fichiers sources :** [Draw.io (.drawio)](./diagrams/c4_level2_container.drawio) | [PlantUML (.puml)](./diagrams/c4_level2_container.puml) | [Mermaid (.mmd)](./diagrams/c4_level2_container.mmd)
 
 ---
 
-## 3. Diagramme de Séquence : Le Workflow d'Orchestration
+## 3. Diagramme de Séquence : Le Workflow d'Orchestration Complet
 
-### A. La Scène (Le « Quand » & « Comment »)
-Ce diagramme détaille la vie d'une requête d'architecture, depuis la commande dans le terminal jusqu'à l'écriture des fichiers. Il met en lumière le pattern d'IA moderne **Reflection & Critique** : le Solution Architect ne travaille pas seul, son travail est audité contradictoirement par un agent Challenger (Red Team) avant d'être validé.
+Ce diagramme détaille le cheminement complet d'une demande, depuis la console jusqu'à la publication sécurisée dans Git :
 
-### B. Le Schéma Séquentiel
 ```mermaid
 sequenceDiagram
     autonumber
     actor User as 👤 Lead Architect (HITL)
     participant CLI as 💻 CLI (src/main.py)
     participant Config as ⚙️ Config & LLMs
-    participant Manager as 👑 Manager (TOGAF)
+    participant Manager as 👑 Manager (TOGAF/SAFe)
     participant Solution as 🏗️ Solution Architect
     participant RAG as 🗄️ Base RAG (ChromaDB)
     participant Challenger as 🎯 Challenger (Red Team)
-    participant Gemini as ☁️ Google Gemini API
-    participant FS as 💾 Système de Fichiers
+    participant CISO as 🛡️ CISO (Sécurité)
+    participant Crafter as 💎 Software Crafter
+    participant SAFe as 🚆 SAFe Enabler
+    participant FinOps as 💰 Migration & FinOps
+    participant Gemini as ☁️ Gemini API (Flash/Pro)
+    participant Exporter as 📤 Exportateur
+    participant GitPub as 🛠️ GitPublisher (Tool)
+    participant Career as 📈 Agent Carrière
+    participant Meta as 🔧 Meta-Agent (Fond)
 
-    %% Étape 1
+    %% Étape 1 : Initialisation
     rect rgb(235, 245, 251)
     note right of User: Étape 1 : Initialisation & Sécurisation
-    User->>CLI: python src/main.py --language "French" --input "..."
-    CLI->>Config: get_config() & instancie LLMs
+    User->>CLI: python src/main.py --language "French" --input "Notes de cadrage"
+    CLI->>Config: get_config() & validation clés
     Config-->>CLI: worker_llm (Flash) & manager_llm (Pro)
-    CLI->>CLI: Prépare les agents & la tâche (injection langue)
+    CLI->>CLI: Assemble la brigade d'agents et injecte la langue cible
     end
 
-    %% Étape 2
+    %% Étape 2 : Conception Macro & RAG
     rect rgb(234, 250, 241)
-    note right of CLI: Étape 2 : Orchestration & Conception RAG
+    note right of CLI: Étape 2 : Conception Macro-Patterns
     CLI->>Manager: crew.kickoff()
-    Manager->>Solution: Délègue l'analyse d'architecture
-    Solution->>RAG: Requête de patterns similaires
-    RAG-->>Solution: Blueprints & templates
-    Solution->>Gemini: Inférence (Prompt + RAG) [Gemini Flash]
-    Gemini-->>Solution: Ébauche d'architecture
+    Manager->>Solution: Cadrage & Macro-Patterns (Cloud WAF, EDA/Kafka)
+    Solution->>RAG: Recherche de blueprints d'architecture
+    RAG-->>Solution: Patterns de résilience & templates
+    Solution->>Gemini: Inférence conception [Gemini Flash]
+    Gemini-->>Solution: Ébauche d'architecture technique
     end
 
-    %% Étape 3
+    %% Étape 3 : Boucle Critique (Red Team)
     rect rgb(253, 237, 236)
-    note right of Solution: Étape 3 : Boucle Contradictoire (Red Team)
+    note right of Solution: Étape 3 : Boucle Contradictoire (Reflection Pattern)
     Solution->>Challenger: Soumission pour audit contradictoire
-    Challenger->>Gemini: Analyse des failles & SPOF [Gemini Flash]
-    Gemini-->>Challenger: Critique & risques
-    Challenger-->>Solution: Recommandations de correction
-    Solution->>Solution: Ajustement de l'architecture
-    Solution-->>Manager: Architecture consolidée
+    Challenger->>Gemini: Traque des SPOF, anti-patterns & sur-ingénierie [Gemini Flash]
+    Gemini-->>Challenger: Rapport critique & alternatives simples
+    Challenger-->>Solution: Recommandations de simplification (KISS/YAGNI)
+    Solution->>Solution: Consolidation de la macro-architecture
     end
 
-    %% Étape 4
+    %% Étape 4 : Évaluations Spécialisées
     rect rgb(254, 249, 231)
-    note right of Manager: Étape 4 : Synthèse, Validation HITL & Export
-    Manager->>Gemini: Synthèse DAT finale en langue cible [Gemini Pro]
-    Gemini-->>Manager: Dossier d'architecture finalisé
-    Manager-->>CLI: Résultat de la Crew
-    CLI->>User: 🛑 Présentation pour validation Human-in-the-Loop
-    User->>CLI: Approbation formelle
-    CLI->>FS: Sauvegarde DAT.md et schémas .puml
-    FS-->>CLI: Fichiers écrits
-    CLI-->>User: Affichage du livrable et confirmation
+    note right of Manager: Étape 4 : Audits de Sécurité, Craft, Delivery & FinOps
+    Solution->>CISO: Soumission pour conformité Zero-Trust & C2
+    CISO->>Gemini: Audit classification, chiffrement CMK, DCA [Gemini Flash]
+    Gemini-->>CISO: Avis formel de sécurité DCA
+    
+    CISO->>Crafter: Transmission pour modélisation logicielle pure
+    Crafter->>Gemini: Conception Hexagonale, DDD & stratégie TDD [Gemini Flash]
+    Gemini-->>Crafter: Micro-patterns & plan de testabilité
+
+    Crafter->>SAFe: Transmission pour découpage agile
+    SAFe->>Gemini: Découpage Enabler Epics, Stories Jira & DoD [Gemini Flash]
+    Gemini-->>SAFe: Backlog Jira technique opérationnel
+
+    SAFe->>FinOps: Transmission pour chiffrage
+    FinOps->>Gemini: Calcul TCO comparatif Cloud vs On-Premise [Gemini Flash]
+    Gemini-->>FinOps: Grille de coûts & trajectoire de bascule
+    FinOps-->>Manager: Remontée de l'ensemble des travaux consolidés
+    end
+
+    %% Étape 5 : Synthèse & Validation HITL
+    rect rgb(245, 238, 248)
+    note right of Manager: Étape 5 : Synthèse Manager & Validation Humaine
+    Manager->>Gemini: Rédaction finale du DAT au standard TOGAF [Gemini Pro]
+    Gemini-->>Manager: Dossier d'Architecture Technique complet
+    Manager-->>CLI: Restitution de la Crew
+    CLI->>User: 🛑 Présentation de la synthèse pour arbitrage HITL
+    User->>CLI: Approbation formelle [O/N]
+    end
+
+    %% Étape 6 : Publication Déterministe & Post-Actions
+    rect rgb(230, 247, 255)
+    note right of CLI: Étape 6 : Publication Déterministe & Carrière
+    CLI->>Exporter: Génération physique des livrables
+    Exporter-->>CLI: DAT.md et schémas .puml écrits sur disque
+    CLI->>GitPub: Ordre de publication sécurisée avec message conventionnel
+    GitPub->>GitPub: Scan anti-secrets (.env, clés privées)
+    GitPub-->>CLI: git commit & git push confirmés
+    Manager->>Career: Déclenche valorisation de carrière
+    Career->>Career: Mise à jour CV & brouillon de post LinkedIn (REX)
+    Meta-->>Meta: Analyse des logs d'exécution en tâche de fond (Self-Healing)
+    CLI-->>User: Confirmation finale & affichage du livrable
     end
 ```
-
-### C. Déroulement Détaillé des 4 Phases
-
-#### Étape 1 : Initialisation & Sécurisation
-* L'utilisateur exécute la commande avec ses paramètres.
-* Le gestionnaire de configuration vérifie la présence du `.env` et prépare les deux profils de modèles LLM (`gemini-1.5-flash` pour les opérations rapides et `gemini-1.5-pro` pour le raisonnement de haut niveau).
-* La tâche est assemblée en forçant la langue demandée.
-
-#### Étape 2 : Orchestration & Conception RAG
-* Le Manager prend les commandes du processus et délègue la conception technique à l'architecte solution.
-* L'architecte solution interroge la base documentaire (RAG) pour identifier des solutions similaires ou des contraintes d'entreprise.
-* Il formule une première ébauche d'architecture technique.
-
-#### Étape 3 : Boucle Critique (Red Team / Reflection Pattern)
-* L'ébauche n'est pas acceptée immédiatement : elle est envoyée à l'agent **Challenger**.
-* Le Challenger audite la solution : recherche de points de défaillance uniques (SPOF), évaluation de la sur-ingénierie, conformité sécurité.
-* L'architecte solution intègre ces retours pour corriger et consolider son livrable.
-
-#### Étape 4 : Synthèse, Validation Human-in-the-Loop & Export
-* Le Manager assemble le document complet au standard TOGAF en s'appuyant sur la puissance rédactionnelle de `gemini-1.5-pro`.
-* **Porte d'arrêt obligatoire (HITL) :** Le résultat est présenté à l'architecte en chef qui valide formellement.
-* Après validation, les documents physiques (`DAT.md`, `.puml`, `.drawio`) sont écrits dans l'arborescence de fichiers du projet.
-
-🔗 **Fichiers sources :** [PlantUML (.puml)](./diagrams/sequence_architecture_workflow.puml) | [Mermaid (.mmd)](./diagrams/sequence_architecture_workflow.mmd)
 
 ---
 
 ## 4. Synthèse des Choix d'Architecture (ADRs Clés)
 
-1. **Pourquoi CrewAI plutôt qu'un script simple ?**  
-   Pour permettre la délégation hiérarchique, la gestion native des rôles et l'attribution d'outils spécialisés par agent.
-2. **Pourquoi dissocier Gemini Flash et Gemini Pro ?**  
-   Pour des raisons d'optimisation économique et de latence : 80 % des tâches d'extraction et de relecture intermédiaire coûtent 30x moins cher sur Flash, tandis que Pro est réservé à la synthèse finale du Manager.
-3. **Pourquoi trois formats de schémas (PlantUML, Mermaid, Draw.io) ?**  
-   *PlantUML* pour la rigueur documentaire sans fioriture, *Mermaid* pour la lisibilité native Markdown dans GitHub, et *Draw.io* pour l'édition graphique libre en atelier.
+### ADR-01 : Pourquoi GitPublisher est un outil déterministe et NON un agent IA ?
+* **Décision :** Les interactions Git (`git add`, `git commit`, `git push`) sont gérées par une classe utilitaire Python pure (`GitPublisher`) et non par un agent LLM.
+* **Justification :** Lancer une commande Git est une action déterministe et critique. Déléguée à un LLM, elle consomme des tokens inutilement et introduit un risque d'erreurs d'exécution ou d'inventions de commandes destructrices. Le script garantit également un scan anti-secrets avant tout commit.
+
+### ADR-02 : Pourquoi une brigade de 8 agents plutôt qu'un gros prompt unique ?
+* **Décision :** Séparer les expertises (Solution, CISO, Crafter, SAFe, Challenger, FinOps, Meta-Agent, Branding) sous la direction d'un Manager.
+* **Justification :** Un prompt unique souffre d'attention dispersée et oublie les contraintes spécifiques (ex. la testabilité TDD ou la classification C2). Chaque agent spécialisé applique son référentiel de manière intransigeante.
+
+### ADR-03 : Pourquoi dissocier Gemini Flash et Gemini Pro ?
+* **Décision :** Utiliser `gemini-1.5-flash` pour les 6 agents ouvriers et réserver `gemini-1.5-pro` pour le Manager Orchestrateur.
+* **Justification :** Optimisation économique majeure : 85% des opérations intermédiaires sont exécutées 30x plus vite et à coût quasi nul sur Flash, tandis que Pro fournit la haute fidélité rédactionnelle nécessaire au document final.
+
+### ADR-04 : Pourquoi le Meta-Agent est-il isolé de la boucle de conception ?
+* **Décision :** Le Meta-Agent fonctionne comme un observateur hors-bande (Out-of-Band Observer).
+* **Justification :** Il ne doit pas être pollué par les détails du DAT traité, mais se focaliser exclusivement sur la métrique logicielle : temps de réponse, taux de succès des agents, dérives de tokens et propositions de correctifs de code.
