@@ -52,11 +52,22 @@ def parse_arguments():
 def main():
     args = parse_arguments()
 
+    # 0. Détection et lecture automatique si --input est un fichier
+    input_content = args.input
+    input_path = Path(args.input)
+    if input_path.is_file():
+        try:
+            with open(input_path, "r", encoding="utf-8") as f:
+                input_content = f.read()
+            print(f"📄 Fichier de cadrage détecté et chargé : {input_path}")
+        except Exception as e:
+            print(f"⚠️ Erreur lors de la lecture du fichier {input_path}, utilisation du texte brut : {e}")
+
     print("==================================================================")
     print("  🚀 Multi-Agent Architecture Platform (AAP) — Initialisation")
     print("==================================================================")
     print(f"• Langue cible configurée : [{args.language}]")
-    print(f"• Requête d'entrée       : {args.input[:100]}..." if len(args.input) > 100 else f"• Requête d'entrée       : {args.input}")
+    print(f"• Requête d'entrée       : {input_content[:100]}..." if len(input_content) > 100 else f"• Requête d'entrée       : {input_content}")
 
     # 1. Chargement de la configuration et des clés Gemini
     try:
@@ -87,7 +98,7 @@ def main():
     # 4. Création des tâches enchaînées (Conception -> Challenge -> CISO -> Craft -> SAFe)
     design_task = create_preliminary_design_task(
         agent=solution_architect,
-        user_input=args.input,
+        user_input=input_content,
         language=args.language
     )
 
