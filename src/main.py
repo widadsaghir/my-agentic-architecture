@@ -26,6 +26,7 @@ from src.tasks import (
     create_safe_delivery_task,
     create_finops_task
 )
+from src.tools import ArchitectureRAGManager, KnowledgeSearchTool
 from crewai import Crew, Process
 
 def parse_arguments():
@@ -102,11 +103,22 @@ def main():
         print(f"\n❌ Erreur lors de l'initialisation des modèles Gemini : {e}")
         sys.exit(1)
 
+    # 2.bis Initialisation de la base vectorielle RAG locale (Brique 3)
+    try:
+        rag_manager = ArchitectureRAGManager()
+        chunks_indexed = rag_manager.ingest_knowledge()
+        knowledge_tool = KnowledgeSearchTool(rag_manager=rag_manager)
+        print(f"📚 Base de connaissances RAG initialisée ({chunks_indexed} fragments doctrinaux indexés dans ChromaDB)")
+        agent_tools = [knowledge_tool]
+    except Exception as e:
+        print(f"⚠️ Avertissement RAG : exécution sans RAG ({e})")
+        agent_tools = []
+
     # 3. Création de la brigade complète d'agents
     manager = create_manager_agent(manager_llm)
-    solution_architect = create_solution_architect_agent(worker_llm)
+    solution_architect = create_solution_architect_agent(worker_llm, tools=agent_tools)
     challenger = create_challenger_agent(worker_llm)
-    ciso = create_ciso_agent(worker_llm)
+    ciso = create_ciso_agent(worker_llm, tools=agent_tools)
     crafter = create_crafter_agent(worker_llm)
     safe_enabler = create_safe_enabler_agent(worker_llm)
     finops = create_finops_agent(worker_llm)

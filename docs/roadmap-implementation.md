@@ -17,8 +17,8 @@ Construire une plateforme open-source autonome d'ingénierie d'architecture bas�
 | Brique | Intitulé | Priorité | Statut | Dépendances |
 | :---: | :--- | :---: | :---: | :--- |
 | **1** | **Socle Technique, Modularité & Connecteur Gemini** | P0 (Critique) | 🟢 **Terminé** | Clé API Gemini |
-| **2** | **Brigade d'Agents Spécialisés d'Architecture** | P1 (Haute) | 🟡 **En cours** | Brique 1 |
-| **3** | **Module RAG & Base de Connaissances (ChromaDB)** | P1 (Haute) | ⚪ En attente | Brique 1 |
+| **2** | **Brigade d'Agents Spécialisés d'Architecture** | P1 (Haute) | 🟢 **Terminé** | Brique 1 |
+| **3** | **Module RAG & Base de Connaissances (ChromaDB)** | P1 (Haute) | 🟢 **Terminé** | Brique 1 |
 | **4** | **Générateurs de Livrables & Outil GitPublisher (HITL)** | P2 (Moyenne) | ⚪ En attente | Briques 2 & 3 |
 | **5** | **Méta-Gouvernance (Meta-Agent) & Personal Branding** | P2 (Moyenne) | ⚪ En attente | Brique 4 |
 
@@ -45,7 +45,7 @@ Construire une plateforme open-source autonome d'ingénierie d'architecture bas�
 
 ---
 
-### Brique 2 : Brigade d'Agents Spécialisés d'Architecture 🟡
+### Brique 2 : Brigade d'Agents Spécialisés d'Architecture 🟢
 *Objectif : Déployer les personas d'architecture selon les phases TOGAF B, C et D.*
 
 *   [x] **2.1 Agent CISO / Sécurité :**
@@ -69,21 +69,22 @@ Construire une plateforme open-source autonome d'ingénierie d'architecture bas�
     *   Scénarios de transition et jalons de bascule progressive.
     *   Livrable stratégique `05_STRATEGIE_MIGRATION_ET_FINOPS_TCO.md` formalisé.
 *   [x] **2.6 Câblage complet des tâches & pipeline dans `src/main.py` :**
-    *   Séquence d'élite opérationnelle : Solution ➔ Challenger ➔ CISO ➔ Crafter ➔ SAFe Enabler.
+    *   Séquence d'élite opérationnelle : Solution ➔ Challenger ➔ CISO ➔ Crafter ➔ SAFe Enabler ➔ FinOps.
     *   Test d'intégration complet `test_full_pipeline_assembly` validé.
 
 ---
 
-### Brique 3 : Module RAG & Base de Connaissances (ChromaDB) ⚪
+### Brique 3 : Module RAG & Base de Connaissances (ChromaDB) 🟢
 *Objectif : Permettre aux agents d'interroger la doctrine d'architecture et des blueprints d'entreprise.*
 
-*   [ ] **3.1 Création du répertoire de connaissances (`knowledge/`) :**
-    *   Dossier de documentation de référence (templates de DAT, matrices de flux, patterns hexagonaux/microservices).
-*   [ ] **3.2 Mise en place du moteur vectoriel :**
-    *   Intégration de ChromaDB en mode local (léger, sans infrastructure lourde).
-    *   Pipeline d'ingestion et d'indexation vectorielle via les embeddings Gemini.
-*   [ ] **3.3 Tool RAG pour CrewAI :**
-    *   Création d'un outil `KnowledgeSearchTool` utilisable nativement par le Solution Architect et le CISO.
+*   [x] **3.1 Création du répertoire de connaissances (`knowledge/`) :**
+    *   Dossier de documentation de référence doctrinale : Zero-Trust C2, Craftsmanship Hexagonal/DDD, Patrons Cloud WAF, et Gouvernance SAFe.
+*   [x] **3.2 Mise en place du moteur vectoriel :**
+    *   Intégration de ChromaDB en mode local persistant (`chroma_db/`).
+    *   Pipeline d'ingestion et découpage modulaire des fragments (`ingest_knowledge`).
+*   [x] **3.3 Tool RAG pour CrewAI :**
+    *   Création de l'outil `KnowledgeSearchTool` utilisable nativement par le Solution Architect et le CISO.
+    *   Validation par la suite de tests unitaires TDD (`test_knowledge_rag.py`).
 
 ---
 
