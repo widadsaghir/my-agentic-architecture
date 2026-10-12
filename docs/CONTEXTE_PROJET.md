@@ -4,7 +4,7 @@
 **Gouvernance :** Projet autonome (aucun ticket Jira d'entreprise requis)  
 **Méta-Cadre Référentiel :** TOGAF 10 ADM (Phases A à G), SAFe 6 for Architects, Software Craftsmanship (Hexagonale, TDD 100%, Clean Code), Cloud WAF, Zero-Trust (NIST SP 800-207)  
 **Stack technique :** Python 3.13, CrewAI, Google Gemini API (`gemini-1.5-flash`, `gemini-1.5-pro`), ChromaDB Local, Pytest  
-**Branche Git courante :** `main` (Fusion réussie de `feat/brique-2-pipeline-craft-safe`)  
+**Branche Git courante :** `feat/brique-3-rag-chromadb`  
 
 ---
 
@@ -17,11 +17,11 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 1. **Lead Architecture Manager (Orchestrateur TOGAF 10 & SAFe 6)** :
    - Pilote le workflow, répartit les rôles et rédige la synthèse finale du DAT (`gemini-1.5-pro`).
 2. **Solution & Infrastructure Architect (Worker Macro)** :
-   - Macro-patterns : Cloud WAF, EDA/Kafka, Outbox, Strangler Fig, Circuit Breakers (`gemini-1.5-flash`).
+   - Macro-patterns : Cloud WAF, EDA/Kafka, Outbox, Strangler Fig, Circuit Breakers + Outil RAG Doctrine (`gemini-1.5-flash`).
 3. **Challenger / Red Team (Évaluateur Contradictoire)** :
    - Pattern *Reflection & Critique*, détection des SPOF et traque de la sur-ingénierie (KISS, YAGNI, Golden Hammer).
 4. **CISO & Data Protection Architect (Évaluateur Sécurité & C2)** :
-   - Conformité Zero-Trust (NIST SP 800-207), classification C1/C2/C2 massif/RGPD, chiffrement CMK, avis formel DCA.
+   - Conformité Zero-Trust (NIST SP 800-207), classification C1/C2/C2 massif/RGPD, chiffrement CMK + Outil RAG Doctrine.
 5. **Software Crafter & Domain Architect (Worker Micro)** :
    - Micro-patterns : Architecture Hexagonale (Ports & Adapters), modélisation DDD et stratégie de testabilité unitaire 100% TDD.
 6. **SAFe System Architect & Agile Delivery Enabler (Worker Delivery)** :
@@ -45,7 +45,7 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 | :---: | :--- | :---: | :--- |
 | **1** | Socle Technique & Connecteur Gemini | 🟢 Terminé | Modularisation (`src/config`, `src/agents`, `src/tasks`, `src/main.py`), support `--language`. |
 | **2** | Brigade d'Agents Spécialisés d'Architecture | 🟢 Terminé | Brigade complète (Solution, Challenger, CISO, Crafter, SAFe, FinOps) validée et pack d'étude complet généré (`docs/etudes/migration_ssas_cloud/`). |
-| **3** | Base Vectorielle & RAG (ChromaDB) | ⚪ En attente | Indexation locale des blueprints, règles de sécurité et templates d'entreprise. |
+| **3** | Base Vectorielle & RAG (ChromaDB) | 🟢 Terminé | ChromaDB local persistant (`chroma_db/`), doctrine d'entreprise (`knowledge/`), `ArchitectureRAGManager`, et `KnowledgeSearchTool` injecté dans Solution Architect et CISO. |
 | **4** | Génération de Livrables & Outil GitPublisher | ⚪ En attente | DAT.md, schémas C4 autonomes (.puml, .mmd, .drawio), adaptateur GitPublisher et exports Jira. |
 | **5** | Meta-Agent (Self-Healing) & Branding | ⚪ En attente | Agent Zero (monitoring des logs & patch prompts) et Agent Carrière (CV & LinkedIn). |
 
@@ -53,6 +53,7 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 
 ## 📁 Pack Documentaire d'Architecture Produit (`docs/etudes/migration_ssas_cloud/`)
 
+- `00_RESUME_EXECUTIF_ET_DECISION.md` (Fiche de synthèse exécutive One-Pager)
 - `00_SYNTHESE_EXECUTIVE_ET_ROADMAP_TOGAF.md` (👑 Lead Architecture Manager)
 - `01_DOSSIER_ARCHITECTURE_TECHNIQUE_DAT.md` (🏗️ Solution Architect)
 - `02_RAPPORT_AUDIT_CONTRADICTOIRE.md` (🎯 Challenger Red Team)
@@ -60,23 +61,26 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 - `04_CONCEPTION_HEXAGONALE_ET_DDD.md` (💎 Software Crafter)
 - `05_STRATEGIE_MIGRATION_ET_FINOPS_TCO.md` (💰 Migration & FinOps)
 - `06_BACKLOG_LIVRAISON_SAFE_JIRA.md` (🚆 SAFe Agile Enabler)
+- `07_ROADMAP_DE_REALISATION_ET_PLANNING.md` (Planning Gantt Mermaid, Sprints, Budget, RACI)
 - `diagrams/` : Schémas d'architecture AS-IS et TO-BE complets aux formats Draw.io (`.drawio`), PlantUML (`.puml`) et Mermaid (`.mmd`).
 
 ---
 
 ## 🧪 Bilan d'Exécution des Tests Unitaires (Pytest)
 
-*Dernière exécution : 13/13 tests validés avec succès (100% de réussite)*
+*Dernière exécution : 17/17 tests validés avec succès (100% de réussite)*
 
 - `tests/unit/test_config.py` : 🟢 (Chargement variables, détection clé manquante/placeholder).
 - `tests/unit/test_ciso_agent.py` : 🟢 (Rôle, Zero-Trust, C2 massif, non-délégation).
 - `tests/unit/test_crafter_safe_agents.py` : 🟢 (Hexagonale, TDD, Clean Code, Jira, DoD, ART).
 - `tests/unit/test_challenger_agent.py` : 🟢 (Contradiction, anti-SPOF, KISS/YAGNI, Golden Hammer).
-- `tests/unit/test_tasks.py` : 🟢 (5 tâches testées : Conception, Challenge, Audit CISO, Craft Hexagonal, Delivery SAFe).
-- `tests/unit/test_pipeline_integration.py` : 🟢 (Assemblage séquentiel complet des 5 agents et 5 tâches dans CrewAI).
+- `tests/unit/test_finops_agent.py` : 🟢 (Évaluation TCO, coûts comparatifs, rentabilité Cloud).
+- `tests/unit/test_knowledge_rag.py` : 🟢 (Indexation vectorielle ChromaDB et outil KnowledgeSearchTool).
+- `tests/unit/test_tasks.py` : 🟢 (6 tâches testées : Conception, Challenge, Audit CISO, Craft Hexagonal, Delivery SAFe, FinOps).
+- `tests/unit/test_pipeline_integration.py` : 🟢 (Assemblage séquentiel complet des 6 agents et 6 tâches dans CrewAI).
 
 ---
 
 ## 📍 Prochaines Actions Prioritaires
-1. **Passage à la Brique 3 : Base vectorielle RAG locale (ChromaDB)** pour injecter les blueprints d'architecture d'entreprise.
-2. **Implémentation de l'adaptateur déterministe GitPublisher** (Brique 4).
+1. **Passage à la Brique 4 : Générateur autonome d'artéfacts et Adaptateur déterministe GitPublisher** (avec scan anti-secrets et porte d'arrêt HITL).
+2. **Brique 5 : Meta-Agent (Agent Zero) & Valorisation de Carrière**.
