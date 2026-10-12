@@ -1,12 +1,19 @@
 import pytest
+from crewai import Agent
 from src.tasks.architecture_tasks import create_preliminary_design_task, create_security_audit_task
 
-class DummyAgent:
-    pass
+@pytest.fixture
+def agent():
+    return Agent(
+        role="Test Architect",
+        goal="Tester la configuration et les attributs des tâches",
+        backstory="Agent de test dédié aux validations unitaires",
+        llm="gemini/gemini-1.5-flash",
+        allow_delegation=False
+    )
 
-def test_preliminary_design_task_language_injection():
+def test_preliminary_design_task_language_injection(agent):
     """Vérifie que la tâche de conception préliminaire injecte strictement la langue demandée."""
-    agent = DummyAgent()
     task_fr = create_preliminary_design_task(agent, "Notes projet Far&Co", "French")
 
     assert "[French]" in task_fr.description
@@ -17,9 +24,8 @@ def test_preliminary_design_task_language_injection():
     assert "[English]" in task_en.description
     assert "[English]" in task_en.expected_output
 
-def test_security_audit_task_language_and_doctrine():
+def test_security_audit_task_language_and_doctrine(agent):
     """Vérifie que la tâche CISO intègre les exigences de sécurité et la langue."""
-    agent = DummyAgent()
     task = create_security_audit_task(agent, context_tasks=[], language="French")
 
     assert "[French]" in task.description
