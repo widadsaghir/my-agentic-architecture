@@ -88,3 +88,67 @@ def create_challenge_task(agent: Agent, context_tasks: list, language: str) -> T
         context=context_tasks
     )
 
+def create_software_crafting_task(agent: Agent, context_tasks: list, language: str) -> Task:
+    """
+    Crée la tâche de modélisation logicielle pure par le Software Crafter (Brique 2.2).
+    Prend en entrée la macro-architecture pour concevoir les micro-patterns :
+    Architecture Hexagonale (Ports & Adapters), DDD et stratégie de testabilité unitaire 100% TDD.
+    """
+    description = (
+        f"Traduire la macro-architecture technique en micro-patterns logiciels purs et propres selon les principes du Software Craftsmanship.\n"
+        f"Votre modélisation doit impérativement définir :\n"
+        f"1. Le découplage en Architecture Hexagonale (Ports & Adapters) : identifier le Cœur de Domaine métier, les Ports d'Entrée (Drivers/Inbound), les Ports de Sortie (Driven/Outbound) et leurs Adaptateurs respectifs.\n"
+        f"2. La modélisation Domain-Driven Design (DDD) : définir le Bounded Context, les Agrégats racines, les Entités et les Value Objects immuables.\n"
+        f"3. La stratégie de testabilité unitaire (TDD 100%) : garantir que le domaine métier est testable avec 0 dépendance d'infrastructure et 0 token (tests unitaires purs, mocks/stubs des ports).\n"
+        f"4. L'application des principes SOLID, Clean Code et KISS/YAGNI au niveau du code source.\n\n"
+        f"IMPORTANT : Rédiger l'intégralité de votre guide de conception logicielle en langue [{language}]."
+    )
+
+    expected_output = (
+        f"Un guide de conception logicielle Software Craftsmanship en Markdown rédigé en [{language}], comprenant :\n"
+        f"1. Spécification de l'Architecture Hexagonale (Schéma textuel Domaine ⟷ Ports ⟷ Adaptateurs)\n"
+        f"2. Modélisation DDD (Bounded Context, Agrégats, Entités, Value Objects)\n"
+        f"3. Matrice de testabilité TDD (Pyramide des tests, typologie des tests unitaires déterministes)\n"
+        f"4. Directives Clean Code & SOLID pour les développeurs des équipes de build."
+    )
+
+    return Task(
+        description=description,
+        expected_output=expected_output,
+        agent=agent,
+        context=context_tasks
+    )
+
+def create_safe_delivery_task(agent: Agent, context_tasks: list, language: str) -> Task:
+    """
+    Crée la tâche de découpage delivery agile par le SAFe Agile Enabler (Brique 2.3).
+    Prend en entrée les travaux d'architecture pour générer le backlog Jira opérationnel :
+    Enabler Epics, Enabler Features, User Stories techniques et Definition of Done (DoD).
+    """
+    description = (
+        f"Traduire l'ensemble du dossier d'architecture technique (macro-patterns, sécurité C2, architecture hexagonale) "
+        f"en éléments de backlog agile directement exploitables par les équipes de build d'un train SAFe (ART).\n"
+        f"Votre découpage opérationnel doit produire :\n"
+        f"1. L'Enabler Epic chapeau structurant la trajectoire d'implémentation.\n"
+        f"2. Les Enabler Features découpées verticalement par incrément de valeur.\n"
+        f"3. Les User Stories techniques prêtes pour le backlog Jira (format : En tant que... Je souhaite... Afin de...).\n"
+        f"4. Les critères d'acceptation opérationnels et la Definition of Done (DoD) pour chaque story (tests unitaires, couverture, revue de code, sécurité).\n\n"
+        f"IMPORTANT : Rédiger l'intégralité du backlog et des User Stories en langue [{language}]."
+    )
+
+    expected_output = (
+        f"Un backlog d'implémentation SAFe & Jira en Markdown rédigé en [{language}], comprenant :\n"
+        f"1. Fiche Enabler Epic (Objectif, hypothèse de valeur, métriques de succès)\n"
+        f"2. Liste des Enabler Features priorisées\n"
+        f"3. Backlog détaillé des User Stories Jira techniques avec critères d'acceptation\n"
+        f"4. Definition of Done (DoD) standardisée pour les équipes de développement."
+    )
+
+    return Task(
+        description=description,
+        expected_output=expected_output,
+        agent=agent,
+        context=context_tasks
+    )
+
+

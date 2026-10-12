@@ -11,11 +11,17 @@ from src.config import get_config
 from src.agents import (
     create_manager_agent,
     create_solution_architect_agent,
-    create_ciso_agent
+    create_challenger_agent,
+    create_ciso_agent,
+    create_crafter_agent,
+    create_safe_enabler_agent
 )
 from src.tasks import (
     create_preliminary_design_task,
-    create_security_audit_task
+    create_challenge_task,
+    create_security_audit_task,
+    create_software_crafting_task,
+    create_safe_delivery_task
 )
 from crewai import Crew, Process
 
@@ -70,34 +76,60 @@ def main():
         print(f"\n❌ Erreur lors de l'initialisation des modèles Gemini : {e}")
         sys.exit(1)
 
-    # 3. Création de la brigade d'agents
+    # 3. Création de la brigade complète d'agents
     manager = create_manager_agent(manager_llm)
     solution_architect = create_solution_architect_agent(worker_llm)
+    challenger = create_challenger_agent(worker_llm)
     ciso = create_ciso_agent(worker_llm)
+    crafter = create_crafter_agent(worker_llm)
+    safe_enabler = create_safe_enabler_agent(worker_llm)
 
-    # 4. Création des tâches enchaînées (Conception -> Audit CISO)
+    # 4. Création des tâches enchaînées (Conception -> Challenge -> CISO -> Craft -> SAFe)
     design_task = create_preliminary_design_task(
         agent=solution_architect,
         user_input=args.input,
         language=args.language
     )
 
+    challenge_task = create_challenge_task(
+        agent=challenger,
+        context_tasks=[design_task],
+        language=args.language
+    )
+
     security_task = create_security_audit_task(
         agent=ciso,
-        context_tasks=[design_task],
+        context_tasks=[design_task, challenge_task],
+        language=args.language
+    )
+
+    crafting_task = create_software_crafting_task(
+        agent=crafter,
+        context_tasks=[design_task, challenge_task, security_task],
+        language=args.language
+    )
+
+    delivery_task = create_safe_delivery_task(
+        agent=safe_enabler,
+        context_tasks=[design_task, crafting_task, security_task],
         language=args.language
     )
 
     # 5. Assemblage de la Crew
     crew = Crew(
-        agents=[solution_architect, ciso],
-        tasks=[design_task, security_task],
+        agents=[solution_architect, challenger, ciso, crafter, safe_enabler],
+        tasks=[design_task, challenge_task, security_task, crafting_task, delivery_task],
         process=Process.sequential,
         manager_agent=manager,
         verbose=True
     )
 
-    print("\n▶️ Lancement de l'orchestration multi-agents (Solution Architect + CISO)...")
+    print("\n▶️ Lancement de l'orchestration multi-agents d'architecture...")
+    print("   [1/5] Solution Architect (Macro-Patterns & Vision)")
+    print("   [2/5] Challenger / Red Team (Traque SPOF & Anti-Sur-Ingénierie)")
+    print("   [3/5] CISO & Data Protection (Zero-Trust, C2 & Homologation DCA)")
+    print("   [4/5] Software Crafter (Architecture Hexagonale, DDD & TDD)")
+    print("   [5/5] SAFe Agile Enabler (Backlog Jira, Enablers & DoD)")
     try:
         result = crew.kickoff()
     except Exception as e:

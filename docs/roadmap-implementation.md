@@ -55,9 +55,11 @@ Construire une plateforme open-source autonome d'ingénierie d'architecture bas�
 *   [x] **2.2 Agent Software Crafter & Domain-Driven Design (DDD) :**
     *   Maître des micro-patterns logiciels (Architecture Hexagonale Ports & Adapters, découplage métier).
     *   Garantie de la testabilité unitaire (TDD 100%), des principes SOLID et de la simplicité (KISS/YAGNI).
+    *   Tâche `create_software_crafting_task` implémentée et testée.
 *   [x] **2.3 Agent SAFe System Architect & Agile Delivery Enabler :**
     *   Traduction automatique du DAT en éléments de backlog Jira (Enabler Epics, Enabler Features, User Stories techniques).
     *   Critères d'acceptation opérationnels et Definition of Done (DoD) pour les trains SAFe (ART).
+    *   Tâche `create_safe_delivery_task` implémentée et testée.
 *   [x] **2.4 Agent Challenger / Red Team (Pattern Reflection & Critique) :**
     *   Identification proactive des SPOF (Single Points of Failure).
     *   Challenger les choix du Solution Architect (scalabilité, résilience, sur-ingénierie, Golden Hammer).
@@ -65,8 +67,9 @@ Construire une plateforme open-source autonome d'ingénierie d'architecture bas�
 *   [ ] **2.5 Agent Migration, FinOps & TCO :**
     *   Estimation des coûts comparatifs (On-premise vs Cloud IaaS/PaaS/SaaS).
     *   Scénarios de transition et jalons de bascule progressive.
-*   [ ] **2.6 Câblage complet des tâches & pipeline dans `src/main.py` :**
-    *   Tâches dédiées pour Crafter, SAFe, Challenger et FinOps.
+*   [x] **2.6 Câblage complet des tâches & pipeline dans `src/main.py` :**
+    *   Séquence d'élite opérationnelle : Solution ➔ Challenger ➔ CISO ➔ Crafter ➔ SAFe Enabler.
+    *   Test d'intégration complet `test_full_pipeline_assembly` validé.
 
 ---
 
