@@ -26,7 +26,13 @@ from src.tasks import (
     create_safe_delivery_task,
     create_finops_task
 )
-from src.tools import ArchitectureRAGManager, KnowledgeSearchTool
+from src.tools import (
+    ArchitectureRAGManager,
+    KnowledgeSearchTool,
+    GitPublisher,
+    JiraBacklogExporter,
+    DiagramExporter
+)
 from crewai import Crew, Process
 
 def parse_arguments():
@@ -56,6 +62,11 @@ def parse_arguments():
         type=str,
         default=None,
         help="Dossier d'étude optionnel pour enregistrer l'intégralité du pack documentaire d'architecture (un fichier par agent)"
+    )
+    parser.add_argument(
+        "--publish-git",
+        action="store_true",
+        help="Déclencher la publication Git sécurisée avec porte bloquante Human-in-the-Loop [O/N]"
     )
     parser.add_argument(
         "--log-file",
@@ -224,9 +235,35 @@ def main():
                 with open(target_file, "w", encoding="utf-8") as f:
                     f.write(output_content)
 
+        # Export automatique du backlog Jira au format CSV (Excel Français ;)
+        delivery_output = str(delivery_task.output.raw) if hasattr(delivery_task, "output") and delivery_task.output else ""
+        if delivery_output:
+            jira_csv_file = study_path / "backlog_jira.csv"
+            count = JiraBacklogExporter().export_to_csv(delivery_output, jira_csv_file)
+            print(f"📊 Export Jira CSV ({count} User Stories, délimiteur ;) généré : {jira_csv_file}")
+
         print(f"📦 Pack d'architecture complet (6 dossiers d'experts) généré dans : {study_path}")
 
     print(f"📜 Journal complet des échanges et raisonnements sauvegardé dans : {log_file_path}")
+
+    # 7. Publication Git sécurisée avec porte bloquante Human-in-the-Loop (Brique 4.3)
+    if args.publish_git:
+        publisher = GitPublisher()
+        content_to_scan = str(result)
+        leak_warnings = publisher.scan_content_for_secrets(content_to_scan)
+
+        if leak_warnings:
+            print("\n🚨 SCAN ANTI-SECRETS : Publication bloquée ! Secrets potentiels détectés :")
+            for w in leak_warnings:
+                print(f"   • {w}")
+        else:
+            approved = publisher.request_hitl_approval(
+                "Publication du pack d'architecture vers le dépôt distant Git sur la branche active"
+            )
+            if approved:
+                publisher.push_to_remote(repo_dir=ROOT_DIR)
+            else:
+                print("ℹ️ Publication Git annulée par l'architecte en chef.")
 
 if __name__ == "__main__":
     main()
