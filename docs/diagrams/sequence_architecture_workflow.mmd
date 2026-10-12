@@ -3,53 +3,91 @@ sequenceDiagram
     actor User as 👤 Lead Architect (HITL)
     participant CLI as 💻 CLI (src/main.py)
     participant Config as ⚙️ Config & LLMs
-    participant Manager as 👑 Manager (TOGAF)
+    participant Manager as 👑 Manager (TOGAF/SAFe)
     participant Solution as 🏗️ Solution Architect
     participant RAG as 🗄️ Base RAG (ChromaDB)
     participant Challenger as 🎯 Challenger (Red Team)
-    participant Gemini as ☁️ Google Gemini API
-    participant FS as 💾 Système de Fichiers
+    participant CISO as 🛡️ CISO (Sécurité)
+    participant Crafter as 💎 Software Crafter
+    participant SAFe as 🚆 SAFe Enabler
+    participant FinOps as 💰 Migration & FinOps
+    participant Gemini as ☁️ Gemini API (Flash/Pro)
+    participant Exporter as 📤 Exportateur
+    participant GitPub as 🛠️ GitPublisher (Tool)
+    participant Career as 📈 Agent Carrière
+    participant Meta as 🔧 Meta-Agent (Fond)
 
-    %% Étape 1
+    %% Étape 1 : Initialisation
     rect rgb(235, 245, 251)
-    note right of User: Étape 1 : Initialisation
-    User->>CLI: python src/main.py --language "French" --input "..."
-    CLI->>Config: get_config() & instancie LLMs
+    note right of User: Étape 1 : Initialisation & Sécurisation
+    User->>CLI: python src/main.py --language "French" --input "Notes de cadrage"
+    CLI->>Config: get_config() & validation clés
     Config-->>CLI: worker_llm (Flash) & manager_llm (Pro)
-    CLI->>CLI: Prépare les agents & la tâche (injection langue)
+    CLI->>CLI: Assemble la brigade d'agents et injecte la langue cible
     end
 
-    %% Étape 2
+    %% Étape 2 : Conception Macro & RAG
     rect rgb(234, 250, 241)
-    note right of CLI: Étape 2 : Orchestration & Conception
+    note right of CLI: Étape 2 : Conception Macro-Patterns
     CLI->>Manager: crew.kickoff()
-    Manager->>Solution: Délègue l'analyse d'architecture
-    Solution->>RAG: Requête de patterns similaires
-    RAG-->>Solution: Blueprints & templates
-    Solution->>Gemini: Inférence (Prompt + RAG) [Gemini Flash]
-    Gemini-->>Solution: Ébauche d'architecture
+    Manager->>Solution: Cadrage & Macro-Patterns (Cloud WAF, EDA/Kafka)
+    Solution->>RAG: Recherche de blueprints d'architecture
+    RAG-->>Solution: Patterns de résilience & templates
+    Solution->>Gemini: Inférence conception [Gemini Flash]
+    Gemini-->>Solution: Ébauche d'architecture technique
     end
 
-    %% Étape 3
+    %% Étape 3 : Boucle Critique (Red Team)
     rect rgb(253, 237, 236)
-    note right of Solution: Étape 3 : Boucle Critique (Red Team)
+    note right of Solution: Étape 3 : Boucle Contradictoire (Reflection Pattern)
     Solution->>Challenger: Soumission pour audit contradictoire
-    Challenger->>Gemini: Analyse des failles & SPOF [Gemini Flash]
-    Gemini-->>Challenger: Critique & risques
-    Challenger-->>Solution: Recommandations de correction
-    Solution->>Solution: Ajustement de l'architecture
-    Solution-->>Manager: Architecture consolidée
+    Challenger->>Gemini: Traque des SPOF, anti-patterns & sur-ingénierie [Gemini Flash]
+    Gemini-->>Challenger: Rapport critique & alternatives simples
+    Challenger-->>Solution: Recommandations de simplification (KISS/YAGNI)
+    Solution->>Solution: Consolidation de la macro-architecture
     end
 
-    %% Étape 4
+    %% Étape 4 : Évaluations Spécialisées
     rect rgb(254, 249, 231)
-    note right of Manager: Étape 4 : Synthèse & Validation HITL
-    Manager->>Gemini: Synthèse DAT finale en langue cible [Gemini Pro]
-    Gemini-->>Manager: Dossier d'architecture finalisé
-    Manager-->>CLI: Résultat de la Crew
-    CLI->>User: 🛑 Présentation pour validation Human-in-the-Loop
-    User->>CLI: Approbation formelle
-    CLI->>FS: Sauvegarde DAT.md et schémas .puml
-    FS-->>CLI: Fichiers écrits
-    CLI-->>User: Affichage du livrable et confirmation
+    note right of Manager: Étape 4 : Audits de Sécurité, Craft, Delivery & FinOps
+    Solution->>CISO: Soumission pour conformité Zero-Trust & C2
+    CISO->>Gemini: Audit classification, chiffrement CMK, DCA [Gemini Flash]
+    Gemini-->>CISO: Avis formel de sécurité DCA
+    
+    CISO->>Crafter: Transmission pour modélisation logicielle pure
+    Crafter->>Gemini: Conception Hexagonale, DDD & stratégie TDD [Gemini Flash]
+    Gemini-->>Crafter: Micro-patterns & plan de testabilité
+
+    Crafter->>SAFe: Transmission pour découpage agile
+    SAFe->>Gemini: Découpage Enabler Epics, Stories Jira & DoD [Gemini Flash]
+    Gemini-->>SAFe: Backlog Jira technique opérationnel
+
+    SAFe->>FinOps: Transmission pour chiffrage
+    FinOps->>Gemini: Calcul TCO comparatif Cloud vs On-Premise [Gemini Flash]
+    Gemini-->>FinOps: Grille de coûts & trajectoire de bascule
+    FinOps-->>Manager: Remontée de l'ensemble des travaux consolidés
+    end
+
+    %% Étape 5 : Synthèse & Validation HITL
+    rect rgb(245, 238, 248)
+    note right of Manager: Étape 5 : Synthèse Manager & Validation Humaine
+    Manager->>Gemini: Rédaction finale du DAT au standard TOGAF [Gemini Pro]
+    Gemini-->>Manager: Dossier d'Architecture Technique complet
+    Manager-->>CLI: Restitution de la Crew
+    CLI->>User: 🛑 Présentation de la synthèse pour arbitrage HITL
+    User->>CLI: Approbation formelle [O/N]
+    end
+
+    %% Étape 6 : Publication Déterministe & Post-Actions
+    rect rgb(230, 247, 255)
+    note right of CLI: Étape 6 : Publication Déterministe & Carrière
+    CLI->>Exporter: Génération physique des livrables
+    Exporter-->>CLI: DAT.md et schémas .puml écrits sur disque
+    CLI->>GitPub: Ordre de publication sécurisée avec message conventionnel
+    GitPub->>GitPub: Scan anti-secrets (.env, clés privées)
+    GitPub-->>CLI: git commit & git push confirmés
+    Manager->>Career: Déclenche valorisation de carrière
+    Career->>Career: Mise à jour CV & brouillon de post LinkedIn (REX)
+    Meta-->>Meta: Analyse des logs d'exécution en tâche de fond (Self-Healing)
+    CLI-->>User: Confirmation finale & affichage du livrable
     end

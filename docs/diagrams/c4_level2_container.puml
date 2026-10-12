@@ -17,8 +17,10 @@ rectangle "==Google Gemini Cloud Service\n\nAPI REST Google Generative Language\
 
 rectangle "==Système de Fichiers Local & Git\n\nStockage des livrables (DAT.md, .puml, .env, logs)" as LocalFS #EDBB99
 
+rectangle "==Dépôt Git Distant\n\nGitLab / GitHub d'entreprise" as RemoteGit #EDBB99
+
 ' Frontière du Système AAP
-System_Boundary(AAP_Boundary, "Multi-Agent Architecture Platform (AAP)") {
+package "Multi-Agent Architecture Platform (AAP)" as AAP_Boundary {
 
     rectangle "==Interface CLI & Lanceur\n[Python 3 / argparse]\n\nPoint d'entrée principal (src/main.py).\nParse --language, --input et --output." as CLI #D6EAF8
 
@@ -26,13 +28,15 @@ System_Boundary(AAP_Boundary, "Multi-Agent Architecture Platform (AAP)") {
 
     rectangle "==Moteur d'Orchestration CrewAI\n[Framework Multi-Agents / Python]\n\nGère le cycle de vie, la délégation et la mémoire d'exécution." as CrewEngine #AED6F1
 
-    rectangle "==Brigade d'Agents Spécialisés\n[src/agents/architect_agents.py]\n\n- Manager (TOGAF Leader)\n- Solution Architect\n- CISO (Sécurité & C2)\n- Challenger (Red Team)" as AgentsFleet #A9DFBF
+    rectangle "==Flotte Complète d'Agents Spécialisés\n[src/agents/architect_agents.py]\n\n- Manager (TOGAF 10 & SAFe 6 Leader)\n- Solution Architect (Macro/Cloud WAF)\n- Challenger (Red Team / Anti-SPOF)\n- CISO (Zero-Trust & C2/DCA)\n- Software Crafter (Hexagonale & TDD)\n- SAFe Agile Enabler (Jira & DoD)\n- Migration & FinOps (TCO Cloud)\n- Agent Carrière & Branding (CV & LinkedIn)\n- Meta-Agent (Agent Zero / Self-Healing)" as AgentsFleet #A9DFBF
 
     rectangle "==Fabrique de Tâches d'Architecture\n[src/tasks/architecture_tasks.py]\n\nGénère les prompts et injecte la langue cible." as TaskFactory #D2B4DE
 
-    rectangle "==Base de Connaissances RAG\n[ChromaDB / Vector Store]\n\nIndexation vectorielle des blueprints et normes." as VectorDB #FAD7A0
+    rectangle "==Base de Connaissances RAG\n[ChromaDB Local / Vector Store]\n\nIndexation vectorielle des blueprints et normes." as VectorDB #FAD7A0
 
-    rectangle "==Moteur d'Export des Livrables\n[src/tools/ / File Exporters]\n\nGénération automatique de DAT.md et schémas .puml." as Exporter #F5CBA7
+    rectangle "==Moteur d'Export des Livrables\n[src/tools/ / File Exporters]\n\nGénération de DAT.md et schémas C4 (.puml, .mmd, .drawio)." as Exporter #F5CBA7
+
+    rectangle "==GitPublisher (Outil Déterministe)\n[src/tools/git_publisher.py]\n\nScript Python sans LLM : scan anti-secrets,\ncommit conventionnel et push après validation HITL." as GitPublisher #FADBD8
 }
 
 ' Relations
@@ -40,26 +44,32 @@ User ---> CLI : Lance la commande avec options
 CLI ---> ConfigMgr : Initialise la configuration et les clés
 ConfigMgr ---> GeminiService : Établit la connexion avec les LLM
 CLI ---> CrewEngine : Déclenche l'orchestration (kickoff)
-CrewEngine ---> AgentsFleet : Coordonne les agents
+CrewEngine ---> AgentsFleet : Coordonne les 8 agents
 AgentsFleet ---> TaskFactory : Reçoit les instructions de tâche
 AgentsFleet ---> VectorDB : Requête les patterns d'architecture (RAG)
 AgentsFleet ---> GeminiService : Inférence et génération d'analyses
 CrewEngine ---> Exporter : Transmet les résultats consolidés
-Exporter ---> LocalFS : Écrit les fichiers DAT.md et .puml
-CLI ---> User : Affiche la synthèse finale
+Exporter ---> LocalFS : Écrit les fichiers physiques
+CLI ---> User : 🛑 Demande de validation formelle HITL
+User ---> CLI : Approbation explicite
+CLI ---> GitPublisher : Déclenche publication sécurisée
+GitPublisher ---> RemoteGit : git add, commit et push sécurisé
 
 legend right
-  |= Type de Ligne |= Signification |
-  | ---> | Appel fonctionnel / Flux de données |
+  |= Type |= Composant |= Rôle |
+  | Humain | Lead Architect | Validation formelle (HITL) |
+  | Cognitif | Flotte 8 Agents LLM | Raisonnement et conception d'architecture |
+  | Déterministe | GitPublisher (Python) | Automatisation Git sécurisée sans LLM |
+  | Données | ChromaDB | Référentiel vectoriel local |
 endlegend
 
 note bottom of AAP_Boundary
   **1. Type de Diagramme :** C4 Model - Niveau 2 (Container Diagram).
   **(Définition) :** Décompose le système en conteneurs exécutables (applications, bases de données, composants runtime).
-  **2. Utilité :** Montrer l'architecture logicielle interne de la plateforme AAP et le rôle de chaque brique Python.
+  **2. Utilité :** Montrer l'architecture logicielle interne de la plateforme AAP avec les 8 agents et l'adaptateur GitPublisher.
   **3. Standard :** C4 Model & TOGAF Information Systems Architecture (Phase C).
   **4. Équivalent UML :** Diagramme de Déploiement / Diagramme de Paquetages UML.
-  **5. Résumé :** Décrit comment la CLI initialise la configuration, orchestre les agents via CrewAI avec Gemini, interroge la base vectorielle RAG et génère les livrables dans le système de fichiers.
+  **5. Résumé :** Décrit comment la CLI initialise la configuration, orchestre les 8 agents spécialisés via CrewAI et Gemini, exploite ChromaDB pour le RAG, et sécurise la publication Git via l'outil déterministe GitPublisher après accord HITL.
 end note
 
 @enduml

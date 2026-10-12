@@ -1,40 +1,53 @@
 flowchart TB
     User["👤 Lead Architect (Human-in-the-Loop)"]
     GeminiService["☁️ Google Gemini Cloud Service<br/><i>gemini-1.5-flash & gemini-1.5-pro</i>"]
-    LocalFS["💾 Système de Fichiers & Git<br/><i>DAT.md, Schémas .puml, .env</i>"]
+    LocalFS["💾 Système de Fichiers Local<br/><i>DAT.md, Schémas .puml, .env, logs</i>"]
+    RemoteGit["🌐 Dépôt Git Distant<br/><i>GitLab / GitHub</i>"]
 
     subgraph AAP ["🖥️ Multi-Agent Architecture Platform (AAP)"]
         direction TB
-        CLI["💻 Interface CLI (main.py)<br/><i>argparse (--language, --input)</i>"]
-        ConfigMgr["⚙️ Config & LLM Manager (settings.py)<br/><i>dotenv, LangChain Google GenAI</i>"]
-        CrewEngine["🧠 Moteur CrewAI<br/><i>Processus d'orchestration</i>"]
+        CLI["💻 Interface CLI (main.py)<br/><i>argparse (--language, --input, --output)</i>"]
+        ConfigMgr["⚙️ Config & LLM Manager (settings.py)<br/><i>dotenv, validation clés, LangChain Gemini</i>"]
+        CrewEngine["🧠 Moteur CrewAI<br/><i>Orchestration séquentielle & hiérarchique</i>"]
         
-        subgraph Fleet ["👥 Brigade d'Agents Spécialisés"]
-            ManagerAgent["👑 Manager (TOGAF Lead)"]
-            SolutionAgent["🏗️ Solution Architect"]
-            CisoAgent["🛡️ CISO (Sécurité/C2)"]
-            ChallengerAgent["🎯 Challenger (Red Team)"]
+        subgraph Fleet ["👥 Flotte Complète d'Agents Spécialisés"]
+            ManagerAgent["👑 Manager (TOGAF/SAFe Lead)"]
+            SolutionAgent["🏗️ Solution Architect (Macro/WAF)"]
+            ChallengerAgent["🎯 Challenger (Red Team / Anti-SPOF)"]
+            CisoAgent["🛡️ CISO (Zero-Trust & C2)"]
+            CrafterAgent["💎 Software Crafter (Hexagonale & TDD)"]
+            SafeAgent["🚆 SAFe Agile Enabler (Jira & DoD)"]
+            FinopsAgent["💰 Migration & FinOps (TCO)"]
+            CareerAgent["📈 Carrière & Branding (CV & LinkedIn)"]
+            MetaAgent["🔧 Meta-Agent (Agent Zero / Self-Healing)"]
         end
 
-        TaskFactory["📋 Fabrique de Tâches<br/><i>Injection langue & contraintes</i>"]
-        VectorDB["🗄️ Base RAG (ChromaDB)<br/><i>Indexation blueprints & normes</i>"]
-        Exporter["📤 Exportateur de Livrables<br/><i>Générateur DAT & PlantUML</i>"]
+        TaskFactory["📋 Fabrique de Tâches<br/><i>Injection langue (--language) & contraintes</i>"]
+        VectorDB["🗄️ Base RAG (ChromaDB Local)<br/><i>Indexation blueprints & templates</i>"]
+        Exporter["📤 Exportateur de Livrables<br/><i>Générateur DAT.md, .puml, .mmd, .drawio</i>"]
+        GitPublisher["🛠️ GitPublisher (Outil Déterministe)<br/><i>Contrôle anti-secrets, commit conventionnel & push</i>"]
     end
 
     User -->|"Lance la commande CLI"| CLI
-    CLI -->|"Charge la config"| ConfigMgr
+    CLI -->|"Charge la configuration"| ConfigMgr
     ConfigMgr -->|"Connecte les LLMs"| GeminiService
-    CLI -->|"Déclenche l'orchestration"| CrewEngine
-    CrewEngine -->|"Coordonne"| Fleet
-    Fleet -->|"Reçoit les instructions"| TaskFactory
-    Fleet -->|"Interroge les patterns"| VectorDB
-    Fleet -->|"Inférences LLM"| GeminiService
+    CLI -->|"Initialise la Crew"| CrewEngine
+    CrewEngine -->|"Coordonne la flotte"| Fleet
+    Fleet -->|"Reçoit les tâches enrichies"| TaskFactory
+    Fleet -->|"Requête la doctrine RAG"| VectorDB
+    Fleet -->|"Inférences LLM spécialisées"| GeminiService
     CrewEngine -->|"Consolide les livrables"| Exporter
-    Exporter -->|"Écrit les fichiers"| LocalFS
-    CLI -->|"Restitue la synthèse"| User
+    Exporter -->|"Écrit les fichiers bruts"| LocalFS
+    CLI -->|"Demande validation HITL"| User
+    User -->|"Donne approbation"| CLI
+    CLI -->|"Déclenche publication"| GitPublisher
+    GitPublisher -->|"git commit & push"| RemoteGit
+    MetaAgent ..>|"Supervise logs & santé"| CrewEngine
 
     style User fill:#D4E6F1,stroke:#2980B9,stroke-width:2px
     style GeminiService fill:#FCF3CF,stroke:#F39C12,stroke-width:2px
     style LocalFS fill:#EDBB99,stroke:#D35400,stroke-width:2px
+    style RemoteGit fill:#EDBB99,stroke:#D35400,stroke-width:2px
     style AAP fill:#F2F4F4,stroke:#7F8C8D,stroke-width:2px
     style Fleet fill:#E8F8F5,stroke:#1ABC9C,stroke-width:2px
+    style GitPublisher fill:#FADBD8,stroke:#C0392B,stroke-width:2px

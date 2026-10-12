@@ -5,17 +5,24 @@ skinparam roundcorner 10
 skinparam shadowing false
 skinparam responseMessageBelowArrow true
 
-title Diagramme de Séquence - Workflow d'Exécution & Cycle Reflection/Critique (AAP)
+title Diagramme de Séquence - Workflow Complet d'Orchestration & Publication Git (AAP)
 
 actor "Lead Architect\n(Human-in-the-Loop)" as User #D4E6F1
 participant "CLI Runner\n(src/main.py)" as CLI #D6EAF8
 participant "Configuration\n(settings.py)" as Config #E8F8F5
-participant "Manager Agent\n(TOGAF Lead)" as Manager #AED6F1
-participant "Solution Architect\n(Worker)" as SolutionAgent #A9DFBF
-participant "Base RAG\n(ChromaDB)" as RAG #FAD7A0
-participant "Challenger Agent\n(Red Team)" as Challenger #FADBD8
+participant "Manager Agent\n(TOGAF/SAFe Lead)" as Manager #AED6F1
+participant "Solution Architect\n(Worker Macro)" as SolutionAgent #A9DFBF
+participant "Base RAG\n(ChromaDB Local)" as RAG #FAD7A0
+participant "Challenger Agent\n(Red Team / Anti-SPOF)" as Challenger #FADBD8
+participant "CISO Agent\n(Zero-Trust & C2)" as CISO #FDEBD0
+participant "Software Crafter\n(Hexagonale & TDD)" as Crafter #D2B4DE
+participant "SAFe Agile Enabler\n(Jira Backlog & DoD)" as SAFe #D5F5E3
+participant "Migration & FinOps\n(TCO & Coûts)" as FinOps #FCF3CF
 participant "Google Gemini API\n(Flash / Pro)" as GeminiAPI #FCF3CF
-participant "Système de Fichiers\n(DAT / .puml)" as FileSystem #EDBB99
+participant "Exportateur Livrables\n(DAT / .puml)" as Exporter #EDBB99
+participant "GitPublisher (Tool)\n(Script Python pur)" as GitPub #FADBD8
+participant "Agent Carrière\n(CV & LinkedIn)" as Career #E8DAEF
+participant "Meta-Agent\n(Agent Zero / Fond)" as Meta #F9EBEA
 
 == 1. Initialisation & Chargement ==
 User -> CLI : python src/main.py --language "French" --input "Notes de cadrage"
@@ -27,19 +34,18 @@ Config -> Config : Charge .env & valide GEMINI_API_KEY
 Config --> CLI : worker_llm (Flash) & manager_llm (Pro)
 deactivate Config
 
-CLI -> CLI : Instancie Manager & Solution Architect
-CLI -> CLI : Crée la tâche avec injection de la langue cible
+CLI -> CLI : Instancie la brigade complète et injecte la langue cible
 
-== 2. Orchestration & Conception Technique ==
+== 2. Orchestration & Conception Technique (Macro) ==
 CLI -> Manager : crew.kickoff()
 activate Manager
 
-Manager -> SolutionAgent : Délègue l'analyse d'architecture technique
+Manager -> SolutionAgent : Délègue l'analyse d'architecture technique (Macro-Patterns)
 activate SolutionAgent
 
-SolutionAgent -> RAG : Recherche de blueprints similaires (RAG Query)
+SolutionAgent -> RAG : Recherche de blueprints d'architecture (RAG Query)
 activate RAG
-RAG --> SolutionAgent : Retours sémantiques (patterns, règles TOGAF)
+RAG --> SolutionAgent : Retours sémantiques (patterns Cloud WAF, EDA/Kafka)
 deactivate RAG
 
 SolutionAgent -> GeminiAPI : Inférence LLM (Prompt + Notes + Contexte RAG) [Gemini Flash]
@@ -51,19 +57,52 @@ deactivate GeminiAPI
 SolutionAgent -> Challenger : Soumet la proposition pour revue contradictoire
 activate Challenger
 
-Challenger -> GeminiAPI : Audit sécurité, détection SPOF & sur-coûts [Gemini Flash]
+Challenger -> GeminiAPI : Détection des SPOF, anti-patterns & sur-ingénierie [Gemini Flash]
 activate GeminiAPI
-GeminiAPI --> Challenger : Liste des faiblesses et contre-propositions
+GeminiAPI --> Challenger : Liste des faiblesses et solutions simplifiées (KISS/YAGNI)
 deactivate GeminiAPI
 
 Challenger --> SolutionAgent : Feedback critique & recommandations d'ajustement
 deactivate Challenger
 
-SolutionAgent -> SolutionAgent : Ajuste et finalise la proposition technique
-SolutionAgent --> Manager : Restitue la proposition d'architecture consolidée
+SolutionAgent -> SolutionAgent : Ajuste et finalise la macro-architecture
 deactivate SolutionAgent
 
-== 4. Synthèse, Validation HITL & Restitution ==
+== 4. Évaluations Spécialisées : Sécurité, Craft, Delivery & FinOps ==
+SolutionAgent -> CISO : Soumission pour conformité Zero-Trust & classification C2
+activate CISO
+CISO -> GeminiAPI : Audit des données, chiffrement CMK et règles DCA [Gemini Flash]
+activate GeminiAPI
+GeminiAPI --> CISO : Avis formel de sécurité DCA
+deactivate GeminiAPI
+CISO --> Crafter : Transmission du dossier audité
+deactivate CISO
+
+activate Crafter
+Crafter -> GeminiAPI : Modélisation Architecture Hexagonale, DDD & stratégie TDD [Gemini Flash]
+activate GeminiAPI
+GeminiAPI --> Crafter : Micro-patterns logiciels purs et plan de testabilité
+deactivate GeminiAPI
+Crafter --> SAFe : Transmission pour atterrissage dans le backlog
+deactivate Crafter
+
+activate SAFe
+SAFe -> GeminiAPI : Découpage vertical Enabler Epics, Features, Stories Jira & DoD [Gemini Flash]
+activate GeminiAPI
+GeminiAPI --> SAFe : Backlog Jira opérationnel
+deactivate GeminiAPI
+SAFe --> FinOps : Transmission pour évaluation économique
+deactivate SAFe
+
+activate FinOps
+FinOps -> GeminiAPI : Calcul TCO comparatif Cloud vs On-Premise [Gemini Flash]
+activate GeminiAPI
+GeminiAPI --> FinOps : Grille budgétaire & calendrier de transition
+deactivate GeminiAPI
+FinOps --> Manager : Restitution consolidée de la brigade
+deactivate FinOps
+
+== 5. Synthèse Globale & Validation Human-in-the-Loop ==
 Manager -> GeminiAPI : Synthèse globale du DAT en langue cible [Gemini 1.5 Pro]
 activate GeminiAPI
 GeminiAPI --> Manager : Document d'architecture finalisé
@@ -72,24 +111,39 @@ deactivate GeminiAPI
 Manager --> CLI : Résultat final de la Crew
 deactivate Manager
 
-CLI -> User : 🛑 Présentation pour validation Human-in-the-Loop (HITL)
-User -> CLI : Approbation formelle
+CLI -> User : 🛑 Présentation de la synthèse pour validation Human-in-the-Loop (HITL)
+User -> CLI : Approbation formelle explicite [O/N]
 
-CLI -> FileSystem : Enregistrement de DAT.md et des schémas C4 .puml
-activate FileSystem
-FileSystem --> CLI : Fichiers créés avec succès
-deactivate FileSystem
+== 6. Exportation, Publication Déterministe & Valorisation ==
+CLI -> Exporter : Enregistrement des fichiers physiques
+activate Exporter
+Exporter --> CLI : Fichiers créés avec succès (DAT.md, .puml, .drawio)
+deactivate Exporter
 
-CLI --> User : Affichage de la synthèse & confirmation de sauvegarde
+CLI -> GitPub : Déclenche publication sécurisée avec Conventional Commit
+activate GitPub
+GitPub -> GitPub : Scan anti-secrets (.env, clés privées)
+GitPub -> GitPub : git add, git commit, git push
+GitPub --> CLI : Confirmation de publication Git
+deactivate GitPub
+
+Manager -> Career : Ordre de mise à jour de profil
+activate Career
+Career -> Career : Mise à jour du CV & brouillon de post LinkedIn (REX)
+deactivate Career
+
+Meta -> Meta : Surveillance des logs et état de santé des prompts en arrière-plan
+
+CLI --> User : Affichage de la synthèse finale & lien vers les fichiers
 deactivate CLI
 
 note bottom of User
   **1. Type de Diagramme :** Diagramme de Séquence UML.
-  **(Définition) :** Représente l'ordre chronologique des échanges et messages entre les acteurs et composants.
-  **2. Utilité :** Expliciter le cycle complet de traitement, depuis la commande CLI jusqu'à la production du livrable.
+  **(Définition) :** Représente l'ordre chronologique des échanges et messages entre les acteurs, agents et adaptateurs.
+  **2. Utilité :** Expliciter le cycle complet de traitement, depuis la commande CLI jusqu'à la publication sécurisée dans Git.
   **3. Standard :** UML 2.5 / TOGAF Phase F (Plan de Transition & Exécution).
   **4. Équivalent UML :** Diagramme de Séquence d'Interaction.
-  **5. Résumé :** Décrit les 4 étapes majeures : initialisation, conception enrichie par RAG, challenge contradictoire (Red Team), et validation humaine avant export.
+  **5. Résumé :** Décrit les 6 étapes majeures : initialisation, conception macro RAG, challenge contradictoire, évaluations spécialisées (CISO, Crafter, SAFe, FinOps), validation humaine HITL, et publication Git déterministe via GitPublisher.
 end note
 
 @enduml
