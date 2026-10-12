@@ -10,7 +10,7 @@
 
 ## 🎯 Vision & Composition Exhaustive du Système
 
-Le système est désormais modélisé de façon rigoureusement identique entre la cible TOGAF (`docs/architecture-cible-togaf.md`), la living documentation visuelle (`docs/dossier-architecture-visuelle.md`), la feuille de route (`docs/roadmap-implementation.md`), le backlog d'idées de brigades métier (`docs/backlog_idees_brigades.md`) et les diagrammes C4 / Séquence.
+Le système est désormais modélisé de façon rigoureusement identique entre la cible TOGAF (`docs/architecture-cible-togaf.md`), la living documentation visuelle (`docs/dossier-architecture-visuelle.md`), la feuille de route (`docs/roadmap-implementation.md`) et les diagrammes C4 / Séquence.
 
 ### 👥 La Brigade Complète des 8 Agents Spécialisés
 
