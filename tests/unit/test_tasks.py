@@ -3,7 +3,9 @@ from crewai import Agent
 from src.tasks.architecture_tasks import (
     create_preliminary_design_task,
     create_security_audit_task,
-    create_challenge_task
+    create_challenge_task,
+    create_software_crafting_task,
+    create_safe_delivery_task
 )
 
 @pytest.fixture
@@ -48,4 +50,28 @@ def test_challenge_task_language_and_doctrine(agent):
     assert "spof" in desc_lower
     assert "sur-ingénierie" in desc_lower or "golden hammer" in desc_lower or "kiss" in desc_lower
     assert task.context == []
+
+def test_software_crafting_task_language_and_doctrine(agent):
+    """Vérifie que la tâche Software Crafter intègre l'Architecture Hexagonale, le DDD et le TDD."""
+    task = create_software_crafting_task(agent, context_tasks=[], language="French")
+
+    assert "[French]" in task.description
+    assert "[French]" in task.expected_output
+    desc_lower = task.description.lower()
+    assert "hexagonale" in desc_lower or "ports" in desc_lower or "adapters" in desc_lower
+    assert "ddd" in desc_lower or "domaine" in desc_lower or "agrégat" in desc_lower
+    assert "tdd" in desc_lower or "tests unitaires" in desc_lower or "solid" in desc_lower
+    assert task.context == []
+
+def test_safe_delivery_task_language_and_doctrine(agent):
+    """Vérifie que la tâche SAFe Enabler intègre le découpage en backlog Jira et la Definition of Done."""
+    task = create_safe_delivery_task(agent, context_tasks=[], language="French")
+
+    assert "[French]" in task.description
+    assert "[French]" in task.expected_output
+    desc_lower = task.description.lower()
+    assert "jira" in desc_lower or "user stories" in desc_lower or "enabler" in desc_lower
+    assert "dod" in desc_lower or "definition of done" in desc_lower
+    assert task.context == []
+
 
