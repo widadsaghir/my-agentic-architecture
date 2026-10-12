@@ -23,6 +23,8 @@ chroma_db/
 .chroma/
 .cache/
 tmp/
+logs/
+*.log
 
 # IDE & Editor
 .vscode/

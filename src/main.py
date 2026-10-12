@@ -1,5 +1,6 @@
 import sys
 import argparse
+from datetime import datetime
 from pathlib import Path
 
 # Assurer que le répertoire racine est bien dans le PYTHONPATH
@@ -46,6 +47,12 @@ def parse_arguments():
         type=str,
         default=None,
         help="Chemin optionnel pour enregistrer le livrable Markdown produit"
+    )
+    parser.add_argument(
+        "--log-file",
+        type=str,
+        default=None,
+        help="Chemin optionnel pour sauvegarder l'intégralité des traces et échanges des agents (par défaut dans logs/)"
     )
     return parser.parse_args()
 
@@ -126,12 +133,19 @@ def main():
         language=args.language
     )
 
-    # 5. Assemblage de la Crew
+    # 5. Configuration des logs d'exécution (Base d'audit pour le Meta-Agent)
+    logs_dir = ROOT_DIR / "logs"
+    logs_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file_path = args.log_file if args.log_file else str(logs_dir / f"execution_{timestamp}.log")
+
+    # 6. Assemblage de la Crew
     crew = Crew(
         agents=[solution_architect, challenger, ciso, crafter, safe_enabler],
         tasks=[design_task, challenge_task, security_task, crafting_task, delivery_task],
         process=Process.sequential,
         manager_agent=manager,
+        output_log_file=log_file_path,
         verbose=True
     )
 
@@ -141,6 +155,7 @@ def main():
     print("   [3/5] CISO & Data Protection (Zero-Trust, C2 & Homologation DCA)")
     print("   [4/5] Software Crafter (Architecture Hexagonale, DDD & TDD)")
     print("   [5/5] SAFe Agile Enabler (Backlog Jira, Enablers & DoD)")
+    print(f"   [Trace] Enregistrement en direct des échanges dans : {log_file_path}")
     try:
         result = crew.kickoff()
     except Exception as e:
@@ -159,6 +174,8 @@ def main():
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(str(result))
         print(f"\n💾 Livrable enregistré avec succès dans : {output_path}")
+
+    print(f"📜 Journal complet des échanges et raisonnements sauvegardé dans : {log_file_path}")
 
 if __name__ == "__main__":
     main()
