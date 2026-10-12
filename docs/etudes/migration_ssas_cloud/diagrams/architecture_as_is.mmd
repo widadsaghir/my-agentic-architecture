@@ -1,0 +1,33 @@
+flowchart TD
+    subgraph UsersZone ["Zone Utilisateurs & Décisionnelle"]
+        Users["👤 Analystes Financiers & Contrôleurs de Gestion"]
+        PowerBI["📊 Power BI Desktop / Service Local<br/><i>Tableaux de bord & requêtes DAX/MDX</i>"]
+    end
+
+    subgraph OnPremDatacenter ["Zone Hébergement On-Premise (Datacenter Sécurisé)"]
+        subgraph SSASCluster ["Serveurs Dédiés SSAS (Instances Physiques / VM)"]
+            SSAS1["🖥️ Serveur 01 : BillingCube<br/><i>SSAS Multidimensionnel Facturation</i><br/>[C2 MASSIF]"]
+            SSAS2["🖥️ Serveur 02 : RecoveryCube<br/><i>SSAS Multidimensionnel Recouvrement</i><br/>[C2 MASSIF]"]
+            SSAS3["🖥️ Serveur 03 : LedgerCube<br/><i>SSAS Multidimensionnel Comptabilité</i><br/>[C2 MASSIF]"]
+        end
+
+        subgraph OLTPZone ["Bases Transactionnelles Amont (OLTP)"]
+            DB1[("🗄️ Base Facturation OLTP<br/><i>Émissions de factures</i>")]
+            DB2[("🗄️ Base Recouvrement OLTP<br/><i>Créances & contentieux</i>")]
+            DB3[("🗄️ Base Comptabilité OLTP<br/><i>Grand Livre & balances</i>")]
+        end
+    end
+
+    Users -->|"Consultation des rapports"| PowerBI
+    PowerBI -->|"Requêtes MDX/DAX (port 2383)"| SSAS1
+    PowerBI -->|"Requêtes MDX/DAX (port 2383)"| SSAS2
+    PowerBI -->|"Requêtes MDX/DAX (port 2383)"| SSAS3
+
+    DB1 -.->|"Batch nocturne (ETL/SQL)"| SSAS1
+    DB2 -.->|"Batch nocturne (ETL/SQL)"| SSAS2
+    DB3 -.->|"Batch nocturne (ETL/SQL)"| SSAS3
+
+    style UsersZone fill:#EBF5FB,stroke:#2980B9,stroke-width:2px
+    style OnPremDatacenter fill:#EAEDED,stroke:#7F8C8D,stroke-width:2px
+    style SSASCluster fill:#D4E6F1,stroke:#1F618D,stroke-width:2px
+    style OLTPZone fill:#D5F5E3,stroke:#27AE60,stroke-width:2px

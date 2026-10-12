@@ -1,0 +1,59 @@
+@startuml
+skinparam defaultFontSize 16
+skinparam defaultFontColor #000000
+skinparam roundcorner 10
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 120
+skinparam ranksep 120
+
+top to bottom direction
+
+title Architecture Existante (AS-IS) — Plateforme Décisionnelle SSAS On-Premise (NovaAnalytics)
+
+node "Zone Utilisateurs & Décisionnelle" {
+    actor "Analystes Financiers &\nContrôleurs de Gestion" as Users #D4E6F1
+    rectangle "==Power BI Desktop / Service On-Prem\n\nRapports interactifs et tableaux de bord" as PowerBI #FCF3CF
+}
+
+node "Zone Hébergement On-Premise (Datacenter Sécurisé)" {
+
+    package "Serveurs Dédiés SSAS (Instances Physiques / VM)" {
+        rectangle "==Serveur 01 : Facturation\n[Windows Server / SSAS Multidimensionnel]\n\nInstance SSAS - BillingCube\nStockage OLAP volumétrique" as Server1 #AED6F1
+        rectangle "==Serveur 02 : Recouvrement\n[Windows Server / SSAS Multidimensionnel]\n\nInstance SSAS - RecoveryCube\nSuivi créances et impayés" as Server2 #AED6F1
+        rectangle "==Serveur 03 : Comptabilité\n[Windows Server / SSAS Multidimensionnel]\n\nInstance SSAS - LedgerCube\nGrand livre et écritures comptables" as Server3 #AED6F1
+    }
+
+    package "Zone Données Sources Transactionnelles (OLTP)" {
+        database "==Base Facturation OLTP\n[SQL Server / Oracle]\nDonnées d'émissions de factures" as DbBilling #D5F5E3
+        database "==Base Recouvrement OLTP\n[SQL Server / Oracle]\nDonnées clients et contentieux" as DbRecovery #D5F5E3
+        database "==Base Comptable OLTP\n[SQL Server / Oracle]\nÉcritures de journal et balances" as DbLedger #D5F5E3
+    }
+}
+
+' Flux
+Users ---> PowerBI : Consultation des tableaux de bord
+PowerBI ---> Server1 : Requêtes MDX / DAX (Port 2383)
+PowerBI ---> Server2 : Requêtes MDX / DAX (Port 2383)
+PowerBI ---> Server3 : Requêtes MDX / DAX (Port 2383)
+
+Server1 <... DbBilling : Ingestion batch nocturne (Flux ETL / SQL)
+Server2 <... DbRecovery : Ingestion batch nocturne (Flux ETL / SQL)
+Server3 <... DbLedger : Ingestion batch nocturne (Flux ETL / SQL)
+
+legend right
+  |= Composant |= Classification |= Type de Traitement |
+  | Données Sources | C2 MASSIF | Transactionnel OLTP |
+  | Cubes SSAS | C2 MASSIF | Multidimensionnel OLAP |
+  | Power BI | C2 MASSIF | Restitution Décisionnelle |
+endlegend
+
+note bottom of Server2
+  **1. Type de Diagramme :** Diagramme d'Architecture Technique Infrastructure (AS-IS).
+  **2. Utilité :** Représenter l'état existant des serveurs physiques/VM hébergeant les 3 instances SSAS On-Premise et leurs flux de données.
+  **3. Standard :** UML 2.5 Déploiement / TOGAF Phase C & D (Architecture des Systèmes Existants).
+  **4. Équivalent UML :** Diagramme de Déploiement Physique.
+  **5. Résumé :** Montre le couplage fort entre les 3 bases de données transactionnelles amont, les 3 serveurs SSAS dédiés et la couche de restitution Power BI On-Premise.
+end note
+
+@enduml

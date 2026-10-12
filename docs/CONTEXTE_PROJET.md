@@ -44,10 +44,23 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 | Brique | Libellé | Statut | Détails |
 | :---: | :--- | :---: | :--- |
 | **1** | Socle Technique & Connecteur Gemini | 🟢 Terminé | Modularisation (`src/config`, `src/agents`, `src/tasks`, `src/main.py`), support `--language`. |
-| **2** | Brigade d'Agents Spécialisés d'Architecture | 🟡 En cours | Séquence complète (Solution ➔ Challenger ➔ CISO ➔ Crafter ➔ SAFe) câblée et testée. Reste FinOps. |
+| **2** | Brigade d'Agents Spécialisés d'Architecture | 🟢 Terminé | Brigade complète (Solution, Challenger, CISO, Crafter, SAFe, FinOps) validée et pack d'étude complet généré (`docs/etudes/migration_ssas_cloud/`). |
 | **3** | Base Vectorielle & RAG (ChromaDB) | ⚪ En attente | Indexation locale des blueprints, règles de sécurité et templates d'entreprise. |
 | **4** | Génération de Livrables & Outil GitPublisher | ⚪ En attente | DAT.md, schémas C4 autonomes (.puml, .mmd, .drawio), adaptateur GitPublisher et exports Jira. |
 | **5** | Meta-Agent (Self-Healing) & Branding | ⚪ En attente | Agent Zero (monitoring des logs & patch prompts) et Agent Carrière (CV & LinkedIn). |
+
+---
+
+## 📁 Pack Documentaire d'Architecture Produit (`docs/etudes/migration_ssas_cloud/`)
+
+- `00_SYNTHESE_EXECUTIVE_ET_ROADMAP_TOGAF.md` (👑 Lead Architecture Manager)
+- `01_DOSSIER_ARCHITECTURE_TECHNIQUE_DAT.md` (🏗️ Solution Architect)
+- `02_RAPPORT_AUDIT_CONTRADICTOIRE.md` (🎯 Challenger Red Team)
+- `03_AVIS_HOMOLOGATION_SECURITE_DCA.md` (🛡️ CISO & Data Protection)
+- `04_CONCEPTION_HEXAGONALE_ET_DDD.md` (💎 Software Crafter)
+- `05_STRATEGIE_MIGRATION_ET_FINOPS_TCO.md` (💰 Migration & FinOps)
+- `06_BACKLOG_LIVRAISON_SAFE_JIRA.md` (🚆 SAFe Agile Enabler)
+- `diagrams/` : Schémas d'architecture AS-IS et TO-BE complets aux formats Draw.io (`.drawio`), PlantUML (`.puml`) et Mermaid (`.mmd`).
 
 ---
 
@@ -65,6 +78,5 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 ---
 
 ## 📍 Prochaines Actions Prioritaires
-1. **Développement de l'agent 2.5 : Migration & FinOps / TCO** (`create_finops_agent` + tests unitaires).
-2. **Essai d'exécution réelle de bout en bout de la CLI** sur un sujet d'architecture témoin.
-3. **Passage à la Brique 3 : Base vectorielle RAG locale (ChromaDB)**.
+1. **Passage à la Brique 3 : Base vectorielle RAG locale (ChromaDB)** pour injecter les blueprints d'architecture d'entreprise.
+2. **Implémentation de l'adaptateur déterministe GitPublisher** (Brique 4).

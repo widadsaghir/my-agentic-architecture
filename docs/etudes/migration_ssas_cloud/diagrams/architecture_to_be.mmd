@@ -1,0 +1,54 @@
+flowchart TB
+    subgraph UsersZone ["Zone Utilisateurs & Décisionnelle Sécurisée"]
+        Users["👤 Analystes Financiers & Contrôleurs de Gestion"]
+        PowerBIService["📊 Power BI Service (Enclave Managée)<br/><i>RLS/CLS dynamique & DLP Purview</i>"]
+    end
+
+    subgraph AzureSpoke ["Cloud Managé Souverain (VNet Spoke - 0 IP Publique)"]
+        subgraph SecurityVault ["Gestion des Clés & C2 MASSIF"]
+            AKV["🔐 Azure Key Vault Premium (HSM)<br/><i>FIPS 140-2 Niveau 3 / CMK</i><br/>Kill-Switch < 15 min"]
+        end
+
+        subgraph SemanticModels ["Plateforme Sémantique & Modèles Tabulaires"]
+            Billing["⚡ Modèle Facturation (BillingCube)<br/><i>Fabric Direct Lake (Parquet)</i>"]
+            Recovery["🛡️ Modèle Recouvrement (RecoveryCube)<br/><i>PBI Premium Import + RLS / SHA-256</i>"]
+            Ledger["💎 Modèle Comptabilité (LedgerCube)<br/><i>PBI Premium Import + Intégrité SOX</i>"]
+        end
+
+        subgraph LakeStorage ["Stockage Data Lake Unifié"]
+            OneLake[("🗄️ OneLake Storage (Delta Parquet)<br/><i>Chiffrement CMK de bout en bout</i>")]
+        end
+
+        subgraph DevSecOpsZone ["Usine DevSecOps TMDL / GitOps"]
+            CICD["🚀 Pipeline CI/CD TMDL<br/><i>Tabular Editor BPA, Gitleaks, XMLA OIDC</i>"]
+        end
+    end
+
+    subgraph OnPremZone ["Datacenter On-Premise Sécurisé (Sources)"]
+        Sources[("🗄️ Bases Sources OLTP<br/><i>Facturation, Recouvrement, Compta</i>")]
+        Gateway["🛠️ Data Gateway Privée / Runtime<br/><i>Transfert batch sécurisé</i>"]
+    end
+
+    Users -->|"SSO Entra ID via Private Link"| PowerBIService
+    PowerBIService -->|"Requêtes interactives Direct Lake"| Billing
+    PowerBIService -->|"Requêtes filtrées RLS/CLS"| Recovery
+    PowerBIService -->|"Requêtes Grand Livre auditées"| Ledger
+
+    Billing -->|"Direct Lake (Zéro recopie)"| OneLake
+    AKV -.->|"Clé CMK"| OneLake
+    AKV -.->|"Sel de hachage & Clé CMK"| Recovery
+
+    Sources --> Gateway
+    Gateway -->|"Ingestion via ExpressRoute MACsec"| OneLake
+
+    CICD -->|"Déploiement déclaratif XMLA"| Billing
+    CICD -->|"Déploiement déclaratif XMLA"| Recovery
+    CICD -->|"Déploiement déclaratif XMLA"| Ledger
+
+    style UsersZone fill:#EBF5FB,stroke:#2980B9,stroke-width:2px
+    style AzureSpoke fill:#F4F6F7,stroke:#7F8C8D,stroke-width:2px
+    style SecurityVault fill:#FADBD8,stroke:#C0392B,stroke-width:2px
+    style SemanticModels fill:#D4E6F1,stroke:#1F618D,stroke-width:2px
+    style LakeStorage fill:#D5F5E3,stroke:#27AE60,stroke-width:2px
+    style DevSecOpsZone fill:#E8DAEF,stroke:#8E44AD,stroke-width:2px
+    style OnPremZone fill:#FCF3CF,stroke:#F39C12,stroke-width:2px

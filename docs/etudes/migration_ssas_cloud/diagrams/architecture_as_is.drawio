@@ -1,0 +1,80 @@
+<mxfile host="Electron" modified="2026-10-12T15:00:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="AS_IS_Architecture" name="Architecture Existante AS-IS (SSAS)">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Group Users -->
+        <mxCell id="grp_users" value="Zone Utilisateurs &amp; Décisionnelle" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EBF5FB;strokeColor=#2980B9;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="300" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="usr_analysts" value="Analystes Financiers &amp;&#xa;Contrôleurs de Gestion" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#D4E6F1;strokeColor=#1F618D;" vertex="1" parent="grp_users">
+          <mxGeometry x="130" y="40" width="40" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="app_powerbi" value="Power BI Desktop / Service&#xa;Rapports &amp; Tableaux de bord" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCF3CF;strokeColor=#F39C12;fontSize=12;fontStyle=1" vertex="1" parent="grp_users">
+          <mxGeometry x="50" y="160" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_usr_pbi" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="grp_users" source="usr_analysts" target="app_powerbi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Group On-Premise Datacenter -->
+        <mxCell id="grp_dc" value="Zone Hébergement On-Premise (Datacenter Sécurisé) - [Données C2 MASSIF]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8F9F9;strokeColor=#7F8C8D;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="420" y="40" width="680" height="520" as="geometry" />
+        </mxCell>
+
+        <!-- SSAS Servers Subgroup -->
+        <mxCell id="grp_ssas" value="Serveurs Dédiés SSAS (Instances Physiques / VM Dédiées)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#D4E6F1;strokeColor=#2980B9;fontSize=12;fontStyle=1" vertex="1" parent="grp_dc">
+          <mxGeometry x="30" y="40" width="620" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="srv_ssas1" value="Serveur 01 : Facturation&#xa;[BillingCube - SSAS OLAP]&#xa;Stockage multidimensionnel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=11;fontStyle=1" vertex="1" parent="grp_ssas">
+          <mxGeometry x="20" y="50" width="170" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="srv_ssas2" value="Serveur 02 : Recouvrement&#xa;[RecoveryCube - SSAS OLAP]&#xa;Créances &amp; contentieux" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=11;fontStyle=1" vertex="1" parent="grp_ssas">
+          <mxGeometry x="225" y="50" width="170" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="srv_ssas3" value="Serveur 03 : Comptabilité&#xa;[LedgerCube - SSAS OLAP]&#xa;Grand Livre &amp; balances" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=11;fontStyle=1" vertex="1" parent="grp_ssas">
+          <mxGeometry x="430" y="50" width="170" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- OLTP Databases Subgroup -->
+        <mxCell id="grp_oltp" value="Bases de Données Sources Transactionnelles (OLTP)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;fontSize=12;fontStyle=1" vertex="1" parent="grp_dc">
+          <mxGeometry x="30" y="290" width="620" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="db_billing" value="Base Facturation OLTP&#xa;[SQL Server / Oracle]" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#A9DFBF;strokeColor=#196F3D;fontSize=11;fontStyle=1" vertex="1" parent="grp_oltp">
+          <mxGeometry x="40" y="50" width="130" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="db_recovery" value="Base Recouvrement OLTP&#xa;[SQL Server / Oracle]" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#A9DFBF;strokeColor=#196F3D;fontSize=11;fontStyle=1" vertex="1" parent="grp_oltp">
+          <mxGeometry x="245" y="50" width="130" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="db_ledger" value="Base Comptable OLTP&#xa;[SQL Server / Oracle]" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#A9DFBF;strokeColor=#196F3D;fontSize=11;fontStyle=1" vertex="1" parent="grp_oltp">
+          <mxGeometry x="450" y="50" width="130" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ETL Batch Flows -->
+        <mxCell id="flow_etl1" value="Batch Nocturne (ETL/SQL)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#7F8C8D;strokeWidth=2;" edge="1" parent="grp_dc" source="db_billing" target="srv_ssas1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_etl2" value="Batch Nocturne (ETL/SQL)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#7F8C8D;strokeWidth=2;" edge="1" parent="grp_dc" source="db_recovery" target="srv_ssas2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_etl3" value="Batch Nocturne (ETL/SQL)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#7F8C8D;strokeWidth=2;" edge="1" parent="grp_dc" source="db_ledger" target="srv_ssas3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Cross-zone flows (Power BI to SSAS) -->
+        <mxCell id="flow_pbi_ssas1" value="Requête MDX/DAX" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#1F618D;strokeWidth=2;" edge="1" parent="1" source="app_powerbi" target="srv_ssas1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_pbi_ssas2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#1F618D;strokeWidth=2;" edge="1" parent="1" source="app_powerbi" target="srv_ssas2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_pbi_ssas3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#1F618D;strokeWidth=2;" edge="1" parent="1" source="app_powerbi" target="srv_ssas3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

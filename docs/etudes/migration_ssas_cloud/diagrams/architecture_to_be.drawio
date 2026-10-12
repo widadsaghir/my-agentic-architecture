@@ -1,0 +1,89 @@
+<mxfile host="Electron" modified="2026-10-12T15:00:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="TO_BE_Architecture" name="Architecture Cible TO-BE (Cloud Zero-Trust)">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Group Users -->
+        <mxCell id="grp_users" value="Zone Utilisateurs &amp; Décisionnelle Sécurisée" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EBF5FB;strokeColor=#2980B9;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="300" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="usr_analysts" value="Analystes Financiers &amp;&#xa;Contrôleurs de Gestion" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#D4E6F1;strokeColor=#1F618D;" vertex="1" parent="grp_users">
+          <mxGeometry x="130" y="40" width="40" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="app_powerbi" value="Power BI Service (Enclave Managée)&#xa;RLS/CLS dynamique &amp; DLP Purview" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCF3CF;strokeColor=#F39C12;fontSize=12;fontStyle=1" vertex="1" parent="grp_users">
+          <mxGeometry x="30" y="160" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_usr_pbi" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="grp_users" source="usr_analysts" target="app_powerbi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Group Cloud Landing Zone -->
+        <mxCell id="grp_cloud" value="Cloud Managé Souverain (Enclave VNet Spoke Privée - 0 IP Publique) - [C2 MASSIF]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8F9F9;strokeColor=#7F8C8D;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="40" width="720" height="680" as="geometry" />
+        </mxCell>
+
+        <!-- Security AKV -->
+        <mxCell id="sec_akv" value="Azure Key Vault Premium (HSM)&#xa;FIPS 140-2 Niveau 3 | CMK Clé Client&#xa;Kill-Switch Révocation &lt; 15 min" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;fontSize=11;fontStyle=1" vertex="1" parent="grp_cloud">
+          <mxGeometry x="40" y="40" width="640" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Semantic Models Subgroup -->
+        <mxCell id="grp_models" value="Plateforme Sémantique &amp; Modèles Tabulaires (TMDL)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#D4E6F1;strokeColor=#2980B9;fontSize=12;fontStyle=1" vertex="1" parent="grp_cloud">
+          <mxGeometry x="40" y="130" width="640" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="mod_billing" value="Modèle Facturation&#xa;[Fabric - Direct Lake]&#xa;Lecture directe Parquet&#xa;Requêtes &lt; 3s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=11;fontStyle=1" vertex="1" parent="grp_models">
+          <mxGeometry x="20" y="50" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="mod_recovery" value="Modèle Recouvrement&#xa;[Power BI Premium Import]&#xa;Pseudonymisation SHA-256&#xa;RLS &amp; CLS dynamiques" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=11;fontStyle=1" vertex="1" parent="grp_models">
+          <mxGeometry x="230" y="50" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="mod_ledger" value="Modèle Comptabilité&#xa;[Power BI Premium Import]&#xa;Grand Livre partitionné&#xa;Intégrité SOX (0 écart)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=11;fontStyle=1" vertex="1" parent="grp_models">
+          <mxGeometry x="440" y="50" width="180" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Storage Lake Subgroup -->
+        <mxCell id="grp_storage" value="Stockage Data Lake Unifié (Format Ouvert)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;fontSize=12;fontStyle=1" vertex="1" parent="grp_cloud">
+          <mxGeometry x="40" y="340" width="640" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="onelake" value="OneLake Storage (Delta Parquet)&#xa;Chiffrement CMK | V-Order Optimisé | Transactionnel ACID" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#A9DFBF;strokeColor=#196F3D;fontSize=12;fontStyle=1" vertex="1" parent="grp_storage">
+          <mxGeometry x="100" y="45" width="440" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- DevSecOps Pipeline -->
+        <mxCell id="devsecops" value="Usine Logicielle DevSecOps &amp; GitOps TMDL&#xa;Tabular Editor BPA | Scan Secrets Gitleaks | Déploiement XMLA via OIDC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8DAEF;strokeColor=#8E44AD;fontSize=11;fontStyle=1" vertex="1" parent="grp_cloud">
+          <mxGeometry x="40" y="520" width="640" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- On-Premise Sources -->
+        <mxCell id="grp_onprem_sources" value="Datacenter On-Premise Sécurisé (Sources)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FCF3CF;strokeColor=#F39C12;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="380" width="300" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="db_sources_onprem" value="Bases Sources OLTP&#xa;Facturation, Recouvrement, Compta" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#FAD7A0;strokeColor=#D68910;fontSize=11;fontStyle=1" vertex="1" parent="grp_onprem_sources">
+          <mxGeometry x="40" y="50" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="gw_onprem" value="Data Gateway Privée / Runtime&#xa;Ingestion Batch Chiffrée" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDBB99;strokeColor=#D35400;fontSize=11;fontStyle=1" vertex="1" parent="grp_onprem_sources">
+          <mxGeometry x="30" y="190" width="240" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_src_gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="grp_onprem_sources" source="db_sources_onprem" target="gw_onprem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Cross-zone connections -->
+        <mxCell id="flow_gw_onelake" value="ExpressRoute Privé MACsec" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#27AE60;strokeWidth=3;" edge="1" parent="1" source="gw_onprem" target="onelake">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow_directlake" value="Direct Lake (Zéro Recopie)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F618D;strokeWidth=2;" edge="1" parent="grp_cloud" source="mod_billing" target="onelake">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow_pbi_models" value="Private Link / SSO Entra ID" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#1F618D;strokeWidth=2;" edge="1" parent="1" source="app_powerbi" target="mod_billing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

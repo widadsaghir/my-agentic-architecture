@@ -64,9 +64,10 @@ Construire une plateforme open-source autonome d'ingénierie d'architecture bas�
     *   Identification proactive des SPOF (Single Points of Failure).
     *   Challenger les choix du Solution Architect (scalabilité, résilience, sur-ingénierie, Golden Hammer).
     *   Tâche d'audit contradictoire `create_challenge_task` et tests unitaires au vert.
-*   [ ] **2.5 Agent Migration, FinOps & TCO :**
+*   [x] **2.5 Agent Migration, FinOps & TCO :**
     *   Estimation des coûts comparatifs (On-premise vs Cloud IaaS/PaaS/SaaS).
     *   Scénarios de transition et jalons de bascule progressive.
+    *   Livrable stratégique `05_STRATEGIE_MIGRATION_ET_FINOPS_TCO.md` formalisé.
 *   [x] **2.6 Câblage complet des tâches & pipeline dans `src/main.py` :**
     *   Séquence d'élite opérationnelle : Solution ➔ Challenger ➔ CISO ➔ Crafter ➔ SAFe Enabler.
     *   Test d'intégration complet `test_full_pipeline_assembly` validé.

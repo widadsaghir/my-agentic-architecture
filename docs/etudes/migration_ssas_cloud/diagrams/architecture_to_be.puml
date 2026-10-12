@@ -1,0 +1,78 @@
+@startuml
+skinparam defaultFontSize 16
+skinparam defaultFontColor #000000
+skinparam roundcorner 10
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 120
+skinparam ranksep 120
+
+top to bottom direction
+
+title Architecture Cible (TO-BE) — Plateforme Décisionnelle Cloud Zero-Trust & Direct Lake (NovaAnalytics)
+
+node "Zone Utilisateurs & Décisionnelle Sécurisée" {
+    actor "Analystes Financiers &\nContrôleurs de Gestion" as Users #D4E6F1
+    rectangle "==Power BI Service (Enclave Managée)\n\nAccès via Private Link & Entra ID SSO\nRLS/CLS dynamique & DLP Purview" as PowerBIService #FCF3CF
+}
+
+node "Cloud Managé Souverain (Enclave VNet Spoke Privée - 0 IP Publique)" {
+
+    package "Gestion des Clés & Conformité C2 MASSIF" {
+        rectangle "==Azure Key Vault Premium (HSM)\n[FIPS 140-2 Niveau 3]\n\nClé Maîtresse Client (CMK)\nProcédure Kill-Switch < 15 min" as AKV #FADBD8
+    }
+
+    package "Plateforme Sémantique & Modèles Tabulaires" {
+        rectangle "==Modèle Tabulaire Facturation\n[Microsoft Fabric - Direct Lake]\nBillingCube partitionné Parquet" as ModelBilling #AED6F1
+        rectangle "==Modèle Tabulaire Recouvrement\n[Power BI Premium - Import Mode]\nRecoveryCube avec RLS dynamique\n& pseudonymisation SHA-256" as ModelRecovery #AED6F1
+        rectangle "==Modèle Tabulaire Comptabilité\n[Power BI Premium - Import Mode]\nLedgerCube avec intégrité SOX" as ModelLedger #AED6F1
+    }
+
+    package "Stockage Data Lake Unifié" {
+        database "==OneLake Storage (Delta Parquet)\n\nChiffrement CMK de bout en bout\nFormat ouvert & V-Order optimisé" as OneLake #D5F5E3
+    }
+
+    package "Usine DevSecOps & CI/CD" {
+        rectangle "==Pipeline GitOps / TMDL\n\nTabular Editor BPA, Gitleaks\nDéploiement XMLA via OIDC" as CICD #D2B4DE
+    }
+}
+
+node "Datacenter On-Premise Sécurisé (Sources Restantes)" {
+    database "==Bases Sources OLTP\n\nFacturation, Recouvrement, Compta" as DbSources #D5F5E3
+    rectangle "==Data Gateway Privée / Runtime\n\nTransfert batch sécurisé" as Gateway #EDBB99
+}
+
+' Relations & Flux
+Users ---> PowerBIService : Authentification Entra ID & Private Endpoint
+PowerBIService ---> ModelBilling : Requêtes interactives Direct Lake (< 3s)
+PowerBIService ---> ModelRecovery : Requêtes filtrées RLS / CLS
+PowerBIService ---> ModelLedger : Requêtes Grand Livre auditées
+
+ModelBilling ---> OneLake : Lecture directe sans recopie (Direct Lake)
+AKV ...> OneLake : Fournit clé CMK pour déchiffrement
+AKV ...> ModelRecovery : Clé de chiffrement & sel de hachage
+
+Gateway ---> OneLake : Flux d'ingestion chiffré via ExpressRoute MACsec
+DbSources ---> Gateway : Extraction batch nocturne
+
+CICD ---> ModelBilling : Déploiement déclaratif TMDL (XMLA)
+CICD ---> ModelRecovery : Déploiement déclaratif TMDL (XMLA)
+CICD ---> ModelLedger : Déploiement déclaratif TMDL (XMLA)
+
+legend right
+  |= Composant |= Technologie |= Standard de Sécurité |
+  | Chiffrement | CMK sur HSM dédié | FIPS 140-2 Niveau 3 |
+  | Réseau | Private Endpoints | Zero-Trust (NIST SP 800-207) |
+  | Modèles | TMDL / Direct Lake | Architecture Hexagonale & DDD |
+  | Déploiement | GitOps déclaratif | DevSecOps OIDC sans secret |
+endlegend
+
+note bottom of OneLake
+  **1. Type de Diagramme :** Diagramme d'Architecture Technique Cible (TO-BE).
+  **2. Utilité :** Cartographier la modernisation des 3 cubes SSAS vers Microsoft Fabric / Semantic Models avec chiffrement CMK et Zero-Trust.
+  **3. Standard :** C4 Model Container / TOGAF Phase C & D (Architecture Cible).
+  **4. Équivalent UML :** Diagramme de Déploiement & Composants.
+  **5. Résumé :** Présente le passage au format déclaratif TMDL, l'ingestion chiffrée par ExpressRoute MACsec, le stockage OneLake avec CMK et la consommation Power BI sans exposition sur Internet.
+end note
+
+@enduml
