@@ -58,9 +58,10 @@ Construire une plateforme open-source autonome d'ingénierie d'architecture bas�
 *   [x] **2.3 Agent SAFe System Architect & Agile Delivery Enabler :**
     *   Traduction automatique du DAT en éléments de backlog Jira (Enabler Epics, Enabler Features, User Stories techniques).
     *   Critères d'acceptation opérationnels et Definition of Done (DoD) pour les trains SAFe (ART).
-*   [ ] **2.4 Agent Challenger / Red Team (Pattern Reflection & Critique) :**
+*   [x] **2.4 Agent Challenger / Red Team (Pattern Reflection & Critique) :**
     *   Identification proactive des SPOF (Single Points of Failure).
     *   Challenger les choix du Solution Architect (scalabilité, résilience, sur-ingénierie, Golden Hammer).
+    *   Tâche d'audit contradictoire `create_challenge_task` et tests unitaires au vert.
 *   [ ] **2.5 Agent Migration, FinOps & TCO :**
     *   Estimation des coûts comparatifs (On-premise vs Cloud IaaS/PaaS/SaaS).
     *   Scénarios de transition et jalons de bascule progressive.
