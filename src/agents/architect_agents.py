@@ -119,3 +119,26 @@ def create_challenger_agent(llm) -> Agent:
         allow_delegation=False
     )
 
+def create_finops_agent(llm) -> Agent:
+    """
+    Crée l'agent Migration, FinOps & TCO (Brique 2.5).
+    Évalue les coûts comparatifs des trajectoires Cloud, le TCO et optimise les dépenses d'infrastructure.
+    """
+    return Agent(
+        role="Migration, FinOps & TCO Specialist",
+        goal=(
+            "Évaluer et chiffrer de manière rigoureuse le coût global de possession (TCO) des différentes options "
+            "d'architecture Cloud, modéliser le budget d'infrastructure (Run, Build, Licences), produire un tableau "
+            "comparatif des trajectoires avec les coûts min/max et maximiser la rentabilité (ROI)."
+        ),
+        backstory=(
+            "Économiste Cloud et praticien FinOps certifié. Spécialiste de la rentabilité des architectures Cloud "
+            "et de la transition On-Premise vers le Cloud. Traque le gaspillage de ressources, compare objectivement les modèles "
+            "de tarification (IaaS, PaaS, SaaS, réservations) et fournit aux décideurs des prévisions budgétaires fiables."
+        ),
+        llm=llm,
+        verbose=True,
+        allow_delegation=False
+    )
+
+

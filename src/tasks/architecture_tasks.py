@@ -151,4 +151,37 @@ def create_safe_delivery_task(agent: Agent, context_tasks: list, language: str) 
         context=context_tasks
     )
 
+def create_finops_task(agent: Agent, context_tasks: list, language: str) -> Task:
+    """
+    Crée la tâche d'évaluation stratégique de migration et d'analyse FinOps / TCO (Brique 2.5).
+    Compare les différentes options Cloud, modélise le budget à 3 ans et produit la matrice des Pour/Contre.
+    """
+    description = (
+        f"Réaliser une étude comparative exhaustive et rigoureuse des trajectoires de migration Cloud possibles "
+        f"pour l'architecture évaluée (IaaS Lift & Shift, PaaS managé, SaaS / Cloud-Native, Lakehouse unifié).\n"
+        f"Votre mission FinOps & Économique consiste à :\n"
+        f"1. Modéliser et chiffrer les postes de dépenses : Coûts d'infrastructure Run récurrents, Coûts de Build / Migration, "
+        f"et Coûts de Licences (avec Software Assurance, capacités réservées F-SKU ou équivalent).\n"
+        f"2. Calculer le Coût Global de Possession (TCO) estimé sur 3 ans sous forme de fourchettes réalistes (Min / Max).\n"
+        f"3. Établir une matrice comparative détaillée des « Pour » (+) et des « Contre » (-) pour chaque trajectoire.\n"
+        f"4. Formuler une recommandation d'arbitrage argumentée et un calendrier de bascule financièrement optimisé.\n\n"
+        f"IMPORTANT : Rédiger l'intégralité de l'étude stratégique de migration et du rapport FinOps en langue [{language}]."
+    )
+
+    expected_output = (
+        f"Une étude stratégique de migration et comparatif FinOps / TCO en Markdown rédigée en [{language}], comprenant :\n"
+        f"1. Tableau comparatif des options de migration avec coûts estimés Run, Build et Licences\n"
+        f"2. Fourchette de TCO à 3 ans (Min / Max) et calcul du ROI (Retour sur Investissement)\n"
+        f"3. Matrice des « Pour / Contre » détaillée par trajectoire\n"
+        f"4. Recommandation d'arbitrage argumentée et calendrier de transition phasé."
+    )
+
+    return Task(
+        description=description,
+        expected_output=expected_output,
+        agent=agent,
+        context=context_tasks
+    )
+
+
 

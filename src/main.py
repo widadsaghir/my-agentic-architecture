@@ -15,14 +15,16 @@ from src.agents import (
     create_challenger_agent,
     create_ciso_agent,
     create_crafter_agent,
-    create_safe_enabler_agent
+    create_safe_enabler_agent,
+    create_finops_agent
 )
 from src.tasks import (
     create_preliminary_design_task,
     create_challenge_task,
     create_security_audit_task,
     create_software_crafting_task,
-    create_safe_delivery_task
+    create_safe_delivery_task,
+    create_finops_task
 )
 from crewai import Crew, Process
 
@@ -47,6 +49,12 @@ def parse_arguments():
         type=str,
         default=None,
         help="Chemin optionnel pour enregistrer le livrable Markdown produit"
+    )
+    parser.add_argument(
+        "--study-dir",
+        type=str,
+        default=None,
+        help="Dossier d'étude optionnel pour enregistrer l'intégralité du pack documentaire d'architecture (un fichier par agent)"
     )
     parser.add_argument(
         "--log-file",
@@ -101,8 +109,9 @@ def main():
     ciso = create_ciso_agent(worker_llm)
     crafter = create_crafter_agent(worker_llm)
     safe_enabler = create_safe_enabler_agent(worker_llm)
+    finops = create_finops_agent(worker_llm)
 
-    # 4. Création des tâches enchaînées (Conception -> Challenge -> CISO -> Craft -> SAFe)
+    # 4. Création des tâches enchaînées (Conception -> Challenge -> CISO -> Craft -> SAFe -> FinOps)
     design_task = create_preliminary_design_task(
         agent=solution_architect,
         user_input=input_content,
@@ -133,6 +142,12 @@ def main():
         language=args.language
     )
 
+    finops_task = create_finops_task(
+        agent=finops,
+        context_tasks=[design_task, challenge_task, delivery_task],
+        language=args.language
+    )
+
     # 5. Configuration des logs d'exécution (Base d'audit pour le Meta-Agent)
     logs_dir = ROOT_DIR / "logs"
     logs_dir.mkdir(parents=True, exist_ok=True)
@@ -141,8 +156,8 @@ def main():
 
     # 6. Assemblage de la Crew
     crew = Crew(
-        agents=[solution_architect, challenger, ciso, crafter, safe_enabler],
-        tasks=[design_task, challenge_task, security_task, crafting_task, delivery_task],
+        agents=[solution_architect, challenger, ciso, crafter, safe_enabler, finops],
+        tasks=[design_task, challenge_task, security_task, crafting_task, delivery_task, finops_task],
         process=Process.sequential,
         manager_agent=manager,
         output_log_file=log_file_path,
@@ -150,11 +165,12 @@ def main():
     )
 
     print("\n▶️ Lancement de l'orchestration multi-agents d'architecture...")
-    print("   [1/5] Solution Architect (Macro-Patterns & Vision)")
-    print("   [2/5] Challenger / Red Team (Traque SPOF & Anti-Sur-Ingénierie)")
-    print("   [3/5] CISO & Data Protection (Zero-Trust, C2 & Homologation DCA)")
-    print("   [4/5] Software Crafter (Architecture Hexagonale, DDD & TDD)")
-    print("   [5/5] SAFe Agile Enabler (Backlog Jira, Enablers & DoD)")
+    print("   [1/6] Solution Architect (Macro-Patterns & Vision)")
+    print("   [2/6] Challenger / Red Team (Traque SPOF & Anti-Sur-Ingénierie)")
+    print("   [3/6] CISO & Data Protection (Zero-Trust, C2 & Homologation DCA)")
+    print("   [4/6] Software Crafter (Architecture Hexagonale, DDD & TDD)")
+    print("   [5/6] SAFe Agile Enabler (Backlog Jira, Enablers & DoD)")
+    print("   [6/6] Migration & FinOps / TCO (Comparatif des 4 Pistes, Coûts Min/Max)")
     print(f"   [Trace] Enregistrement en direct des échanges dans : {log_file_path}")
     try:
         result = crew.kickoff()
@@ -163,17 +179,40 @@ def main():
         sys.exit(1)
 
     print("\n==================================================================")
-    print("  ✅ DOSSIER D'ARCHITECTURE & AVIS CISO GÉNÉRÉS")
+    print("  ✅ DOSSIER D'ARCHITECTURE & ÉVALUATIONS GÉNÉRÉS")
     print("==================================================================")
     print(result)
 
-    # Sauvegarde optionnelle
+    # Sauvegarde du livrable unique optionnel
     if args.output:
         output_path = Path(args.output)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(str(result))
-        print(f"\n💾 Livrable enregistré avec succès dans : {output_path}")
+        print(f"\n💾 Livrable de synthèse enregistré avec succès dans : {output_path}")
+
+    # Sauvegarde automatique du pack documentaire complet (1 fichier par agent)
+    if args.study_dir:
+        study_path = Path(args.study_dir)
+        study_path.mkdir(parents=True, exist_ok=True)
+
+        deliverables_mapping = [
+            ("01_DOSSIER_ARCHITECTURE_TECHNIQUE_DAT.md", design_task),
+            ("02_RAPPORT_AUDIT_CONTRADICTOIRE.md", challenge_task),
+            ("03_AVIS_HOMOLOGATION_SECURITE_DCA.md", security_task),
+            ("04_CONCEPTION_HEXAGONALE_ET_DDD.md", crafting_task),
+            ("05_STRATEGIE_MIGRATION_ET_FINOPS_TCO.md", finops_task),
+            ("06_BACKLOG_LIVRAISON_SAFE_JIRA.md", delivery_task)
+        ]
+
+        for filename, task_obj in deliverables_mapping:
+            target_file = study_path / filename
+            output_content = str(task_obj.output.raw) if hasattr(task_obj, "output") and task_obj.output else ""
+            if output_content:
+                with open(target_file, "w", encoding="utf-8") as f:
+                    f.write(output_content)
+
+        print(f"📦 Pack d'architecture complet (6 dossiers d'experts) généré dans : {study_path}")
 
     print(f"📜 Journal complet des échanges et raisonnements sauvegardé dans : {log_file_path}")
 

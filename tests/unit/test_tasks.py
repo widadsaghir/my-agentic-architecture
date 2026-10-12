@@ -5,7 +5,8 @@ from src.tasks.architecture_tasks import (
     create_security_audit_task,
     create_challenge_task,
     create_software_crafting_task,
-    create_safe_delivery_task
+    create_safe_delivery_task,
+    create_finops_task
 )
 
 @pytest.fixture
@@ -73,5 +74,17 @@ def test_safe_delivery_task_language_and_doctrine(agent):
     assert "jira" in desc_lower or "user stories" in desc_lower or "enabler" in desc_lower
     assert "dod" in desc_lower or "definition of done" in desc_lower
     assert task.context == []
+
+def test_finops_task_language_and_doctrine(agent):
+    """Vérifie que la tâche FinOps intègre l'analyse des coûts, le TCO comparatif et la langue."""
+    task = create_finops_task(agent, context_tasks=[], language="French")
+
+    assert "[French]" in task.description
+    assert "[French]" in task.expected_output
+    desc_lower = task.description.lower()
+    assert "tco" in desc_lower
+    assert "coût" in desc_lower or "budget" in desc_lower or "comparatif" in desc_lower
+    assert task.context == []
+
 
 
