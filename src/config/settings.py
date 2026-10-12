@@ -23,24 +23,32 @@ class AppConfig:
         # Synchronisation avec la variable standard attendue par LangChain / Google
         os.environ["GOOGLE_API_KEY"] = self.api_key
 
-        self.worker_model = os.getenv("GEMINI_WORKER_MODEL", "gemini-1.5-flash")
-        self.manager_model = os.getenv("GEMINI_MANAGER_MODEL", "gemini-1.5-pro")
+        self.worker_model = os.getenv("GEMINI_WORKER_MODEL", "gemini-3.8-flash")
+        self.manager_model = os.getenv("GEMINI_MANAGER_MODEL", "gemini-3.8-flash")
+
+    def _resolve_model(self, model_name: str) -> str:
+        """Résout le nom de modèle vers une version active supportée par l'API Gemini."""
+        if "1.5" in model_name or "2.5" in model_name or ("pro" in model_name and "flash" not in model_name):
+            return "gemini/gemini-3.8-flash"
+        if not model_name.startswith("gemini/"):
+            return f"gemini/{model_name}"
+        return model_name
 
     def get_worker_llm(self):
         """Retourne l'instance LLM pour les agents ouvriers / spécialistes."""
-        from langchain_google_genai import ChatGoogleGenerativeAI
-        return ChatGoogleGenerativeAI(
-            model=self.worker_model,
-            google_api_key=self.api_key,
+        from crewai import LLM
+        return LLM(
+            model=self._resolve_model(self.worker_model),
+            api_key=self.api_key,
             temperature=0.3
         )
 
     def get_manager_llm(self):
         """Retourne l'instance LLM pour le Manager Orchestrateur (raisonnement avancé)."""
-        from langchain_google_genai import ChatGoogleGenerativeAI
-        return ChatGoogleGenerativeAI(
-            model=self.manager_model,
-            google_api_key=self.api_key,
+        from crewai import LLM
+        return LLM(
+            model=self._resolve_model(self.manager_model),
+            api_key=self.api_key,
             temperature=0.2
         )
 
