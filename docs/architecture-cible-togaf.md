@@ -74,112 +74,97 @@ Le cycle de traitement orchestré par le **Lead Architecture Manager** suit une 
 
 ## Phase C: Information Systems Architecture (IS)
 
-### 1. Cartographie Complète de la Brigade d'Agents & Adaptateurs (PlantUML)
+### 1. Cartographie Complète de la Brigade d'Agents & Adaptateurs (Mermaid)
 
-```plantuml
-@startuml
-skinparam defaultFontSize 16
-skinparam defaultFontColor #000000
-skinparam roundcorner 10
-skinparam shadowing false
-skinparam linetype ortho
-skinparam nodesep 120
-skinparam ranksep 120
+```mermaid
+flowchart TB
+    subgraph InputsNode ["📥 Entrées Système"]
+        Inputs["💻 Paramètres CLI & Contexte<br/><i>--language, --input (Notes / Fichier), Profils</i>"]
+    end
 
-top to bottom direction
+    User["👤 Lead Architect (Human-in-the-Loop)"]
 
-title Plateforme AAP - Architecture Cible Complète (TOGAF 10 & SAFe 6)
+    subgraph AAP ["🖥️ Multi-Agent Architecture Platform (AAP)"]
+        direction TB
 
-actor "Lead Architect\n(Human-in-the-Loop)" as User #D4E6F1
+        subgraph MetaLayer ["🔧 Méta-Gouvernance & Maintenance"]
+            MetaAgent["🔧 Meta-Agent (Agent Zero)<br/><i>Self-Healing, Surveillance logs & Patch prompts</i>"]
+        end
 
-node "Entrées Système" {
-    rectangle "Paramètres CLI\n- Langue cible (--language)\n- Cadrage brut (--input)\n- Profil & Certifications" as Inputs #E8F8F5
-}
+        subgraph OrchestrationLayer ["👑 Couche d'Orchestration"]
+            Manager["👑 Lead Architecture Manager<br/><i>TOGAF 10 ADM & SAFe 6 Leader</i>"]
+        end
 
-package "Plateforme AAP (CrewAI / Python)" {
-    
-    rectangle "Méta-Gouvernance & Maintenance" {
-        agent "Meta-Agent (Agent Zero)\n(Self-Healing & Patch Prompts)" as MetaAgent #F9EBEA
-    }
+        subgraph WorkersLayer ["👥 Brigade d'Agents Spécialisés (Workers & Évaluateurs)"]
+            SolutionAgent["🏗️ Solution & Infra Architect<br/><i>Macro-Patterns, Cloud WAF, EDA</i>"]
+            ChallengerAgent["🎯 Challenger / Red Team<br/><i>Anti-SPOF, Critique & KISS/YAGNI</i>"]
+            CisoAgent["🛡️ CISO & Data Protection<br/><i>Zero-Trust, C2 Massif, Chiffrement CMK</i>"]
+            CrafterAgent["💎 Software Crafter & DDD<br/><i>Arch. Hexagonale, TDD 100%, Clean Code</i>"]
+            SafeAgent["🚆 SAFe Agile Enabler<br/><i>Backlog Jira, Enablers, DoD</i>"]
+            FinopsAgent["💰 Migration & FinOps / TCO<br/><i>Coûts Cloud vs On-Prem, Trajectoire</i>"]
+        end
 
-    rectangle "Couche d'Orchestration" {
-        agent "Lead Architecture Manager\n(TOGAF 10 ADM & SAFe 6 Leader)" as Manager #AED6F1
-    }
+        subgraph CareerLayer ["📈 Valorisation Professionnelle"]
+            CareerAgent["📈 Agent Carrière & Branding<br/><i>CV dynamique, LinkedIn REX, Certifications</i>"]
+        end
 
-    package "Brigade d'Agents Spécialisés (Workers & Évaluateurs)" {
-        agent "Solution & Infra Architect\n(Macro-Patterns, Cloud WAF, EDA)" as SolutionAgent #A9DFBF
-        agent "Challenger / Red Team\n(Anti-SPOF, Critique & KISS/YAGNI)" as ChallengerAgent #FADBD8
-        agent "CISO & Data Protection\n(Zero-Trust, C2, Chiffrement, DCA)" as CisoAgent #FAD7A0
-        agent "Software Crafter & DDD\n(Arch. Hexagonale, TDD, Clean Code)" as CrafterAgent #D2B4DE
-        agent "SAFe Agile Enabler\n(Backlog Jira, Enablers, DoD)" as SafeAgent #D5F5E3
-        agent "Migration & FinOps / TCO\n(Coûts Cloud vs On-Prem, Trajectoire)" as FinopsAgent #FCF3CF
-    }
+        VectorDB[("📚 Base Vectorielle RAG (ChromaDB Local)<br/><i>Blueprints, templates DAT & doctrine</i>")]
 
-    package "Valorisation Professionnelle" {
-        agent "Agent Carrière & Branding\n(CV, LinkedIn REX, Certifications)" as CareerAgent #E8DAEF
-    }
+        subgraph ToolsLayer ["🛠️ Adaptateurs Déterministes (Outils purs - 0 Token)"]
+            Exporter["📤 Exportateur Multi-Formats<br/><i>DAT.md, Schémas (.drawio, .puml, .mmd)</i>"]
+            GitPublisher["🛠️ GitPublisher (Outil Git Déterministe)<br/><i>Scan anti-secrets, commit conventionnel & push</i>"]
+        end
+    end
 
-    database "Base Vectorielle RAG\n(ChromaDB Local / Knowledge Base)" as VectorDB #FCF3CF
+    subgraph OutputsNode ["📦 Sorties & Persistance (GitLab/GitHub)"]
+        OutStudy["📁 Pack d'Étude Structuré<br/><i>00_Resume à 07_Roadmap Gantt</i>"]
+        OutSchemas["🖼️ Cartographies Multi-Formats<br/><i>Draw.io (.drawio), PlantUML, Mermaid</i>"]
+        RemoteGit[("🌐 Dépôt Git Distant")]
+    end
 
-    package "Adaptateurs Déterministes (Outils purs - 0 Token)" {
-        rectangle "Exportateur Multi-Formats\n(DAT.md, .puml, .mmd, .drawio)" as Exporter #EDBB99
-        rectangle "GitPublisher (Outil Git)\n(Scan anti-secrets, Commit & Push)" as GitPublisher #FADBD8
-    }
-}
+    Inputs -->|"1. Injecte paramètres"| Manager
+    Manager -->|"2. Cadrage macro-architecture"| SolutionAgent
+    SolutionAgent <-->|"Recherche doctrine"| VectorDB
+    SolutionAgent <-->|"3. Boucle contradictoire (Reflection)"| ChallengerAgent
+    ChallengerAgent -->|"4. Soumission audit sécurité"| CisoAgent
+    CisoAgent <-->|"Vérification normes C2"| VectorDB
+    CisoAgent -->|"5. Modélisation logicielle pure"| CrafterAgent
+    CrafterAgent -->|"6. Découpage delivery"| SafeAgent
+    SafeAgent -->|"7. Chiffrage financier"| FinopsAgent
+    FinopsAgent -->|"8. Consolidation"| Manager
 
-node "Sorties & Persistance (GitLab/GitHub)" {
-    file "Dossier d'Architecture (DAT.md)" as OutDat
-    file "Diagrammes C4 (.puml, .mmd, .drawio)" as OutSchemas
-    file "Backlog Jira Export (Enablers & Stories)" as OutJira
-    file "Mise à jour CV & Posts LinkedIn" as OutCareer
-    database "Dépôt Git Distant" as RemoteGit
-}
+    Manager -->|"9. 🛑 Soumission pour arbitrage HITL"| User
+    User -->|"10. Approbation formelle [O/N]"| Manager
 
-Inputs ---> Manager : Injecte paramètres & consignes
-Manager ---> SolutionAgent : 1. Délégation macro-design
-SolutionAgent ---> VectorDB : Requête blueprints & normes (RAG)
-SolutionAgent <---> ChallengerAgent : 2. Boucle contradictoire (Reflection)
-ChallengerAgent ---> CisoAgent : 3. Revue de sécurité & C2
-CisoAgent ---> CrafterAgent : 4. Découplage micro-patterns & TDD
-CrafterAgent ---> SafeAgent : 5. Traduction en backlog Jira
-SafeAgent ---> FinopsAgent : 6. Chiffrage TCO & bascule
-FinopsAgent ---> Manager : Consolidation livrable
+    Manager -->|"11. Déclenche export"| Exporter
+    Exporter -->|"Écrit livrables"| OutStudy
+    Exporter -->|"Génère schémas"| OutSchemas
 
-Manager ---> User : 7. 🛑 Demande de validation formelle (HITL)
-User ---> Manager : Approbation explicite
+    Manager -->|"12. Déclenche publication sécurisée"| GitPublisher
+    GitPublisher -->|"git commit & push sécurisé"| RemoteGit
 
-Manager ---> Exporter : Ordre de génération des artéfacts
-Exporter ---> OutDat : Rédige le document Markdown
-Exporter ---> OutSchemas : Rédige les codes sources diagrammes
-Exporter ---> OutJira : Exporte les tickets et DoD
+    Manager -->|"13. Notification d'architecture"| CareerAgent
 
-Manager ---> GitPublisher : 8. Déclenche publication sécurisée
-GitPublisher ---> RemoteGit : git add, commit, push sécurisé
+    MetaAgent -.->|"Supervise logs & santé des prompts"| Manager
+    MetaAgent -.->|"Surveillance de la brigade"| WorkersLayer
 
-Manager ---> CareerAgent : 9. Notification de l'architecture validée
-CareerAgent ---> OutCareer : Rédige MAJ CV & post LinkedIn
-
-MetaAgent ..> Manager : Analyse logs d'exécution & latence
-MetaAgent ..> SolutionAgent : Ajuste prompts et répare code source
-
-legend right
-  |= Composant |= Nature |= Rôle |
-  | Lead Architect | Humain | Arbitre suprême (HITL) |
-  | Agents IA | Modèles LLM | Raisonnement, analyse et critique |
-  | GitPublisher | Script Python | Outil déterministe (sans LLM) |
-  | ChromaDB | Base Vectorielle | Contexte documentaire & RAG |
-endlegend
-
-note bottom of Manager
-  **1. Type de Diagramme :** C4 Model - Niveau 2 (Container / Logical Architecture).
-  **2. Utilité :** Cartographier la totalité des 8 agents validés, du rôle humain HITL et des adaptateurs déterministes.
-  **3. Standard :** TOGAF 10 Phase C & Agentic Design Patterns.
-  **4. Équivalent UML :** Diagramme de Composants & de Déploiement logique.
-  **5. Résumé :** Structure le flux de données depuis l'entrée utilisateur jusqu'au push Git sécurisé par GitPublisher.
-end note
-
-@enduml
+    style User fill:#D4E6F1,stroke:#2980B9,stroke-width:2px
+    style Manager fill:#AED6F1,stroke:#1F618D,stroke-width:3px
+    style WorkersLayer fill:#E8F8F5,stroke:#1ABC9C,stroke-width:2px
+    style SolutionAgent fill:#A9DFBF,stroke:#196F3D,stroke-width:1px
+    style ChallengerAgent fill:#FADBD8,stroke:#922B21,stroke-width:1px
+    style CisoAgent fill:#FAD7A0,stroke:#B9770E,stroke-width:1px
+    style CrafterAgent fill:#D2B4DE,stroke:#6C3483,stroke-width:1px
+    style SafeAgent fill:#D5F5E3,stroke:#1E8449,stroke-width:1px
+    style FinopsAgent fill:#FCF3CF,stroke:#B7950B,stroke-width:1px
+    style VectorDB fill:#FCF3CF,stroke:#F39C12,stroke-width:2px
+    style GitPublisher fill:#FADBD8,stroke:#C0392B,stroke-width:2px
+    style RemoteGit fill:#EDBB99,stroke:#D35400,stroke-width:2px
+    style MetaAgent fill:#F9EBEA,stroke:#C0392B,stroke-width:1px
+    style CareerAgent fill:#E8DAEF,stroke:#8E44AD,stroke-width:1px
 ```
+
+*(Note : Les fichiers sources éditables complémentaires sous format **Draw.io (`.drawio`)** et **PlantUML (`.puml`)** sont disponibles dans le dossier `docs/diagrams/`).*
 
 ### 2. Matrice Rôles & Responsabilités de la Flotte d'Agents
 
