@@ -4,7 +4,7 @@
 **Gouvernance :** Projet autonome (aucun ticket Jira d'entreprise requis)  
 **Méta-Cadre Référentiel :** TOGAF 10 ADM (Phases A à G), SAFe 6 for Architects, Software Craftsmanship (Hexagonale, TDD 100%, Clean Code), Cloud WAF, Zero-Trust (NIST SP 800-207)  
 **Stack technique :** Python 3.13, CrewAI, Google Gemini API (`gemini-1.5-flash`, `gemini-1.5-pro`), ChromaDB Local, Pytest  
-**Branche Git courante :** `main` (Fusion réussie de `feat/brique-2-ciso-agent`)  
+**Branche Git courante :** `feat/brique-2-challenger-agent`  
 
 ---
 
@@ -44,7 +44,7 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 | Brique | Libellé | Statut | Détails |
 | :---: | :--- | :---: | :--- |
 | **1** | Socle Technique & Connecteur Gemini | 🟢 Terminé | Modularisation (`src/config`, `src/agents`, `src/tasks`, `src/main.py`), support `--language`. |
-| **2** | Brigade d'Agents Spécialisés d'Architecture | 🟡 En cours | Manager, Solution, CISO, Crafter, SAFe Enabler créés et testés. Reste Challenger et FinOps. |
+| **2** | Brigade d'Agents Spécialisés d'Architecture | 🟡 En cours | Manager, Solution, CISO, Crafter, SAFe Enabler, Challenger créés et testés. Reste FinOps. |
 | **3** | Base Vectorielle & RAG (ChromaDB) | ⚪ En attente | Indexation locale des blueprints, règles de sécurité et templates d'entreprise. |
 | **4** | Génération de Livrables & Outil GitPublisher | ⚪ En attente | DAT.md, schémas C4 autonomes (.puml, .mmd, .drawio), adaptateur GitPublisher et exports Jira. |
 | **5** | Meta-Agent (Self-Healing) & Branding | ⚪ En attente | Agent Zero (monitoring des logs & patch prompts) et Agent Carrière (CV & LinkedIn). |
@@ -53,16 +53,17 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 
 ## 🧪 Bilan d'Exécution des Tests Unitaires (Pytest)
 
-*Dernière exécution : 8/8 tests validés avec succès (100% de réussite)*
+*Dernière exécution : 10/10 tests validés avec succès (100% de réussite)*
 
 - `tests/unit/test_config.py` : 🟢 (Chargement variables, détection clé manquante/placeholder).
 - `tests/unit/test_ciso_agent.py` : 🟢 (Rôle, Zero-Trust, C2 massif, non-délégation).
 - `tests/unit/test_crafter_safe_agents.py` : 🟢 (Hexagonale, TDD, Clean Code, Jira, DoD, ART).
-- `tests/unit/test_tasks.py` : 🟢 (Injection multilingue stricte et doctrine d'architecture).
+- `tests/unit/test_challenger_agent.py` : 🟢 (Contradiction, anti-SPOF, KISS/YAGNI, Golden Hammer).
+- `tests/unit/test_tasks.py` : 🟢 (Tâches Conception, Audit CISO et Challenge contradictoire).
 
 ---
 
 ## 📍 Prochaines Actions Prioritaires
 1. **Création des tâches dédiées pour le Software Crafter et le SAFe Enabler** dans `src/tasks/architecture_tasks.py`.
-2. **Développement de l'agent 2.4 : Challenger / Red Team** (`create_challenger_agent` + tests unitaires associés).
-3. **Mise à jour de `src/main.py`** pour intégrer la brigade complète dans le pipeline séquentiel.
+2. **Développement de l'agent 2.5 : Migration & FinOps / TCO** (`create_finops_agent` + tests unitaires).
+3. **Mise à jour de `src/main.py`** pour orchestrer la chaîne complète (Solution ➔ Challenger ➔ CISO ➔ Crafter ➔ SAFe Enabler).
