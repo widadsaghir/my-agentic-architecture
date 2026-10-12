@@ -201,11 +201,11 @@ end note
 ## Phase D: Technology Architecture
 
 - **Moteurs d'Inférence LLM :**
-  - `Google Gemini 1.5 Flash` : Agents ouvriers et évaluateurs (Solution, Challenger, CISO, Crafter, SAFe, FinOps) pour une latence ultra-faible et un coût minime.
-  - `Google Gemini 1.5 Pro` : Lead Architecture Manager pour les raisonnements de synthèse complexes et la rédaction finale du DAT.
-- **Moteur Vectoriel & RAG :** `ChromaDB` en mode local embarqué (sans dépendance serveur externe), alimenté par des embeddings Gemini.
-- **Framework d'Agents :** Python 3.13+, `CrewAI` (Orchestration hiérarchique et séquentielle).
+  - `Google Gemini 3.8 Flash` : Agents ouvriers et évaluateurs (Solution, Challenger, CISO, Crafter, SAFe, FinOps, Manager) pour une latence ultra-faible, une fidélité maximale et un coût optimisé.
+- **Moteur Vectoriel & RAG :** `ChromaDB` en mode local persistant (`chroma_db/`), indexant les blueprints et la doctrine d'entreprise (`knowledge/`).
+- **Framework d'Agents :** Python 3.13+, `CrewAI` (Orchestration séquentielle et hiérarchique avec `output_log_file` natif).
 - **Outillage & Publication :**
+  - `KnowledgeSearchTool` : Outil de recherche vectorielle locale RAG injecté dans Solution Architect et CISO.
   - `GitPublisher` : Module Python interne avec wrapper `git CLI` et vérification de conformité `.gitignore` / `.aiexclude`.
   - Moteur de rendu graphique : PlantUML CLI / Plantuml.com REST API, Mermaid CLI, Draw.io XML format.
   - Générateur de présentations : Marp CLI (Markdown to PPT/PDF).
@@ -218,15 +218,17 @@ La feuille de route d'implémentation est découpée en 5 briques incrémentales
 
 * **Brique 1 : Socle Technique & Connecteur Gemini** 🟢 *(Terminé)*
   * Modularité du code, configuration multi-modèles (`settings.py`), gestion stricte multi-langue (`--language`).
-* **Brique 2 : Brigade d'Agents Spécialisés d'Architecture** 🟡 *(En cours)*
+* **Brique 2 : Brigade d'Agents Spécialisés d'Architecture** 🟢 *(Terminé)*
   * 2.1 CISO & Data Protection Agent (🟢 Implémenté & Testé).
   * 2.2 Software Crafter & Domain Architect Agent (🟢 Implémenté & Testé).
   * 2.3 SAFe Agile Delivery Enabler Agent (🟢 Implémenté & Testé).
-  * 2.4 Challenger / Red Team Agent (⚪ Prochaine étape).
-  * 2.5 Migration & FinOps Agent (⚪ À venir).
-  * Tâches associées dans `src/tasks/` et chaînage complet dans `src/main.py`.
-* **Brique 3 : Module RAG & Base de Connaissances (ChromaDB)** ⚪ *(En attente)*
-  * Indexation vectorielle locale des blueprints, règles de sécurité d'entreprise et templates de DAT.
+  * 2.4 Challenger / Red Team Agent (🟢 Implémenté & Testé).
+  * 2.5 Migration & FinOps Agent (🟢 Implémenté & Testé).
+  * 2.6 Séquence complète câblée dans `src/main.py` avec export `--study-dir` multi-documents.
+* **Brique 3 : Module RAG & Base de Connaissances (ChromaDB)** 🟢 *(Terminé)*
+  * Répertoire de doctrine d'entreprise (`knowledge/doctrine/`) : Zero-Trust C2, Craftsmanship Hexagonal/DDD, Patrons Cloud WAF, Gouvernance SAFe.
+  * Base vectorielle locale persistante (`chroma_db/`) avec `ArchitectureRAGManager`.
+  * Outil CrewAI `KnowledgeSearchTool` injecté dans Solution Architect et CISO.
 * **Brique 4 : Génération des Livrables & Outil GitPublisher** ⚪ *(En attente)*
   * Génération multi-formats (`DAT.md`, `.puml`, `.mmd`, `.drawio`), exports Jira et adaptateur déterministe `GitPublisher` (avec validation HITL).
 * **Brique 5 : Méta-Gouvernance, Personal Branding & Auto-Maintenance** ⚪ *(En attente)*
