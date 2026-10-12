@@ -4,7 +4,7 @@
 **Gouvernance :** Projet autonome (aucun ticket Jira d'entreprise requis)  
 **Méta-Cadre Référentiel :** TOGAF 10 ADM (Phases A à G), SAFe 6 for Architects, Software Craftsmanship (Hexagonale, TDD 100%, Clean Code), Cloud WAF, Zero-Trust (NIST SP 800-207)  
 **Stack technique :** Python 3.13, CrewAI, Google Gemini API (`gemini-1.5-flash`, `gemini-1.5-pro`), ChromaDB Local, Pytest  
-**Branche Git courante :** `feat/brique-2-ciso-agent`  
+**Branche Git courante :** `main` (Fusion réussie de `feat/brique-2-ciso-agent`)  
 
 ---
 
