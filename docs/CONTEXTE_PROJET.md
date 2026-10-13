@@ -69,8 +69,12 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 
 ## 🧪 Bilan d'Exécution des Tests Unitaires & d'Architecture (Pytest)
 
-*Dernière exécution : 30/30 tests validés avec succès (100% de réussite)*
+*Dernière exécution : 39/39 tests validés avec succès (100% de réussite)*
 
+- `tests/unit/test_diagram_syntax.py` : 🟢 (Syntaxe schémas : PlantUML sans remote !include, Mermaid flowchart sans syntaxe illégale, Draw.io XML valide).
+- `tests/unit/test_data_anonymization.py` : 🟢 (Sécurité & Anonymisation : zéro fuite d'adresses IP réelles RFC 1918 et zéro jeton d'API en clair).
+- `tests/unit/test_cli_resilience.py` : 🟢 (Résilience CLI : chargement transparent fichier/texte, arborescences imbriquées et parsing d'arguments).
+- `tests/unit/test_e2e_mocked_crew.py` : 🟢 (Exécution E2E Niveau 2 : chaîne complète 6 agents/6 tâches avec Mock LLM déterministe à 0 token en < 2s).
 - `tests/unit/test_hexagonal_architecture.py` : 🟢 (Tests d'Architecture : isolation stricte des outils déterministes, inversion de contrôle, indépendance de la configuration et scan anti-secrets).
 - `tests/unit/test_architecture_conformance.py` : 🟢 (Fitness functions : présence et export des 7 agents, 6 tâches et 5 adaptateurs).
 - `tests/unit/test_config.py` : 🟢 (Chargement variables, détection clé manquante/placeholder).
