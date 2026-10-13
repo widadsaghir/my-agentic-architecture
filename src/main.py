@@ -229,6 +229,11 @@ def main():
         study_path = Path(args.study_dir)
         study_path.mkdir(parents=True, exist_ok=True)
 
+        # Sauvegarde systématique du cahier des charges d'entrée dans le dossier d'étude
+        cahier_des_charges_file = study_path / "00_CAHIER_DES_CHARGES_INPUT.md"
+        cahier_des_charges_file.write_text(input_content, encoding="utf-8")
+        print(f"📥 Cahier des charges (Input de cadrage) archivé dans : {cahier_des_charges_file}")
+
         deliverables_mapping = [
             ("00_DECISION_ARBITRAGE_ET_SYNTHESE_CONVERGENCE.md", convergence_task),
             ("01_DOSSIER_ARCHITECTURE_TECHNIQUE_DAT.md", design_task),
