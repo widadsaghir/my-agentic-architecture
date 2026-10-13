@@ -46,7 +46,7 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 | **1** | Socle Technique & Connecteur Gemini | 🟢 Terminé | Modularisation (`src/config`, `src/agents`, `src/tasks`, `src/main.py`), support `--language`. |
 | **2** | Brigade d'Agents Spécialisés d'Architecture | 🟢 Terminé | Brigade complète (Solution, Challenger, CISO, Crafter, SAFe, FinOps) validée et pack d'étude complet généré (`docs/etudes/migration_ssas_cloud/`). |
 | **3** | Base Vectorielle & RAG (ChromaDB) | 🟢 Terminé | ChromaDB local persistant (`chroma_db/`), doctrine d'entreprise (`knowledge/`), `ArchitectureRAGManager`, et `KnowledgeSearchTool` injecté dans Solution Architect et CISO. |
-| **4** | Génération de Livrables & Outil GitPublisher | ⚪ En attente | DAT.md, schémas C4 autonomes (.puml, .mmd, .drawio), adaptateur GitPublisher et exports Jira. |
+| **4** | Génération de Livrables & Outil GitPublisher | 🟢 Terminé | Pack multi-fichiers (`--study-dir`), schémas C4 autonomes (`.drawio`, `.puml`, `.mmd`), adaptateur déterministe `GitPublisher` avec scan anti-secrets & porte HITL, et export Jira CSV point-virgule via `JiraBacklogExporter`. |
 | **5** | Meta-Agent (Self-Healing) & Branding | ⚪ En attente | Agent Zero (monitoring des logs & patch prompts) et Agent Carrière (CV & LinkedIn). |
 
 ---
@@ -62,25 +62,32 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 - `05_STRATEGIE_MIGRATION_ET_FINOPS_TCO.md` (💰 Migration & FinOps)
 - `06_BACKLOG_LIVRAISON_SAFE_JIRA.md` (🚆 SAFe Agile Enabler)
 - `07_ROADMAP_DE_REALISATION_ET_PLANNING.md` (Planning Gantt Mermaid, Sprints, Budget, RACI)
+- `backlog_jira.csv` (Export Jira CSV séparateur point-virgule compatible Excel Français)
 - `diagrams/` : Schémas d'architecture AS-IS et TO-BE complets aux formats Draw.io (`.drawio`), PlantUML (`.puml`) et Mermaid (`.mmd`).
 
 ---
 
-## 🧪 Bilan d'Exécution des Tests Unitaires (Pytest)
+## 🧪 Bilan d'Exécution des Tests Unitaires & d'Architecture (Pytest)
 
-*Dernière exécution : 17/17 tests validés avec succès (100% de réussite)*
+*Dernière exécution : 30/30 tests validés avec succès (100% de réussite)*
 
+- `tests/unit/test_hexagonal_architecture.py` : 🟢 (Tests d'Architecture : isolation stricte des outils déterministes, inversion de contrôle, indépendance de la configuration et scan anti-secrets).
+- `tests/unit/test_architecture_conformance.py` : 🟢 (Fitness functions : présence et export des 7 agents, 6 tâches et 5 adaptateurs).
 - `tests/unit/test_config.py` : 🟢 (Chargement variables, détection clé manquante/placeholder).
 - `tests/unit/test_ciso_agent.py` : 🟢 (Rôle, Zero-Trust, C2 massif, non-délégation).
 - `tests/unit/test_crafter_safe_agents.py` : 🟢 (Hexagonale, TDD, Clean Code, Jira, DoD, ART).
 - `tests/unit/test_challenger_agent.py` : 🟢 (Contradiction, anti-SPOF, KISS/YAGNI, Golden Hammer).
 - `tests/unit/test_finops_agent.py` : 🟢 (Évaluation TCO, coûts comparatifs, rentabilité Cloud).
 - `tests/unit/test_knowledge_rag.py` : 🟢 (Indexation vectorielle ChromaDB et outil KnowledgeSearchTool).
+- `tests/unit/test_git_publisher.py` : 🟢 (Scan anti-secrets, Conventional Commits, arbitrage HITL).
+- `tests/unit/test_jira_exporter.py` : 🟢 (Parsing Markdown et export CSV avec point-virgule et UTF-8-sig).
+- `tests/unit/test_diagram_exporter.py` : 🟢 (Génération des 3 formats Draw.io, PlantUML et Mermaid).
 - `tests/unit/test_tasks.py` : 🟢 (6 tâches testées : Conception, Challenge, Audit CISO, Craft Hexagonal, Delivery SAFe, FinOps).
 - `tests/unit/test_pipeline_integration.py` : 🟢 (Assemblage séquentiel complet des 6 agents et 6 tâches dans CrewAI).
 
 ---
 
 ## 📍 Prochaines Actions Prioritaires
-1. **Passage à la Brique 4 : Générateur autonome d'artéfacts et Adaptateur déterministe GitPublisher** (avec scan anti-secrets et porte d'arrêt HITL).
-2. **Brique 5 : Meta-Agent (Agent Zero) & Valorisation de Carrière**.
+1. **Passage à la Brique 5 : Meta-Agent (Agent Zero - Self-Healing & Surveillance des Logs) et Agent Carrière / Branding**.
+2. **Industrialisation finale de la plateforme**.
+

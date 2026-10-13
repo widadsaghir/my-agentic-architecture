@@ -57,13 +57,19 @@ def test_all_operational_tasks_exist_and_exported():
             f"La tâche '{task_func_name}' n'est pas listée dans src/tasks/__all__"
         )
 
-def test_rag_tools_exist_and_exported():
+def test_deterministic_tools_exist_and_exported():
     """
-    Vérifie que les composants du RAG ChromaDB sont bien implémentés et exportés.
+    Vérifie que les adaptateurs déterministes (RAG, GitPublisher, JiraExporter, DiagramExporter) sont exportés.
     """
-    expected_tools = ["ArchitectureRAGManager", "KnowledgeSearchTool"]
+    expected_tools = [
+        "ArchitectureRAGManager",
+        "KnowledgeSearchTool",
+        "GitPublisher",
+        "JiraBacklogExporter",
+        "DiagramExporter"
+    ]
     for tool_name in expected_tools:
-        assert hasattr(tools_module, tool_name), f"Composant RAG '{tool_name}' manquant dans src/tools/"
+        assert hasattr(tools_module, tool_name), f"Composant déterministe '{tool_name}' manquant dans src/tools/"
         assert tool_name in tools_module.__all__
 
 def test_documentation_drift_conformance():
