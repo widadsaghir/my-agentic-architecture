@@ -1,19 +1,19 @@
 flowchart TD
     subgraph "Acteurs Externes"
-        U[Assuré / Client Final]
-        P[Artisan / Expert Partenaire]
+        U["Assuré / Client Final"]
+        P["Artisan / Expert Partenaire"]
     end
 
     subgraph "AssurGlobal - Plateforme OmniClaim AI"
-        SYS[OmniClaim AI Platform]
+        SYS["OmniClaim AI Platform"]
     end
 
     subgraph "Systèmes Tiers"
-        B[Banques / Systèmes de Paiement SEPA]
-        S[Fournisseurs d'Identité & Registres Officiels]
+        B["Banques / Systèmes de Paiement SEPA"]
+        S["Fournisseurs d'Identité et Registres Officiels"]
     end
 
-    U -->|Déclaration & Photos| SYS
-    P -->|Devis & Factures PDF| SYS
-    SYS -->|Ordres de Virement| B
-    SYS -->|Vérification Conformité| S
+    U -->|"Déclaration et Photos"| SYS
+    P -->|"Devis et Factures PDF"| SYS
+    SYS -->|"Ordres de Virement"| B
+    SYS -->|"Vérification Conformité"| S

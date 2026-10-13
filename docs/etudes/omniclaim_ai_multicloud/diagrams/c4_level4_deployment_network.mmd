@@ -1,15 +1,15 @@
-graph TD
+flowchart TD
     subgraph "AWS Region (eu-west-1) - Multi-AZ"
         subgraph "VPC AWS (var.vpc_cidr_block)"
             subgraph "Subnet Public AZ-A & AZ-B"
-                ALB[Application Load Balancer / WAF]
+                ALB["Application Load Balancer / WAF"]
             end
             subgraph "Subnet Privé Application AZ-A & AZ-B"
-                EKS_NODES[Worker Nodes EKS (CWAgent / Istio Service Mesh)]
+                EKS_NODES["Worker Nodes EKS (CWAgent / Istio Service Mesh)"]
             end
             subgraph "Subnet Isolé Données"
-                S3[(S3 Buckets chiffrés CMK)]
-                MSK_NODES[MSK Brokers Kafka]
+                S3[("S3 Buckets chiffrés CMK")]
+                MSK_NODES["MSK Brokers Kafka"]
             end
         end
     end
@@ -18,9 +18,9 @@ graph TD
     EKS_NODES --> S3
     EKS_NODES --> MSK_NODES
 
-    MSK_NODES <==>|Inter-Cloud PrivateLink / ExpressRoute| AZURE_VNET[Azure VNet (var.azure_vnet_cidr)]
+    MSK_NODES <-->|"Inter-Cloud PrivateLink / ExpressRoute"| AZURE_VNET["Azure VNet (var.azure_vnet_cidr)"]
 
     subgraph "Azure Region (francecentral) - Enclave IA"
-        AZURE_VNET --> PE[Private Endpoints]
-        PE --> ENCLAVE[Azure OpenAI / Llama-3 GPU Instances]
+        AZURE_VNET --> PE["Private Endpoints"]
+        PE --> ENCLAVE["Azure OpenAI / Llama-3 GPU Instances"]
     end

@@ -45,45 +45,45 @@ graph TD
 ```mermaid
 flowchart TD
     subgraph "Acteurs Externes"
-        U[Assuré / Client Final]
-        P[Artisan / Expert Partenaire]
+        U["Assuré / Client Final"]
+        P["Artisan / Expert Partenaire"]
     end
 
     subgraph "AssurGlobal - Plateforme OmniClaim AI"
-        SYS[OmniClaim AI Platform]
+        SYS["OmniClaim AI Platform"]
     end
 
     subgraph "Systèmes Tiers"
-        B[Banques / Systèmes de Paiement SEPA]
-        S[Fournisseurs d'Identité & Registres Officiels]
+        B["Banques / Systèmes de Paiement SEPA"]
+        S["Fournisseurs d'Identité et Registres Officiels"]
     end
 
-    U -->|Déclaration & Photos| SYS
-    P -->|Devis & Factures PDF| SYS
-    SYS -->|Ordres de Virement| B
-    SYS -->|Vérification Conformité| S
+    U -->|"Déclaration et Photos"| SYS
+    P -->|"Devis et Factures PDF"| SYS
+    SYS -->|"Ordres de Virement"| B
+    SYS -->|"Vérification Conformité"| S
 ```
 
 ### Niveau 2 : Container Diagram (L2)
 ```mermaid
 flowchart TD
     subgraph "Cloud AWS (Zone Ingestion & Stream)"
-        GW[API Gateway / WAF] -->|Ingestion HTTPS| MSK[Kafka Streaming MSK]
-        MSK --> EKS[Cluster EKS - Microservices Métier]
-        EKS --> S3[(Data Lake S3 Immuable)]
-        EKS --> KMS[AWS KMS - CMK]
+        GW["API Gateway / WAF"] -->|"Ingestion HTTPS"| MSK["Kafka Streaming MSK"]
+        MSK --> EKS["Cluster EKS - Microservices Métier"]
+        EKS --> S3[("Data Lake S3 Immuable")]
+        EKS --> KMS["AWS KMS - CMK"]
     end
 
     subgraph "Interconnexion Sécurisée"
-        MSK <==>|Direct Connect + IPsec (< 3ms)| AZURE_GW[Azure ExpressRoute]
+        MSK <-->|"Direct Connect + IPsec (latence inf. 3ms)"| AZURE_GW["Azure ExpressRoute"]
     end
 
     subgraph "Cloud Azure (Zone Cognitive & IA Souveraine)"
-        AZURE_GW --> VNET[Virtual Network Isolé]
-        VNET --> GUARD[Azure AI Content Safety / NeMo Guardrails]
-        GUARD --> LLM[Enclave Privée - Azure OpenAI / Llama-3]
-        LLM --> SEARCH[(Azure AI Search / Vector DB)]
-        LLM --> AKV[Azure Key Vault HSM]
+        AZURE_GW --> VNET["Virtual Network Isolé"]
+        VNET --> GUARD["Azure AI Content Safety / NeMo Guardrails"]
+        GUARD --> LLM["Enclave Privée - Azure OpenAI / Llama-3"]
+        LLM --> SEARCH[("Azure AI Search / Vector DB")]
+        LLM --> AKV["Azure Key Vault HSM"]
     end
 
     classDef aws fill:#ff9900,stroke:#232f3e,stroke-width:2px;
@@ -96,7 +96,7 @@ flowchart TD
 
 ### Niveau 3 : Component Diagram (L3 - Architecture Hexagonale d'un Microservice Clé)
 ```mermaid
-graph TD
+flowchart TD
     subgraph "Adapters (Inbound)"
         REST[REST Controller / Webhooks]
         KAFKA_IN[Kafka Event Consumer]
@@ -122,18 +122,18 @@ graph TD
 
 ### Niveau 4 : Deployment & Network Topology (L4 - Multi-AZ AWS / Azure)
 ```mermaid
-graph TD
+flowchart TD
     subgraph "AWS Region (eu-west-1) - Multi-AZ"
         subgraph "VPC AWS (var.vpc_cidr_block)"
             subgraph "Subnet Public AZ-A & AZ-B"
-                ALB[Application Load Balancer / WAF]
+                ALB["Application Load Balancer / WAF"]
             end
             subgraph "Subnet Privé Application AZ-A & AZ-B"
-                EKS_NODES[Worker Nodes EKS (CWAgent / Istio Service Mesh)]
+                EKS_NODES["Worker Nodes EKS (CWAgent / Istio Service Mesh)"]
             end
             subgraph "Subnet Isolé Données"
-                S3[(S3 Buckets chiffrés CMK)]
-                MSK_NODES[MSK Brokers Kafka]
+                S3[("S3 Buckets chiffrés CMK")]
+                MSK_NODES["MSK Brokers Kafka"]
             end
         end
     end
@@ -142,11 +142,11 @@ graph TD
     EKS_NODES --> S3
     EKS_NODES --> MSK_NODES
 
-    MSK_NODES <==>|Inter-Cloud PrivateLink / ExpressRoute| AZURE_VNET[Azure VNet (var.azure_vnet_cidr)]
+    MSK_NODES <-->|"Inter-Cloud PrivateLink / ExpressRoute"| AZURE_VNET["Azure VNet (var.azure_vnet_cidr)"]
 
     subgraph "Azure Region (francecentral) - Enclave IA"
-        AZURE_VNET --> PE[Private Endpoints]
-        PE --> ENCLAVE[Azure OpenAI / Llama-3 GPU Instances]
+        AZURE_VNET --> PE["Private Endpoints"]
+        PE --> ENCLAVE["Azure OpenAI / Llama-3 GPU Instances"]
     end
 ```
 
@@ -168,14 +168,14 @@ sequenceDiagram
     Core->>Filter: Masquage local PII (Noms, IBAN, Secu)
     Filter->>AzureAI: Requête d'Inférence Anonymisée (via PrivateLink)
     AzureAI-->>Core: JSON Normalisé (Score Fraude, Dommages, Montant)
-    Core->>RuleEngine: Évaluation barèmes & seuils (< 2k€ & Score < 0.15)
+    Core->>RuleEngine: Évaluation barèmes et seuils (inf. à 2k€ et Score inf. 0.15)
     
-    alt Cas Simple (Montant < 2000 € & Score < 0.15)
+    alt Cas Simple (Montant inf. à 2000 € et Score inf. 0.15)
         RuleEngine->>Bank: Déclenchement Virement Automatique
-        Bank-->>Assuré: Notification & Virement Effectué
-    else Cas Complexe ou Ambigu (Montant >= 2000 € ou Score >= 0.15)
-        RuleEngine->>HITL: Suspension & Assignation Dossier au Gestionnaire Humain
-        HITL->>Assuré: Validation Humaine & Notification
+        Bank-->>Assuré: Notification et Virement Effectué
+    else Cas Complexe ou Ambigu (Montant sup. ou égal à 2000 € ou Score sup. ou égal à 0.15)
+        RuleEngine->>HITL: Suspension et Assignation Dossier au Gestionnaire Humain
+        HITL->>Assuré: Validation Humaine et Notification
     end
 ```
 

@@ -1,21 +1,21 @@
 flowchart TD
     subgraph "Cloud AWS (Zone Ingestion & Stream)"
-        GW[API Gateway / WAF] -->|Ingestion HTTPS| MSK[Kafka Streaming MSK]
-        MSK --> EKS[Cluster EKS - Microservices Métier]
-        EKS --> S3[(Data Lake S3 Immuable)]
-        EKS --> KMS[AWS KMS - CMK]
+        GW["API Gateway / WAF"] -->|"Ingestion HTTPS"| MSK["Kafka Streaming MSK"]
+        MSK --> EKS["Cluster EKS - Microservices Métier"]
+        EKS --> S3[("Data Lake S3 Immuable")]
+        EKS --> KMS["AWS KMS - CMK"]
     end
 
     subgraph "Interconnexion Sécurisée"
-        MSK <==>|Direct Connect + IPsec (< 3ms)| AZURE_GW[Azure ExpressRoute]
+        MSK <-->|"Direct Connect + IPsec (latence inf. 3ms)"| AZURE_GW["Azure ExpressRoute"]
     end
 
     subgraph "Cloud Azure (Zone Cognitive & IA Souveraine)"
-        AZURE_GW --> VNET[Virtual Network Isolé]
-        VNET --> GUARD[Azure AI Content Safety / NeMo Guardrails]
-        GUARD --> LLM[Enclave Privée - Azure OpenAI / Llama-3]
-        LLM --> SEARCH[(Azure AI Search / Vector DB)]
-        LLM --> AKV[Azure Key Vault HSM]
+        AZURE_GW --> VNET["Virtual Network Isolé"]
+        VNET --> GUARD["Azure AI Content Safety / NeMo Guardrails"]
+        GUARD --> LLM["Enclave Privée - Azure OpenAI / Llama-3"]
+        LLM --> SEARCH[("Azure AI Search / Vector DB")]
+        LLM --> AKV["Azure Key Vault HSM"]
     end
 
     classDef aws fill:#ff9900,stroke:#232f3e,stroke-width:2px;

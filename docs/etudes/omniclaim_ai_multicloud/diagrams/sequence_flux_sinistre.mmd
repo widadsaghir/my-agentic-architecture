@@ -14,12 +14,12 @@ sequenceDiagram
     Core->>Filter: Masquage local PII (Noms, IBAN, Secu)
     Filter->>AzureAI: Requête d'Inférence Anonymisée (via PrivateLink)
     AzureAI-->>Core: JSON Normalisé (Score Fraude, Dommages, Montant)
-    Core->>RuleEngine: Évaluation barèmes & seuils (< 2k€ & Score < 0.15)
+    Core->>RuleEngine: Évaluation barèmes et seuils (inf. à 2k€ et Score inf. 0.15)
     
-    alt Cas Simple (Montant < 2000 € & Score < 0.15)
+    alt Cas Simple (Montant inf. à 2000 € et Score inf. 0.15)
         RuleEngine->>Bank: Déclenchement Virement Automatique
-        Bank-->>Assuré: Notification & Virement Effectué
-    else Cas Complexe ou Ambigu (Montant >= 2000 € ou Score >= 0.15)
-        RuleEngine->>HITL: Suspension & Assignation Dossier au Gestionnaire Humain
-        HITL->>Assuré: Validation Humaine & Notification
+        Bank-->>Assuré: Notification et Virement Effectué
+    else Cas Complexe ou Ambigu (Montant sup. ou égal à 2000 € ou Score sup. ou égal à 0.15)
+        RuleEngine->>HITL: Suspension et Assignation Dossier au Gestionnaire Humain
+        HITL->>Assuré: Validation Humaine et Notification
     end
