@@ -67,10 +67,12 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 
 ---
 
-## 🧪 Bilan d'Exécution des Tests Unitaires (Pytest)
+## 🧪 Bilan d'Exécution des Tests Unitaires & d'Architecture (Pytest)
 
-*Dernière exécution : 26/26 tests validés avec succès (100% de réussite)*
+*Dernière exécution : 30/30 tests validés avec succès (100% de réussite)*
 
+- `tests/unit/test_hexagonal_architecture.py` : 🟢 (Tests d'Architecture : isolation stricte des outils déterministes, inversion de contrôle, indépendance de la configuration et scan anti-secrets).
+- `tests/unit/test_architecture_conformance.py` : 🟢 (Fitness functions : présence et export des 7 agents, 6 tâches et 5 adaptateurs).
 - `tests/unit/test_config.py` : 🟢 (Chargement variables, détection clé manquante/placeholder).
 - `tests/unit/test_ciso_agent.py` : 🟢 (Rôle, Zero-Trust, C2 massif, non-délégation).
 - `tests/unit/test_crafter_safe_agents.py` : 🟢 (Hexagonale, TDD, Clean Code, Jira, DoD, ART).
@@ -80,7 +82,6 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 - `tests/unit/test_git_publisher.py` : 🟢 (Scan anti-secrets, Conventional Commits, arbitrage HITL).
 - `tests/unit/test_jira_exporter.py` : 🟢 (Parsing Markdown et export CSV avec point-virgule et UTF-8-sig).
 - `tests/unit/test_diagram_exporter.py` : 🟢 (Génération des 3 formats Draw.io, PlantUML et Mermaid).
-- `tests/unit/test_architecture_conformance.py` : 🟢 (Fitness functions : agents, tâches et outils déterministes).
 - `tests/unit/test_tasks.py` : 🟢 (6 tâches testées : Conception, Challenge, Audit CISO, Craft Hexagonal, Delivery SAFe, FinOps).
 - `tests/unit/test_pipeline_integration.py` : 🟢 (Assemblage séquentiel complet des 6 agents et 6 tâches dans CrewAI).
 
