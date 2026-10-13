@@ -50,7 +50,8 @@ def test_all_operational_tasks_exist_and_exported():
         "create_safe_delivery_task",
         "create_finops_task",
         "create_meta_maintenance_task",
-        "create_career_branding_task"
+        "create_career_branding_task",
+        "create_convergence_reconciliation_task"
     ]
 
     for task_func_name in operational_tasks:

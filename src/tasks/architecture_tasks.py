@@ -240,6 +240,38 @@ def create_career_branding_task(agent: Agent, context_tasks: list, language: str
         context=context_tasks
     )
 
+def create_convergence_reconciliation_task(agent: Agent, context_tasks: list, language: str) -> Task:
+    """
+    Crée la tâche de convergence et réconciliation d'architecture (Phase E TOGAF / Consensus Gate).
+    Le Lead Manager arbitre les divergences entre Solution Architect, Challenger et FinOps,
+    et produit le document de décision consolidé et sans contradiction.
+    """
+    description = (
+        f"En tant que Lead Architecture Manager et autorité d'arbitrage de l'Architecture Review Board (ARB) :\n"
+        f"1. Analyser l'ensemble des livrables produits par la brigade : le DAT préliminaire, l'audit critique du Challenger (Red Team), "
+        f"l'avis d'homologation du CISO, la conception hexagonale du Crafter et l'étude TCO du FinOps.\n"
+        f"2. Identifier formellement toutes les contradictions ou divergences d'arbitrage (ex: Multi-Cloud vs Mono-Cloud, technologies divergentes).\n"
+        f"3. Rendre une décision d'arbitrage souveraine, argumentée et définitive pour le comité de direction.\n"
+        f"4. Mettre à jour et consolider les choix structurants pour garantir la parfaite cohérence du dossier cible sans contradiction interne.\n\n"
+        f"IMPORTANT : Rédiger votre synthèse de convergence en langue [{language}]."
+    )
+
+    expected_output = (
+        f"Un document de décision d'arbitrage et de convergence d'architecture en Markdown rédigé en [{language}], comprenant :\n"
+        f"1. Synthèse exécutive de la décision finale (Décision formelle de l'ARB)\n"
+        f"2. Tableau des divergences identifiées et arbitrages rendus (Option initiale vs Critique Red Team vs Décision finale)\n"
+        f"3. Architecture cible consolidée et réconciliée (Sans aucune contradiction interne)\n"
+        f"4. Trajectoire de transition et plan d'action immédiat."
+    )
+
+    return Task(
+        description=description,
+        expected_output=expected_output,
+        agent=agent,
+        context=context_tasks
+    )
+
+
 
 
 

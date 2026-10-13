@@ -9,7 +9,8 @@ from .architecture_tasks import (
     create_safe_delivery_task,
     create_finops_task,
     create_meta_maintenance_task,
-    create_career_branding_task
+    create_career_branding_task,
+    create_convergence_reconciliation_task
 )
 
 __all__ = [
@@ -20,5 +21,6 @@ __all__ = [
     "create_safe_delivery_task",
     "create_finops_task",
     "create_meta_maintenance_task",
-    "create_career_branding_task"
+    "create_career_branding_task",
+    "create_convergence_reconciliation_task"
 ]

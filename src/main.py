@@ -24,7 +24,8 @@ from src.tasks import (
     create_security_audit_task,
     create_software_crafting_task,
     create_safe_delivery_task,
-    create_finops_task
+    create_finops_task,
+    create_convergence_reconciliation_task
 )
 from src.tools import (
     ArchitectureRAGManager,
@@ -173,6 +174,12 @@ def main():
         language=args.language
     )
 
+    convergence_task = create_convergence_reconciliation_task(
+        agent=manager,
+        context_tasks=[design_task, challenge_task, finops_task],
+        language=args.language
+    )
+
     # 5. Configuration des logs d'exécution (Base d'audit pour le Meta-Agent)
     logs_dir = ROOT_DIR / "logs"
     logs_dir.mkdir(parents=True, exist_ok=True)
@@ -181,8 +188,8 @@ def main():
 
     # 6. Assemblage de la Crew
     crew = Crew(
-        agents=[solution_architect, challenger, ciso, crafter, safe_enabler, finops],
-        tasks=[design_task, challenge_task, security_task, crafting_task, delivery_task, finops_task],
+        agents=[solution_architect, challenger, ciso, crafter, safe_enabler, finops, manager],
+        tasks=[design_task, challenge_task, security_task, crafting_task, delivery_task, finops_task, convergence_task],
         process=Process.sequential,
         manager_agent=manager,
         output_log_file=log_file_path,
@@ -190,12 +197,13 @@ def main():
     )
 
     print("\n▶️ Lancement de l'orchestration multi-agents d'architecture...")
-    print("   [1/6] Solution Architect (Macro-Patterns & Vision)")
-    print("   [2/6] Challenger / Red Team (Traque SPOF & Anti-Sur-Ingénierie)")
-    print("   [3/6] CISO & Data Protection (Zero-Trust, C2 & Homologation DCA)")
-    print("   [4/6] Software Crafter (Architecture Hexagonale, DDD & TDD)")
-    print("   [5/6] SAFe Agile Enabler (Backlog Jira, Enablers & DoD)")
-    print("   [6/6] Migration & FinOps / TCO (Comparatif des 4 Pistes, Coûts Min/Max)")
+    print("   [1/7] Solution Architect (Macro-Patterns & Vision)")
+    print("   [2/7] Challenger / Red Team (Traque SPOF & Anti-Sur-Ingénierie)")
+    print("   [3/7] CISO & Data Protection (Zero-Trust, C2 & Homologation DCA)")
+    print("   [4/7] Software Crafter (Architecture Hexagonale, DDD & TDD)")
+    print("   [5/7] SAFe Agile Enabler (Backlog Jira, Enablers & DoD)")
+    print("   [6/7] Migration & FinOps / TCO (Comparatif des 4 Pistes, Coûts Min/Max)")
+    print("   [7/7] Lead Architecture Manager (Consensus Gate & Synthèse de Convergence)")
     print(f"   [Trace] Enregistrement en direct des échanges dans : {log_file_path}")
     try:
         result = crew.kickoff()
@@ -222,6 +230,7 @@ def main():
         study_path.mkdir(parents=True, exist_ok=True)
 
         deliverables_mapping = [
+            ("00_DECISION_ARBITRAGE_ET_SYNTHESE_CONVERGENCE.md", convergence_task),
             ("01_DOSSIER_ARCHITECTURE_TECHNIQUE_DAT.md", design_task),
             ("02_RAPPORT_AUDIT_CONTRADICTOIRE.md", challenge_task),
             ("03_AVIS_HOMOLOGATION_SECURITE_DCA.md", security_task),

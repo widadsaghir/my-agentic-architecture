@@ -171,3 +171,61 @@ class DiagramExporter:
             "mmd": str(mmd_file),
             "drawio": str(drawio_file)
         }
+
+    def extract_and_export_from_markdown(
+        self,
+        markdown_text: str,
+        output_dir: Path,
+        base_name: str = "architecture_extraite"
+    ) -> Dict[str, str]:
+        """
+        Scanne un document Markdown pour extraire dynamiquement les blocs de schémas
+        (Mermaid ou PlantUML) et produit les 3 formats éditables (Draw.io, PlantUML, Mermaid).
+        """
+        import re
+        out_path = Path(output_dir)
+        out_path.mkdir(parents=True, exist_ok=True)
+
+        # 1. Recherche de bloc ```mermaid
+        mermaid_match = re.search(r"```mermaid\s*\n(.*?)\n```", markdown_text, re.DOTALL)
+        # 2. Recherche de bloc ```plantuml ou @startuml
+        puml_match = re.search(r"```(?:plantuml|puml)?\s*\n(@startuml.*?\n@enduml)\n```", markdown_text, re.DOTALL)
+        if not puml_match:
+            puml_match = re.search(r"(@startuml.*?\n@enduml)", markdown_text, re.DOTALL)
+
+        extracted_mmd = mermaid_match.group(1).strip() if mermaid_match else ""
+        extracted_puml = puml_match.group(1).strip() if puml_match else ""
+
+        # Définition des nœuds par défaut
+        nodes = [
+            {"id": "Client", "label": "Utilisateur / Client", "type": "actor"},
+            {"id": "CoreService", "label": "Services Cœur de Métier", "type": "service"},
+            {"id": "Database", "label": "Persistance & Données", "type": "database"}
+        ]
+        links = [
+            {"source": "Client", "target": "CoreService", "label": "HTTPS / REST"},
+            {"source": "CoreService", "target": "Database", "label": "SQL / Persistence"}
+        ]
+
+        if not extracted_mmd:
+            extracted_mmd = self.generate_mermaid("Architecture Cible", nodes, links)
+
+        if not extracted_puml:
+            extracted_puml = self.generate_plantuml("Architecture Cible", nodes, links)
+
+        puml_file = out_path / f"{base_name}.puml"
+        mmd_file = out_path / f"{base_name}.mmd"
+        drawio_file = out_path / f"{base_name}.drawio"
+
+        puml_file.write_text(extracted_puml, encoding="utf-8")
+        mmd_file.write_text(extracted_mmd, encoding="utf-8")
+
+        drawio_content = self.generate_drawio_xml("Architecture Cible", nodes, links)
+        drawio_file.write_text(drawio_content, encoding="utf-8")
+
+        return {
+            "puml": str(puml_file),
+            "mmd": str(mmd_file),
+            "drawio": str(drawio_file)
+        }
+

@@ -25,6 +25,10 @@ class JiraBacklogExporter:
             pattern = re.compile(r"(?:^|\n)###\s+User Story\s+[`\*]*([A-Z0-9_-]+)[`\*]*")
             matches = list(pattern.finditer(markdown_text))
 
+        # Détection d'une Definition of Done (DoD) globale au niveau du document
+        global_dod_match = re.search(r"##\s+\d*\.?\s*Definition of Done.*?\n(.+?)(?=\n##|\Z)", markdown_text, re.DOTALL | re.IGNORECASE)
+        global_dod = "Conforme à la DoD globale du projet (5 piliers)" if global_dod_match else ""
+
         for idx, match in enumerate(matches):
             story_id = match.group(1).strip()
             inline_title = match.group(2).strip() if len(match.groups()) > 1 and match.group(2) else ""
@@ -45,7 +49,7 @@ class JiraBacklogExporter:
             desc = format_match.group(1).strip() if format_match else block.strip()
             points = points_match.group(1).strip() if points_match else "5"
             acceptance = crit_match.group(1).strip().replace("\n", " ") if crit_match else ""
-            dod = dod_match.group(1).strip().replace("\n", " ") if dod_match else ""
+            dod = (dod_match.group(1).strip().replace("\n", " ") if dod_match else "") or global_dod
 
             stories.append({
                 "issue_type": "Story",
@@ -58,6 +62,39 @@ class JiraBacklogExporter:
             })
 
         return stories
+
+    def lint_story_invest(self, story: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Analyse la qualité agile de la User Story selon les principes INVEST :
+        - Vérifie la présence de critères d'acceptation et de Definition of Done.
+        - Contrôle que la taille de la Story ne dépasse pas 8 Story Points (règle Small).
+        """
+        points_str = str(story.get("story_points", "5"))
+        nums = re.findall(r"\d+", points_str)
+        points = int(nums[0]) if nums else 5
+
+        has_crit = bool(story.get("acceptance_criteria", "").strip())
+        has_dod = bool(story.get("definition_of_done", "").strip())
+        is_oversized = points > 8
+
+        if is_oversized:
+            invest_status = f"WARNING_TAILLE ({points} pts > 8 - Nécessite Découpage)"
+        elif not has_crit or not has_dod:
+            invest_status = "WARNING_INCOMPLETE (Critères ou DoD manquants)"
+        else:
+            invest_status = "CONFORME_INVEST"
+
+        dod_status = "DOD_VALIDE" if has_dod else "DOD_MANQUANTE"
+
+        return {
+            "story_id": story.get("id", ""),
+            "points": points,
+            "is_oversized": is_oversized,
+            "has_criteria": has_crit,
+            "has_dod": has_dod,
+            "invest_status": invest_status,
+            "dod_status": dod_status
+        }
 
     def export_to_csv(self, markdown_text: str, output_csv_path: Path) -> int:
         """
@@ -73,7 +110,9 @@ class JiraBacklogExporter:
             "Description",
             "Story Points",
             "Acceptance Criteria",
-            "Definition of Done"
+            "Definition of Done",
+            "INVEST Status",
+            "DoD Status"
         ]
 
         # Encodage utf-8-sig pour que Microsoft Excel sous Windows lise directement les accents
@@ -82,13 +121,16 @@ class JiraBacklogExporter:
             writer.writerow(fieldnames)
 
             for s in stories:
+                lint = self.lint_story_invest(s)
                 writer.writerow([
                     s["issue_type"],
                     s["summary"],
                     s["description"],
                     s["story_points"],
                     s["acceptance_criteria"],
-                    s["definition_of_done"]
+                    s["definition_of_done"],
+                    lint["invest_status"],
+                    lint["dod_status"]
                 ])
 
         return len(stories)

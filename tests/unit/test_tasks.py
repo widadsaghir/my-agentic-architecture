@@ -8,7 +8,8 @@ from src.tasks.architecture_tasks import (
     create_safe_delivery_task,
     create_finops_task,
     create_meta_maintenance_task,
-    create_career_branding_task
+    create_career_branding_task,
+    create_convergence_reconciliation_task
 )
 
 @pytest.fixture
@@ -110,6 +111,17 @@ def test_career_branding_task_language_and_doctrine(agent):
     assert "linkedin" in desc_lower
     assert "certification" in desc_lower
     assert task.context == []
+
+def test_convergence_reconciliation_task_language_and_doctrine(agent):
+    """Vérifie que la tâche de convergence arbitre les contradictions et consolide la décision finale."""
+    task = create_convergence_reconciliation_task(agent, context_tasks=[], language="French")
+
+    assert "[French]" in task.description
+    assert "[French]" in task.expected_output
+    desc_lower = task.description.lower()
+    assert "arbitrage" in desc_lower or "réconciliation" in desc_lower or "convergence" in desc_lower
+    assert task.context == []
+
 
 
 

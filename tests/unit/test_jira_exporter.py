@@ -45,3 +45,28 @@ def test_jira_exporter_parses_and_exports_csv_with_semicolon(tmp_path):
     assert "Déploiement Terraform de la Landing Zone Zero-Trust" in content
     assert "Chiffrement CMK sur Azure Key Vault Premium" in content
     assert ";5;" in content or ";5 Story Points;" in content or "5" in lines[1]
+
+def test_jira_exporter_invest_linter_checks_oversized_stories():
+    """Vérifie que le linter INVEST détecte les stories trop volumineuses (> 8 points) ou incomplètes."""
+    exporter = JiraBacklogExporter()
+
+    small_story = {
+        "id": "OMNI-01",
+        "story_points": "5",
+        "acceptance_criteria": "Given A, When B, Then C",
+        "definition_of_done": "Tests unitaires 100%"
+    }
+    lint_small = exporter.lint_story_invest(small_story)
+    assert lint_small["invest_status"] == "CONFORME_INVEST"
+    assert lint_small["is_oversized"] is False
+
+    huge_story = {
+        "id": "OMNI-02",
+        "story_points": "13",
+        "acceptance_criteria": "Critères ok",
+        "definition_of_done": "DoD ok"
+    }
+    lint_huge = exporter.lint_story_invest(huge_story)
+    assert "WARNING_TAILLE" in lint_huge["invest_status"]
+    assert lint_huge["is_oversized"] is True
+
