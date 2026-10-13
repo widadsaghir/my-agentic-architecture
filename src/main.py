@@ -242,7 +242,58 @@ def main():
             count = JiraBacklogExporter().export_to_csv(delivery_output, jira_csv_file)
             print(f"📊 Export Jira CSV ({count} User Stories, délimiteur ;) généré : {jira_csv_file}")
 
-        print(f"📦 Pack d'architecture complet (6 dossiers d'experts) généré dans : {study_path}")
+        # Observabilité Meta-Agent (Brique 5.1)
+        if Path(log_file_path).exists():
+            health_report = LogAnalyzer().generate_health_report(Path(log_file_path))
+            health_file = study_path / "08_RAPPORT_OBSERVABILITE_ET_SANTE_SYSTEME.md"
+            health_file.write_text(health_report, encoding="utf-8")
+            print(f"🩺 Rapport d'observabilité Meta-Agent généré : {health_file}")
+
+        # Valorisation Carrière & LinkedIn REX (Brique 5.2)
+        career_exporter = CareerExporter()
+        study_title = input_path.stem.replace("_", " ").title() if input_path.is_file() else "Modernisation Architecture Multi-Cloud & IA"
+        key_patterns = [
+            "Topologie Multi-Cloud Hybride (AWS EKS/MSK + Azure OpenAI privé C2 MASSIF)",
+            "Agents IA Autonomes en Production avec garde-fous (Prompt Injection, PII masqué, HITL > 2 000 €)",
+            "Architecture Hexagonale découplée (Ports & Adapters) & FinOps TCO optimisé"
+        ]
+        linkedin_rex = career_exporter.generate_linkedin_post(
+            author_name="Widad SAGHIR (Lead Architect)",
+            study_title=study_title,
+            key_results=key_patterns,
+            certifications_alignment=["TOGAF 10 Certified", "SAFe 6 for Architects", "Cloud Solutions Architect"]
+        )
+        cv_bullets = career_exporter.generate_cv_bullet_points(study_title, key_patterns)
+        
+        career_report = f"# 🚀 VALORISATION DE CARRIÈRE & PERSONAL BRANDING\n\n## 📝 Entrées pour Mise à Jour du CV\n" + "\n".join(cv_bullets) + f"\n\n---\n\n## 📱 Brouillon de Post LinkedIn (REX Prêt à Publier)\n\n```markdown\n{linkedin_rex}\n```\n"
+        career_file = study_path / "09_VALORISATION_CARRIERE_ET_POST_LINKEDIN_REX.md"
+        career_file.write_text(career_report, encoding="utf-8")
+        print(f"📈 Dossier de valorisation de carrière généré : {career_file}")
+
+        # Génération conjointe des schémas d'architecture (Draw.io, PlantUML, Mermaid)
+        diagrams_dir = study_path / "diagrams"
+        diagrams_dir.mkdir(parents=True, exist_ok=True)
+        DiagramExporter().export_all_formats(
+            title=f"Architecture Cible — {study_title}",
+            components=[
+                ("Client", "Navigateur Assuré / Courtier"),
+                ("AWS_Ingestion", "Amazon MSK (Kafka) & EKS Microservices"),
+                ("Azure_Cognitive", "Azure OpenAI Private Enclave & AI Search"),
+                ("Core_Database", "PostgreSQL Aurora Multi-Cloud"),
+                ("HITL_Backoffice", "Portail Gestionnaire Arbitrage Humain")
+            ],
+            relationships=[
+                ("Client", "AWS_Ingestion", "Déclaration sinistre (HTTPS/REST)"),
+                ("AWS_Ingestion", "Azure_Cognitive", "Inter-Cloud Direct Connect / ExpressRoute (Private Endpoint)"),
+                ("Azure_Cognitive", "HITL_Backoffice", "Routage si montant > 2000 € ou fraude >= 0.15"),
+                ("AWS_Ingestion", "Core_Database", "Persistance des règlements")
+            ],
+            output_dir=diagrams_dir,
+            base_filename="architecture_cible_omniclaim"
+        )
+        print(f"🖼️ Schémas d'architecture (Draw.io, PlantUML, Mermaid) générés dans : {diagrams_dir}")
+
+        print(f"📦 Pack d'architecture complet (Livrables, Schémas, Observabilité & Carrière) généré dans : {study_path}")
 
     print(f"📜 Journal complet des échanges et raisonnements sauvegardé dans : {log_file_path}")
 
