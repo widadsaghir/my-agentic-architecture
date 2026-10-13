@@ -103,17 +103,28 @@ python src/main.py --language "French" --input "docs/exemples/cadrage_migration_
 
 ---
 
-## 🧪 Built-in Quality & Pytest (45 Tests Déterministes à 0 Token)
+## 🧪 Built-in Quality & Pytest (48 Tests Déterministes à 0 Token)
 
-La suite de tests automatisée s'exécute en **moins de 40 secondes** sans consommer le moindre jeton LLM :
+La suite de tests automatisée s'exécute en **moins de 36 secondes** sans consommer le moindre jeton LLM :
 
 ```powershell
 pytest -v
 ```
 
 ```text
-======================= 45 passed, 150 warnings in 41.96s =======================
+======================= 48 passed, 153 warnings in 35.77s =======================
 ```
 
 Pour consulter le détail des 5 patterns d'ingénierie logicielle (Architectural Fitness Functions, Defect-Driven Testing, Mock E2E, Privacy Guard, Contract Validation), référez-vous au document :  
 👉 **`docs/craftsmanship-safe-testing-strategy.md`**.
+
+---
+
+## 🛠️ Instancier votre Propre Brigade (Framework AAP Meta-Prompt)
+
+Vous souhaitez créer une flotte d'agents spécialisés sur un autre domaine d'entreprise (Cybersécurité / SOC, Audit RGPD / DORA, Plateforme MLOps, Cadrage FinOps Cloud) ?  
+
+Le méta-moule industriel complet du **Framework AAP (V3)** est disponible dans :  
+👉 **`docs/templates/meta_prompt_generateur_brigade.md`**
+
+Il contient le cahier des charges, la structure modulaire, les 10 piliers d'ingénierie logicielle, les contrats de tests et le prompt prêt à l'emploi avec comparatif des gains de temps (~97.9% d'économie).
