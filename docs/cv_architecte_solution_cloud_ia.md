@@ -36,13 +36,14 @@ Pratique rigoureuse des cadres méthodologiques internationaux (**TOGAF 10 ADM**
 
 ## 💼 Expériences Professionnelles Récentes
 
-### 👑 Lead Solution & Enterprise Architect — Cœur Sinistres & Multi-Agents IA
+### 👑 Lead Solution & Enterprise Architect — Cœur Sinistres & Multi-Agents IA (OmniClaim AI)
 *Secteur Assurance & Services Financiers | 2025 – Présent*
-- Direction technique du programme stratégique d'automatisation des sinistres par agents IA autonomes (15 millions de dossiers/an).
-- Cadrage d'une architecture cible multi-cloud hybride (AWS EDA + Azure OpenAI privé C2 MASSIF) avec découplage hexagonal strict.
-- Mise en place d'une gouvernance Human-in-the-Loop (HITL) garantissant zéro décaissement non supervisé au-delà de 2 000 €.
-
-*(Section en attente d'actualisation détaillée post-cadrage OmniClaim AI)*
+- **Direction technique du programme stratégique OmniClaim AI :** Modernisation du cœur sinistres (15 millions de dossiers/an) et absorption des pics climatiques (x10 en 24h) sans interruption de service.
+- **Topologie Cloud-Native & Souveraineté IA :** Conception de l'enclave cognitive sécurisée C2 MASSIF avec modèles multimodaux dédiés, sans réentraînement sur les données clients.
+- **Garde-fous de Sécurité & Zero-Trust (NIST SP 800-207) :** Anonymisation locale des PII à la volée, protection anti-prompt injection (Guardrails) et chiffrement KMS CMK de bout en bout.
+- **Gouvernance Human-in-the-Loop (HITL) :** Définition de la règle métier souveraine d'arbitrage automatisé pour les règlements $< 2\,000\text{ €}$ et score de fraude $< 0.15$ (Straight-Through Processing $\ge 60\%$).
+- **Software Craftsmanship & Architecture Hexagonale :** Isolation stricte des moteurs d'inférence derrière des interfaces SPI (`ClaimAnalyzerPort`), élimination de la *Primitive Obsession* (`Amount`, `FraudScore`) et garantie de testabilité unitaire (TDD 100%).
+- **Optimisation FinOps & TCO :** Élimination de 700 k€/an de licences propriétaires Oracle/WebLogic, division par deux du Run récurrent et atteinte d'un **ROI à 3 ans de +84.6%** (Payback en 18 mois).
 
 ---
 

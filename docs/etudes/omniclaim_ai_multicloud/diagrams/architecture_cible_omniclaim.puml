@@ -1,0 +1,33 @@
+@startuml
+skinparam defaultFontSize 16
+skinparam defaultFontColor #000000
+skinparam roundcorner 10
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 100
+skinparam ranksep 100
+
+top to bottom direction
+
+title Architecture Cible — Plateforme OmniClaim AI
+
+actor "Assure / Courtier" as Client #D4E6F1
+rectangle "==AWS MSK & EKS Services" as AWS_Ingestion #AED6F1
+rectangle "==Azure OpenAI C2 Enclave" as Azure_Cognitive #AED6F1
+database "==PostgreSQL Aurora Multi-Cloud" as Core_Database #D5F5E3
+rectangle "==Portail Gestionnaire HITL > 2000€" as HITL_Backoffice #AED6F1
+
+Client ---> AWS_Ingestion : Declaration sinistre (HTTPS)
+AWS_Ingestion ---> Azure_Cognitive : Direct Connect / ExpressRoute
+Azure_Cognitive ---> HITL_Backoffice : Suspension si > 2000 € ou fraude >= 0.15
+AWS_Ingestion ---> Core_Database : Persistance & Reglements
+
+note bottom
+  **1. Type :** Cartographie d'Architecture Système.
+  **2. Utilité :** Visualisation des flux et composants pour Architecture Cible — Plateforme OmniClaim AI.
+  **3. Standard :** C4 Model / TOGAF 10 Phase C & D.
+  **4. Équivalent UML :** Diagramme de Composants.
+  **5. Résumé :** Restitution générée automatiquement sans dépendance externe.
+end note
+
+@enduml
