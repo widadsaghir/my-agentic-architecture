@@ -183,5 +183,63 @@ def create_finops_task(agent: Agent, context_tasks: list, language: str) -> Task
         context=context_tasks
     )
 
+def create_meta_maintenance_task(agent: Agent, context_tasks: list, language: str) -> Task:
+    """
+    Crée la tâche de méta-gouvernance et d'auto-maintenance du système (Brique 5.1).
+    Analyse les logs d'exécution, audite la santé des agents et propose des patchs de prompts/code.
+    """
+    description = (
+        f"Analyser l'exécution de la brigade d'architecture et auditer les traces d'échanges.\n"
+        f"Votre mission de Méta-Gouvernance consiste à :\n"
+        f"1. Évaluer la fluidité du passage de relais entre agents et identifier les éventuels goulots d'étranglement ou latences.\n"
+        f"2. Détecter les dérives de prompts, les répétitions ou les signes d'hallucinations.\n"
+        f"3. Formuler des recommandations de correctifs de prompts ou d'optimisation de code pour l'auto-guérison (Self-Healing) du système.\n\n"
+        f"IMPORTANT : Rédiger votre rapport d'audit système en langue [{language}]."
+    )
+
+    expected_output = (
+        f"Un rapport d'observabilité et d'auto-maintenance du système en Markdown rédigé en [{language}], comprenant :\n"
+        f"1. Bilan d'exécution et taux de complétude des tâches de la brigade\n"
+        f"2. Analyse de la santé des prompts et détection des dérives\n"
+        f"3. Propositions de correctifs de prompts et de code pour le Self-Healing\n"
+        f"4. Recommandations de dimensionnement pour les prochaines exécutions."
+    )
+
+    return Task(
+        description=description,
+        expected_output=expected_output,
+        agent=agent,
+        context=context_tasks
+    )
+
+def create_career_branding_task(agent: Agent, context_tasks: list, language: str) -> Task:
+    """
+    Crée la tâche de valorisation de carrière et de personal branding (Brique 5.2).
+    Met à jour les compétences du CV et génère un post LinkedIn percutant (REX).
+    """
+    description = (
+        f"Extraire la substantifique moelle d'ingénierie et d'architecture démontrée dans cette étude pour valoriser le profil du Lead Architect.\n"
+        f"Votre mission de Personal Branding consiste à :\n"
+        f"1. Extraire les compétences, méthodologies et patterns appliqués (ex: Cloud WAF, Hexagonale, Zero-Trust, C2, FinOps, SAFe) sous forme de points d'impact pour un CV.\n"
+        f"2. Rédiger un brouillon de post LinkedIn complet, engageant et professionnel (Retour d'Expérience - REX) prêt à la publication.\n"
+        f"3. Cartographier les acquis de cette étude vers les référentiels de certification professionnelle (TOGAF 10, SAFe for Architects, Azure Solutions Architect).\n\n"
+        f"IMPORTANT : Rédiger l'ensemble des livrables de carrière en langue [{language}]."
+    )
+
+    expected_output = (
+        f"Un dossier de valorisation de carrière et personal branding en Markdown rédigé en [{language}], comprenant :\n"
+        f"1. Fiche de mise à jour du CV (Bullet points d'impact et mots-clés de compétences certifiables)\n"
+        f"2. Brouillon de post LinkedIn prêt à l'emploi (Format REX professionnel avec accroche, enseignements clés et hashtags)\n"
+        f"3. Matrice de correspondance vers les certifications professionnelles cibles."
+    )
+
+    return Task(
+        description=description,
+        expected_output=expected_output,
+        agent=agent,
+        context=context_tasks
+    )
+
+
 
 

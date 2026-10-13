@@ -21,7 +21,9 @@ def test_all_operational_agents_exist_and_exported():
         "create_ciso_agent",
         "create_crafter_agent",
         "create_safe_enabler_agent",
-        "create_finops_agent"
+        "create_finops_agent",
+        "create_meta_agent",
+        "create_career_branding_agent"
     ]
 
     for agent_func_name in operational_agents:
@@ -46,7 +48,9 @@ def test_all_operational_tasks_exist_and_exported():
         "create_security_audit_task",
         "create_software_crafting_task",
         "create_safe_delivery_task",
-        "create_finops_task"
+        "create_finops_task",
+        "create_meta_maintenance_task",
+        "create_career_branding_task"
     ]
 
     for task_func_name in operational_tasks:
@@ -66,7 +70,9 @@ def test_deterministic_tools_exist_and_exported():
         "KnowledgeSearchTool",
         "GitPublisher",
         "JiraBacklogExporter",
-        "DiagramExporter"
+        "DiagramExporter",
+        "LogAnalyzer",
+        "CareerExporter"
     ]
     for tool_name in expected_tools:
         assert hasattr(tools_module, tool_name), f"Composant déterministe '{tool_name}' manquant dans src/tools/"

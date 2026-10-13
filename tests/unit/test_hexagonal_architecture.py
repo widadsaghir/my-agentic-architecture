@@ -27,7 +27,9 @@ def test_deterministic_tools_do_not_import_llm_or_orchestrators():
     pure_tools = [
         SRC_DIR / "tools" / "git_publisher.py",
         SRC_DIR / "tools" / "jira_exporter.py",
-        SRC_DIR / "tools" / "diagram_exporter.py"
+        SRC_DIR / "tools" / "diagram_exporter.py",
+        SRC_DIR / "tools" / "log_analyzer.py",
+        SRC_DIR / "tools" / "career_exporter.py"
     ]
 
     forbidden_modules = [
