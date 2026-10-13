@@ -1,9 +1,10 @@
 # 🩺 RAPPORT D'OBSERVABILITÉ ET DE SANTÉ SYSTÈME (META-AGENT)
-**Fichier audité :** `execution_20261013_130457.log.txt`
+**Fichier audité :** `execution_20261013_142838.log.txt`
 **Statut Global :** **Attention Requise (Erreurs détectées)**
-**Lignes de traces :** 1027
+**Lignes de traces :** 1527
 **Avertissements :** 0
-**Erreurs détectées :** 1
+**Erreurs détectées :** 2
 
 ### 🚨 Principales Anomalies Détectées :
-- `* **Gestion rigoureuse des erreurs :** Le domaine lève des exceptions métiers explicites (`DomainException`). Les erreurs techniques d'infrastructure sont capturées au niveau des adaptateurs sortants et converties.`
+- `import com.assurglobal.omniclaim.domain.exception.DomainInvariantViolationException;`
+- `* **Gestion Stricte des Erreurs :** Interdiction d'utiliser des exceptions génériques (`RuntimeException`, `Exception`). Créer une hiérarchie d'exceptions métiers explicites et typées (ex: `DomainInvariantViolationException`, `ClaimNotFoundException`).`

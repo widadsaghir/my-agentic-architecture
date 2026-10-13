@@ -1,171 +1,162 @@
-# BACKLOG D'IMPLÉMENTATION SAFE & JIRA — PLATEFORME OMNICLAIM AI
+# 🚀 Backlog d'Implémentation SAFe & Jira : Plateforme OmniClaim AI (Classification C2 Massif)
 
-## 1. Fiche Enabler Epic (SAFe)
-
-* **Nom de l'Epic :** Modernisation du Cœur Sinistres & Sécurisation de l'Enclave Cognitive C2 Massif
-* **Identifiant Jira :** `OMNI-EPIC-001`
-* **Objectif (Objective) :** Implémenter l'architecture cible orientée Clean Architecture (Hexagonale), DDD et Zero-Trust (NIST SP 800-207) sur un socle Mono-Cloud AWS unifié. L'objectif est d'absorber les pics climatiques d'ingestion de sinistres, d'automatiser les décisions sous les seuils financiers (Règle HITL : $< 2\,000\text{ €}$ et score de fraude $< 0.15$), et de garantir la conformité stricte aux exigences C2 MASSIF (anonymisation PII, filtrage Guardrails Bedrock, chiffrement KMS CMK).
-* **Hypothèse de Valeur (Value Hypothesis) :** 
-  * *Si* nous découpons le monolithe via une architecture événementielle asynchrone (MSK/SQS) et une architecture hexagonale stricte, *alors* nous réduirons le délai de traitement des sinistres de 7-10 jours à moins de quelques minutes pour les dossiers éligibles, *et* nous absorberons un multiplicateur de charge x10 en période de crise climatique sans interruption de service.
-  * *Si* nous encapsulons l'intelligence artificielle derrière le port secondaire `ClaimAnalyzerPort` avec des barrières de modération (Guardrails), *alors* nous éliminerons les risques de fuite de PII (C2 MASSIF) et les injections de prompts indirectes (OWASP Top 10 for LLMs), tout en protégeant le domaine métier des évolutions de SDK ou de modèles.
-* **Métriques de Succès (Success Metrics) :**
-  * Taux d'automatisation (Straight-Through Processing) $\ge 60\%$ pour les sinistres $< 2\,000\text{ €}$.
-  * Temps de réponse moyen d'ingestion et d'évaluation asynchrone $< 3\text{ secondes}$.
-  * Couverture de tests unitaires du cœur de domaine à **100% (TDD strict)**.
-  * Zéro faille critique ou haute détectée par les pipelines SAST/SCA/GitGuardian et zéro exposition de PII en clair.
+**Programme :** Modernisation du Cœur Sinistres & Déploiement d'Agents IA en Production  
+**Cadre Méthodologique :** SAFe 6, Software Craftsmanship (Hexagonale / DDD / TDD), Zero-Trust (NIST SP 800-207)  
+**Langue :** Français [FR]
 
 ---
 
-## 2. Liste des Enabler Features priorisées
+## 1. 📋 Fiche Enabler Epic
 
-| ID Feature | Nom de la Feature | Priorité WSJF | Description succincte |
-| :--- | :--- | :--- | :--- |
-| **OMNI-FEAT-01** | Socle Domaine DDD & Architecture Hexagonale (Cœur Pur) | **1 (Critique)** | Mise en place du bounded context `ClaimAdjudicationContext`, des Value Objects immuables (`ClaimId`, `ClaimAmount`, `FraudScore`) et de l'agrégat `Claim` avec tests unitaires TDD 100%. |
-| **OMNI-FEAT-02** | Implémentation des Ports Sortants & Adaptateurs Sécurisés (S3 & DB) | **2 (Élevée)** | Développement des adaptateurs de persistance (PostgreSQL) et de stockage de documents (AWS S3 Data Lake) respectant le chiffrement CMK et le Zero-Trust. |
-| **OMNI-FEAT-03** | Adaptateur IA Amazon Bedrock & Guardrails (Sécurité C2) | **3 (Élevée)** | Encapsulation de l'analyse cognitive via `ClaimAnalyzerPort`, intégration des barrières de modération (NeMo / Bedrock Guardrails) et anonymisation des PII. |
-| **OMNI-FEAT-04** | Ingestion Événementielle Asynchrone & Gouvernance HITL | **4 (Moyenne)** | Mise en place des ports entrants (API REST / SQS Consumer) et application stricte de la règle de gouvernance Human-in-the-Loop ($< 2\,000\text{ €}$ et score de fraude $< 0.15$). |
+* **ID Epic :** `ENABLER-EPIC-01`
+* **Titre :** Modernisation de la Plateforme OmniClaim AI & Socle Hybride Zero-Trust (C2 Massif)
+* **Objectif (Business Outcome) :** 
+  * Réduire drastiquement le *Time-to-Indemnize* (de 7-10 jours à < 15 min pour les cas simples, < 48h pour les cas complexes).
+  * Absorber des pics climatiques multipliés par 10 en 24h (5 000 dossiers/heure) sans dégradation.
+  * Industrialiser la détection de fraude documentaire (> 80 M€/an d'économies) tout en garantissant une étanchéité absolue des données sensibles (Classification C2 Massif) et la conformité RGPD.
+* **Hypothèse de Valeur :** 
+  * *Si* nous mettons en place une architecture hexagonale couplée à un pipeline d'inférence IA sécurisé (enclave isolée, masquage PII local) et un socle d'infrastructure as code (IaC) résilient (Multi-AZ, Outbox pattern), *alors* nous pourrons automatiser 80% des flux de sinistres en toute sécurité, éliminer les goulets d'étranglement du monolithe legacy et diviser par 4 les coûts opérationnels de traitement.
+* **Métriques de Succès (KPIs) :**
+  * Traitement de 95% des dossiers éligibles en moins de 15 minutes.
+  * Disponibilité globale de la plateforme de l'ordre de $99.99\%$ (SLA).
+  * Latence P99 de l'API synchrone $< 1.5$ seconde (hors inférence lourde).
+  * Zéro fuite de données PII/C2 Massif (0 incident de conformité RGPD ou d'injection de prompt réussie).
+  * Couverture de tests unitaires du domaine $> 90\%$ avec 0 dépendance d'infrastructure.
 
 ---
 
-## 3. Backlog Détaillé des User Stories Jira Techniques
+## 2. 🗺️ Liste des Enabler Features Priorisées (WSJF Aligné)
 
-### OMNI-FEAT-01 : Socle Domaine DDD & Architecture Hexagonale (Cœur Pur)
+Les Enabler Features sont découpées verticalement par incréments de valeur et priorisées selon la matrice de valeur architecturale et de mitigation des risques C2.
 
-#### JIRA-101 : Implémentation des Value Objects Immuables du Domaine
-* **Type de Story :** Technical Enabler Story
-* **Estimation :** 3 Points (Fibonacci)
-* **Description (User Story) :**
-  > **En tant que** Développeur Backend Craftsperson,  
-  > **Je souhaite** implémenter les Value Objects immuables (`ClaimId`, `PolicyId`, `ClaimAmount`, `FraudScore`, `ClaimStatus`) avec leurs règles de validation strictes,  
-  > **Afin de** garantir l'intégrité financière, d'éliminer la *Primitive Obsession* et de sécuriser les invariants du domaine dès la compilation.
+1. **`ENABLER-FEAT-01` : Socle d'Infrastructure Zero-Trust & Chiffrement C2 (Terraform/KMS/S3)**
+   * *Description :* Déploiement du VPC sécurisé multi-AZ, des clés de chiffrement maîtresses client (CMK) KMS/Key Vault, des buckets S3 immuables (Object Lock) et des ponts réseau étanches.
+2. **`ENABLER-FEAT-02` : Cœur de Domaine Clean Architecture & Modèle DDD `ClaimsManagement`**
+   * *Description :* Implémentation du cœur de domaine pur (Agrégat Root `Claim`, Value Objects immuables, règles métier d'approbation et d'évaluation des risques) sans aucune dépendance framework.
+3. **`ENABLER-FEAT-03` : Pipeline d'Anonymisation PII Local & Enclave LLM Sécurisée**
+   * *Description :* Intégration du filtre déterministe de masquage des PII (NIR, IBAN, adresses) et connexion étanche via Private Endpoints à l'enclave Azure OpenAI avec garde-fous NeMo Guardrails.
+4. **`ENABLER-FEAT-04` : Adaptateurs d'Infrastructure, Outbox Pattern & Résilience Kafka/Aurora**
+   * *Description :* Implémentation des adaptateurs de persistance PostgreSQL (Aurora) avec le pattern Transactionnel Outbox, et des connecteurs Kafka (MSK) résilients avec Circuit Breakers (Resilience4j).
 
+---
+
+## 3. 🎫 Backlog Détaillé des User Stories Jira Techniques
+
+### ⚡ Epic/Feature : `ENABLER-FEAT-01` (Socle d'Infrastructure Zero-Trust)
+
+#### Story 1.1 : Provisionnement du VPC Isolé et des Subnets Privés Multi-AZ
+* **ID Jira :** `OMNI-101`
+* **Type :** Technical Enabler Story
+* **Estimations :** 5 Story Points
+* **Description :**
+  * **En tant que** SRE / Cloud Engineer,
+  * **Je souhaite** provisionner l'infrastructure réseau de base via Terraform (VPC `var.vpc_cidr_block`, subnets privés isolés sur 3 Zones de Disponibilité et tables de routage strictes),
+  * **Afin de** garantir l'étanchéité périmétrique Zero-Trust (NIST SP 800-207) et empêcher tout accès public direct aux composants de calcul de la plateforme OmniClaim AI.
 * **Critères d'Acceptation Opérationnels :**
-  1. Les classes `ClaimId`, `PolicyId`, `ClaimAmount` et `FraudScore` sont strictement immuables (`frozen=True` en Python / `final` avec records en Java).
-  2. Toute tentative d'instanciation de `ClaimAmount` avec un montant négatif lève une exception métier explicite (`ValueError`).
-  3. Toute tentative d'instanciation de `FraudScore` en dehors de l'intervalle `[0.0, 1.0]` lève une exception `FraudScoreError`.
-  4. 100% du code des Value Objects est couvert par des tests unitaires purs en TDD (sans aucune dépendance d'infrastructure).
+  1. Le code Terraform/OpenTofu est validé par l'outil de linting `tflint` sans aucune erreur ni avertissement de sécurité.
+  2. Le VPC est créé avec `enable_dns_hostnames = true` et `enable_dns_support = true`.
+  3. Aucun routeur internet (IGW) n'est attaché aux subnets d'application et de données (isolation totale).
+  4. Le déploiement s'exécute avec succès sur les environnements DEV, INT et PERF via pipelines CI/CD automatisés.
 
----
-
-#### JIRA-102 : Modélisation de l'Agrégat Racine `Claim` et de la Logique Métier HITL
-* **Type de Story :** Technical Enabler Story
-* **Estimation :** 5 Points (Fibonacci)
-* **Description (User Story) :**
-  > **En tant que** Développeur Backend Craftsperson,  
-  > **Je souhaite** coder l'agrégat racine `Claim` et sa méthode d'évaluation du risque intégrant la règle métier HITL (`Amount < 2000€` et `FraudScore < 0.15`),  
-  > **Afin de** centraliser la logique décisionnelle au cœur du domaine sans aucune pollution par des frameworks externes ou de la base de données.
-
+#### Story 1.2 : Configuration du Chiffrement CMK et du Data Lake S3 Immuable (WORM)
+* **ID Jira :** `OMNI-102`
+* **Type :** Technical Enabler Story
+* **Estimations :** 8 Story Points
+* **Description :**
+  * **En tant que** Data Security Engineer,
+  * **Je souhaite** configurer une clé maîtresse client dédiée (CMK) dans AWS KMS avec rotation annuelle et un bucket S3 de stockage des documents de sinistres doté du verrouillage d'objet (*S3 Object Lock* en mode *Compliance*),
+  * **Afin de** respecter strictement les exigences de classification de données **C2 MASSIF** et de garantir l'immutabilité légale et financière des pièces justificatives.
 * **Critères d'Acceptation Opérationnels :**
-  1. L'agrégat `Claim` encapsule l'entité interne `SupportingDocument` et gère les transitions de statut (`SUBMITTED` -> `ANALYZING` -> `AUTO_APPROVED` ou `PENDING_HITL`).
-  2. La méthode `evaluate_risk(fraud_score: FraudScore)` applique strictement la règle : si montant $< 2\,000\,00\text{ centimes}$ et score $< 0.15$, le statut passe à `AUTO_APPROVED` ; sinon, il passe à `PENDING_HITL`.
-  3. L'agrégat ne contient aucune annotation de framework externe (pas de `@Entity` JPA dans le cœur de domaine).
-  4. Couverture de tests unitaires à 100% validant tous les cas nominaux et aux limites (arêtes des seuils de 2000 € et 0.15).
+  1. La clé KMS dispose d'une politique d'accès restrictive et d'une fenêtre de suppression de 30 jours minimum, avec rotation automatique activée (`enable_key_rotation = true`).
+  2. Le bucket S3 applique par défaut le chiffrement `aws:kms` avec la CMK dédiée (interdiction stricte du chiffrement par défaut S3-Managed).
+  3. Le blocage public S3 (`block_public_acls`, `block_public_policy`, `ignore_public_acls`, `restrict_public_buckets`) est configuré à `true` sans exception.
+  4. Le mode *S3 Object Lock (Compliance Mode)* est activé sur le bucket de stockage pour empêcher toute altération ou suppression des pièces justificatives pendant la durée légale de conservation.
 
 ---
 
-### OMNI-FEAT-02 : Implémentation des Ports Sortants & Adaptateurs Sécurisés (S3 & DB)
+### ⚡ Epic/Feature : `ENABLER-FEAT-02` (Cœur de Domaine Clean Architecture & DDD)
 
-#### JIRA-201 : Définition des Interfaces de Ports Sortants (SPI)
-* **Type de Story :** Technical Enabler Story
-* **Estimation :** 2 Points (Fibonacci)
-* **Description (User Story) :**
-  > **En tant que** Architecte Logiciel / Développeur Senior,  
-  > **Je souhaite** définir les interfaces de ports sortants `ClaimRepositoryPort` et `DocumentStoragePort` au sein du cœur de domaine,  
-  > **Afin d'**appliquer strictement le principe d'inversion de dépendance (DIP) et d'isoler totalement le domaine des technologies d'infrastructure.
-
+#### Story 2.1 : Implémentation de l'Agrégat Racine `Claim` et des Value Objects Immuables
+* **ID Jira :** `OMNI-201`
+* **Type :** Technical Enabler Story
+* **Estimations :** 5 Story Points
+* **Description :**
+  * **En tant que** Software Craftsperson / Développeur Backend,
+  * **Je souhaite** implémenter l'Agrégat Racine `Claim`, l'entité `SupportingDocument` et les Objets de Valeur immuables (`ClaimId`, `ClaimAmount`, `FraudScore`) en respectant les principes du Domain-Driven Design (DDD),
+  * **Afin de** garantir l'encapsulation stricte des invariants métier du cycle de vie des sinistres dans un cœur de domaine totalement découplé des frameworks et de l'infrastructure.
 * **Critères d'Acceptation Opérationnels :**
-  1. Les interfaces `ClaimRepositoryPort` (`save`, `find_by_id`) et `DocumentStoragePort` (`upload_document`, `get_secure_url`) sont placées dans le package domaine/spi.
-  2. Les signatures des méthodes manipulent exclusivement des objets du domaine (`Claim`, `ClaimId`, `SupportingDocument`) et rejettent tout type primitif brut ou DTO technique.
-  3. Aucune dépendance vers une bibliothèque tierce (AWS SDK, SQLAlchemy, Spring Data) n'est présente dans ces interfaces.
+  1. Le code source du domaine réside dans le package `com.assurglobal.omniclaim.domain` et ne contient **aucune dépendance** envers Spring Framework, Hibernate, AWS SDK ou des bibliothèques d'infrastructure.
+  2. Tous les Objets de Valeur (`Value Objects`) sont immuables (`final` fields, absence de setters, utilisation de `record` ou classes immuables avec constructeurs validant les contraintes métier).
+  3. La méthode d'évaluation des risques (`evaluateAndProcess`) applique l'invariant : si le montant dépasse le seuil (ex: 2000 €) ou si le score de fraude dépasse la limite (0.15), le statut bascule obligatoirement en `PENDING_MANUAL_REVIEW`, sinon en `AUTO_APPROVED`.
+  4. Une suite de tests unitaires purs JUnit 5 / AssertJ couvre 100% des règles de gestion de l'agrégat sans aucun contexte Spring chargé.
 
 ---
 
-#### JIRA-202 : Implémentation de l'Adaptateur S3 pour le Stockage Documentaire Sécurisé
-* **Type de Story :** Technical Enabler Story
-* **Estimation :** 5 Points (Fibonacci)
-* **Description (User Story) :**
-  > **En tant que** Ingénieur Cloud & DevOps,  
-  > **Je souhaite** développer l'adaptateur sortant `S3DocumentStorageAdapter` implémentant `DocumentStoragePort` avec chiffrement AWS KMS CMK et validation des empreintes SHA-256,  
-  > **Afin de** garantir la confidentialité et l'intégrité des pièces justificatives conformément au niveau C2 MASSIF.
+### ⚡ Epic/Feature : `ENABLER-FEAT-03` (Pipeline d'Anonymisation PII & Enclave LLM)
 
+#### Story 3.1 : Développement du Filtre Déterministe de Masquage Local des PII
+* **ID Jira :** `OMNI-301`
+* **Type :** Technical Enabler Story
+* **Estimations :** 8 Story Points
+* **Description :**
+  * **En tant que** Security & Privacy Engineer,
+  * **Je souhaite** implémenter un composant logiciel local d'anonymisation (masquage par expressions régulières et modèles NER) s'exécutant dans les pods EKS,
+  * **Afin de** garantir qu'aucune donnée personnelle sensible (C2 Massif : NIR, IBAN, noms complets, adresses postales en clair) ne quitte le réseau sécurisé d'AssurGlobal vers l'enclave d'inférence LLM.
 * **Critères d'Acceptation Opérationnels :**
-  1. L'adaptateur `S3DocumentStorageAdapter` implémente l'interface `DocumentStoragePort`.
-  2. Tous les objets stockés dans le bucket S3 sont chiffrés par défaut via une clé maîtresse client dédiée (AWS KMS CMK).
-  3. Le hash SHA-256 de chaque document est calculé et persisté dans l'entité `SupportingDocument` lors de l'upload.
-  4. L'adaptateur est testé en isolation via Testcontainers (LocalStack S3) dans la pipeline d'intégration.
+  1. Le filtre analyse les payloads textuels et les métadonnées des documents avant toute sortie vers l'adaptateur LLM.
+  2. Les numéros de Sécurité Sociale (NIR), les IBAN bancaires et les noms propres identifiés sont remplacés par des jetons de masquage sécurisés (ex: `[REDACTED_IBAN]`).
+  3. Une batterie de tests unitaires de non-régression valide l'efficacité du masquage sur un jeu de données de test représentatif de 1000 dossiers contenant des PII variées.
+  4. En cas d'échec ou d'ambiguïté du filtre, une exception de sécurité est levée et le dossier est automatiquement mis en quarantaine pour revue humaine.
 
----
-
-### OMNI-FEAT-03 : Adaptateur IA Amazon Bedrock & Guardrails (Sécurité C2)
-
-#### JIRA-301 : Implémentation du Port Sortant `ClaimAnalyzerPort` et de l'Adaptateur Bedrock
-* **Type de Story :** Technical Enabler Story
-* **Estimation :** 8 Points (Fibonacci)
-* **Description (User Story) :**
-  > **En tant que** Développeur IA & Sécurité,  
-  > **Je souhaite** développer l'adaptateur `BedrockClaimAnalyzerAdapter` implémentant `ClaimAnalyzerPort` pour interroger Amazon Bedrock avec des schémas de sortie stricts,  
-  > **Afin de** calculer le score de fraude et d'extraire les données des factures tout en protégeant le domaine des variations de l'API LLM.
-
+#### Story 3.2 : Implémentation de l'Adaptateur Azure OpenAI avec Private Endpoint & Circuit Breaker
+* **ID Jira :** `OMNI-302`
+* **Type :** Technical Enabler Story
+* **Estimations :** 5 Story Points
+* **Description :**
+  * **En tant que** Lead Backend Architect,
+  * **Je souhaite** implémenter l'adaptateur de sortie `AzureOpenAiAdapter` implémentant le port `AiAnalyzerPort` via WebClient, couplé au pattern Circuit Breaker (Resilience4j) et à un canal réseau sécurisé par Private Endpoint,
+  * **Afin de** permettre l'analyse cognitive des sinistres tout en garantissant une tolérance aux pannes robuste et une étanchéité absolue contre les appels sortants publics non maîtrisés.
 * **Critères d'Acceptation Opérationnels :**
-  1. L'adaptateur encapsule les appels aux modèles souverains hébergés sur Amazon Bedrock.
-  2. Les requêtes sortantes intègrent une validation par schéma JSON strict (JSON Schema Validation) pour éviter toute hallucination structurelle ou injection de code.
-  3. Les erreurs de l'API Bedrock (Timeouts, Rate Limits) sont interceptées et converties en exceptions techniques gérées sans compromettre l'agrégat métier.
-  4. Test d'intégration validé par mock contractuel (WireMock / PACT) pour s'affranchir des coûts et de la latence de l'API externe en CI.
+  1. L'appel vers l'enclave Azure OpenAI s'effectue exclusivement via une URL interne de type Private Endpoint (interdiction d'utiliser des points de terminaison publics).
+  2. Le pattern Resilience4j `CircuitBreaker` est configuré : si le taux d'erreur 5xx dépasse 2% sur une fenêtre glissante de 10 secondes, le circuit s'ouvre, basculant immédiatement les flux vers le mode dégradé (file d'attente HITL humaine).
+  3. L'adaptateur respecte strictement le contrat de l'interface de port de sortie sans fuite de classes spécifiques Azure vers le cœur de domaine.
+  4. Les tests d'intégration avec WireMock simulant les réponses et les pannes de l'API Azure OpenAI passent avec succès.
 
 ---
 
-#### JIRA-302 : Intégration des Guardrails et Anonymisation PII (Conformité C2 MASSIF)
-* **Type de Story :** Technical Enabler Story
-* **Estimation :** 5 Points (Fibonacci)
-* **Description (User Story) :**
-  > **En tant qu'** Ingénieur Sécurité Application (AppSec),  
-  > **Je souhaite** intégrer des barrières de modération (Bedrock Guardrails) et un module d'anonymisation locale des PII en amont de toute inférence,  
-  > **Afin de** respecter impérativement le niveau de classification C2 MASSIF et de bloquer toute tentative d'injection de prompt indirecte.
+### ⚡ Epic/Feature : `ENABLER-FEAT-04` (Adaptateurs, Outbox Pattern & Résilience)
 
+#### Story 4.1 : Implémentation du Pattern Transactional Outbox pour PostgreSQL et Kafka
+* **ID Jira :** `OMNI-401`
+* **Type :** Technical Enabler Story
+* **Estimations :** 8 Story Points
+* **Description :**
+  * **En tant que** Software Craftsperson,
+  * **Je souhaite** implémenter le pattern *Transactional Outbox* pour la persistance des sinistres dans Aurora PostgreSQL et la publication des événements métiers dans les topics Kafka (MSK),
+  * **Afin de** garantir l'atomicité transactionnelle parfaite (zéro perte de message ou décalage d'état en cas de crash applicatif ou de coupure réseau).
 * **Critères d'Acceptation Opérationnels :**
-  1. Un middleware d'anonymisation locale détecte et masque les données personnelles identifiables (PII : NIR, numéros de compte, adresses) avant l'envoi du payload au LLM.
-  2. Les barrières de modération (Bedrock Guardrails) sont configurées pour interdire le contenu malveillant, les tentatives de contournement et les prompts malicieux injectés dans les factures PDF.
-  3. Aucun log applicatif ne contient de PII en clair (conformité RGPD & Software Craftsmanship).
-  4. Un test de non-régression (Red Team scriptée) valide le rejet systématique d'une facture contenant un prompt injection simulé.
+  1. L'écriture de la modification de l'agrégat `Claim` et l'insertion de l'événement dans la table `outbox` s'exécutent dans la même transaction JDBC.
+  2. Un composant de relecture asconfigurable (Debezium ou Publisher Poller) dépile la table `outbox` pour publier les événements vers le broker Kafka `claims.ingest.v1` avec garantie *At-Least-Once*.
+  3. L'utilisation d'une clé d'idempotence (`X-Request-ID` / UUID v4) est obligatoire pour chaque événement publié afin d'éviter tout double traitement en aval.
+  4. Les tests d'intégration basés sur **Testcontainers** (PostgreSQL + Kafka) valident le scénario de commit transactionnel et de publication asynchrone nominale et en cas de panne de Kafka.
 
 ---
 
-### OMNI-FEAT-04 : Ingestion Événementielle Asynchrone & Gouvernance HITL
+## 4. 🛡️ Definition of Done (DoD) Standardisée
 
-#### JIRA-401 : Implémentation du Port Entrant REST et du Consumer SQS
-* **Type de Story :** Technical Enabler Story
-* **Estimation :** 5 Points (Fibonacci)
-* **Description (User Story) :**
-  > **En tant que** Développeur Backend,  
-  > **Je souhaite** développer les adaptateurs entrants (`RestClaimController` et `SqsClaimConsumer`) connectés aux ports entrants du domaine (`SubmitClaimUseCase`),  
-  > **Afin de** permettre l'ingestion synchrone des demandes et le traitement asynchrone hautement résilient via les files d'attente AWS SQS.
+La *Definition of Done* (DoD) ci-dessous s'applique de manière stricte à **toutes** les User Stories techniques et Enabler Features du train SAFe pour la plateforme OmniClaim AI. Aucune story ne peut être déclarée `Done` en fin de Sprint si l'ensemble de ces critères n'est pas rempli et audité.
 
-* **Critères d'Acceptation Opérationnels :**
-  1. Le contrôleur REST expose l'endpoint `POST /api/v1/claims` validant le payload d'entrée par DTO étanche avant de l'injecter dans le port `SubmitClaimUseCase`.
-  2. Le consumer SQS consomme les messages de la file d'ingestion de manière asynchrone et gère la *back-pressure* pour protéger le service en cas de pic de charge climatique.
-  3. En cas d'erreur de traitement, une stratégie de réessai avec backoff exponentiel et Dead Letter Queue (DLQ) est activée.
-  4. Couverture des tests d'intégration des adaptateurs entrants à $\ge 80\%$.
-
----
-
-## 4. Definition of Done (DoD) Standardisée pour l'ART
-
-La présente Definition of Done (DoD) s'applique à l'intégralité des User Stories et Enabler Features du train SAFe. Aucune Story ne peut être déplacée dans la colonne *Done* de Jira sans le respect cumulatif des critères suivants :
-
-1. **Craftsmanship & Clean Code :**
-   * Le code source respecte strictement les principes SOLID, le design pattern Hexagonal (séparation stricte Domaine / Infrastructure) et le principe d'immuabilité par défaut (`frozen=True` / records).
-   * Absence totale de *Primitive Obsession* (utilisation systématique de Value Objects typés).
-2. **Qualité & TDD :**
-   * Approche TDD (Test-Driven Development) rigoureusement appliquée : les tests unitaires du domaine sont écrits et validés avant le code de production.
-   * **Couverture de code minimale :** $\ge 90\%$ de couverture globale sur le cœur de domaine (visée 100% sur les règles métiers et Value Objects).
-   * Exécution verte de l'ensemble de la suite de tests unitaires et d'intégration dans le pipeline CI/CD.
-3. **Sécurité & Zero-Trust (C2 MASSIF) :**
-   * Zéro secret, zéro clé d'API et zéro mot de passe en clair dans le code source ou les configurations (Validation GitGuardian / Vault).
-   * **Analyse SAST & SCA validée :** Zéro vulnérabilité critique ou haute détectée par les outils d'analyse statique de code (SonarQube / Snyk).
-   * Masquage et absence totale de PII dans les logs applicatifs.
-4. **Revue de Code (Peer Review) :**
-   * Validation obligatoire de la Pull Request (PR) par au moins **deux pairs** (dont un référent Clean Architecture / Craftsperson).
-   * Tous les commentaires de revue de code bloquants doivent être résolus avant fusion sur la branche principale (`main`).
-5. **Traçabilité & Déploiement :**
-   * Lien explicite entre la Pull Request, le commit et le ticket Jira associé (`OMNI-` ou `JIRA-`).
-   * Déploiement automatisé réussi sur l'environnement de staging éphémère via la pipeline CI/CD.
+1. **Qualité du Code & Craftsmanship :**
+   * Le code respecte les principes SOLID, KISS, YAGNI et les règles de Clean Code (nommage explicite, classes et méthodes courtes, immutabilité par défaut).
+   * Le code source a fait l'objet d'une **Revue de Code croisée** obligatoire (minimum 2 approbations de pairs dont un Lead Craftsperson ou Architecte).
+2. **Couverture de Tests & TDD :**
+   * Le cœur de domaine dispose d'une couverture de tests unitaires purs $\ge 90\%$ (mesurée via JaCoCo) **sans aucune dépendance d'infrastructure ni contexte framework**.
+   * Les tests d'intégration (utilisant Testcontainers pour PostgreSQL et Kafka) valident le bon fonctionnement des adaptateurs.
+   * Zéro régression sur la suite de tests automatisés de la pipeline CI/CD.
+3. **Sécurité & Conformité C2 Massif :**
+   * Analyse statique du code (SAST) exécutée sans aucune vulnérabilité critique ou majeure détectée (via SonarQube / Trivy).
+   * Vérification de l'absence totale de secrets, mots de passe ou clés en dur dans le code source ou les manifests de déploiement (Secret Scanning actif).
+   * Validation de la conformité au chiffrement CMK et au masquage des PII pour tout composant manipulant des données de sinistres.
+4. **Déploiement & Observabilité :**
+   * Les manifests d'infrastructure (Terraform) ou de déploiement (Kubernetes / Helm) sont validés et versionnés dans le dépôt Git de référence.
+   * Les métriques RED (Rate, Errors, Duration) et les traces distribuées OpenTelemetry (`traceparent`) sont implémentées et remontent correctement dans les dashboards d'observabilité.

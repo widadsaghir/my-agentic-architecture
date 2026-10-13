@@ -36,7 +36,7 @@ def test_all_mermaid_diagrams_have_valid_syntax():
     mmd_files = list(DOCS_DIR.glob("**/*.mmd"))
     assert len(mmd_files) > 0, "Aucun fichier Mermaid trouvé dans docs/ !"
 
-    valid_types = ("flowchart", "sequenceDiagram", "gantt", "classDiagram", "erDiagram")
+    valid_types = ("flowchart", "graph", "sequenceDiagram", "gantt", "classDiagram", "erDiagram")
 
     for mmd in mmd_files:
         content = mmd.read_text(encoding="utf-8").strip()

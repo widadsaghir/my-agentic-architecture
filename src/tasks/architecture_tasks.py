@@ -2,23 +2,64 @@ from crewai import Task, Agent
 
 def create_preliminary_design_task(agent: Agent, user_input: str, language: str) -> Task:
     """
-    Crée la tâche d'analyse préliminaire d'architecture.
-    La langue demandée est strictement injectée pour garantir la restitution dans la langue cible.
+    Crée la tâche de conception de Dossier d'Architecture Technique (DAT) de niveau Grand Compte / Big Tech.
+    Exige une modélisation C4 complète (AS-IS et TO-BE Niveaux 1 à 4) avec schémas Mermaid intégrés,
+    un dimensionnement capacitaire quantifié, une matrice réseau/secrets, les patterns Big Tech,
+    l'environnementalisme (DEV/INT/PERF/PROD), le code Terraform et le volet SRE / MCO.
     """
     description = (
+        f"En tant que Lead Solution Architect d'élite inspiré par les standards d'ingénierie des Grands Comptes (Netflix, Spotify, Amazon) :\n"
         f"Analyser l'expression de besoin ou les notes de cadrage suivantes :\n"
         f"\"\"\"\n{user_input}\n\"\"\"\n\n"
-        f"Proposer une note de cadrage d'architecture technique préliminaire structurée.\n"
-        f"IMPORTANT : Vous devez impérativement rédiger l'intégralité de votre réponse en langue [{language}]."
+        f"Concevoir et rédiger le Dossier d'Architecture Technique (DAT) de référence complet, rigoureux et prêt pour la validation par l'Architecture Review Board (ARB).\n\n"
+        f"VOTRE DAT DOIT COUVRIR DE FAÇON EXHAUSTIVE LES 8 CHAPITRES INDUSTRIELS SUIVANTS :\n\n"
+        f"1. 🏛️ SYNTHÈSE DU BESOIN & VISION D'ARCHITECTURE (TOGAF Phase A & B) :\n"
+        f"   - Objectifs business, drivers stratégiques et cartographie des parties prenantes.\n"
+        f"   - Modélisation de l'architecture existante AS-IS avec schéma Mermaid intégré illustrant les SPOF et goulots d'étranglement.\n\n"
+        f"2. 🗺️ CARTOGRAPHIE C4 MULTI-NIVEAUX (TO-BE) AVEC SCHÉMAS MERMAID EMBARQUÉS :\n"
+        f"   - Niveau 1 (System Context) : Frontières du système, utilisateurs et partenaires externes.\n"
+        f"   - Niveau 2 (Container Diagram) : Découpage applicatif, brokers d'événements, bases de données, enclaves IA.\n"
+        f"   - Niveau 3 (Component Diagram) : Architecture Hexagonale interne d'un microservice clé (Domaine, Ports SPI/API, Adaptateurs).\n"
+        f"   - Niveau 4 (Deployment & Network Topology) : Topologie physique Cloud Multi-AZ, VPC, subnets privés, PrivateLink, passerelles de transit.\n"
+        f"   - Diagramme de séquence de bout en bout (Déclaration -> Dé-identification PII -> Inférence IA -> HITL -> Règlement).\n"
+        f"   *IMPORTANT : Chaque schéma doit être rédigé sous forme de bloc de code ```mermaid valide dans le corps du DAT.*\n\n"
+        f"3. 📊 DIMENSIONNEMENT CAPACITAIRE & VOLUMÉTRIE QUANTIFIÉE :\n"
+        f"   - Calcul précis de la charge nominale et des pics exceptionnels (x10 en 24h).\n"
+        f"   - Dimensionnement vCPU/RAM des clusters de calcul (ex: EKS/AKS) et politique d'autoscaling (HPA/KEDA).\n"
+        f"   - Dimensionnement des clusters de streaming (partitionnement Kafka, rétention, débit Mo/s, IOPS SSD).\n"
+        f"   - Dimensionnement des bases de données (instances primaires Multi-AZ, read replicas, pool de connexions).\n\n"
+        f"4. 🔒 SÉCURITÉ ZERO-TRUST, CHIFFREMENT & GESTION DES SECRETS (C2 MASSIF) :\n"
+        f"   - Authentification et autorisation (mTLS inter-services, jetons OIDC/OAuth 2.0 avec scopes fins).\n"
+        f"   - Gestion des clés de chiffrement client (KMS CMK / Cloud HSM) au repos et en transit (TLS 1.3).\n"
+        f"   - Gestion et rotation automatique des secrets d'infrastructure tous les 30 jours (Secrets Manager / Vault).\n"
+        f"   - Garde-fous IA : Dé-identification PII locale, barrières anti-prompt injection et politique d'enclave souveraine.\n\n"
+        f"5. ⚡ PATTERNS D'ARCHITECTURE & RÉSILIENCE BIG TECH :\n"
+        f"   - Résilience : Déploiement Multi-AZ (3 zones), Circuit Breakers, Bulkheads, Dead Letter Queues (DLQ).\n"
+        f"   - Cohérence des données : Transactional Outbox Pattern, clés d'idempotence et Saga Pattern pour les paiements.\n"
+        f"   - Objectifs de reprise : RTO < 15 minutes et RPO = 0 (zéro perte de données en cas de panne de datacenter).\n\n"
+        f"6. 🌍 TOPOLOGIE DES ENVIRONNEMENTS & STRATÉGIE DE DÉPLOIEMENT :\n"
+        f"   - Ségrégation étanche des 4 environnements : DEV, INT (Recette métier), PERF (Tirs de charge de masse), PROD.\n"
+        f"   - Isolation par comptes / abonnements Cloud distincts.\n"
+        f"   - Stratégie de déploiement continu sans interruption (Blue-Green / Canary Deployments).\n\n"
+        f"7. 💻 SQUELETTE D'INFRASTRUCTURE AS CODE (TERRAFORM / OPENTOFU) :\n"
+        f"   - Fournir un exemple concret de code Terraform HCL modulaire déployant l'infrastructure sécurisée (VPC, Subnets privés, Cluster conteneurs, Enclave sécurisée, Private Endpoints).\n\n"
+        f"8. 🩺 MCO, OBSERVABILITÉ & INGÉNIERIE SRE (RUN) :\n"
+        f"   - Définition des SLI/SLO/SLA (ex: Disponibilité 99.99%, latence P99 < 1.5s, Error Budget).\n"
+        f"   - Observabilité Full-Stack (OpenTelemetry, traçage distribué, métriques RED/USE, logs centralisés).\n"
+        f"   - Matrice des astreintes et Runbook opérationnel d'incident.\n\n"
+        f"IMPORTANT : Rédiger l'intégralité de ce Dossier d'Architecture Technique en langue [{language}]."
     )
 
     expected_output = (
-        f"Un document Markdown complet rédigé impérativement en [{language}], structuré comme suit :\n"
-        f"1. Synthèse du besoin & Vision d'architecture (Phase A TOGAF)\n"
-        f"2. Exigences clés & Besoins Non-Fonctionnels (Scalabilité, Résilience, Sécurité)\n"
-        f"3. Propositions de scénarios d'infrastructure (Cloud, Hybride ou On-Premise)\n"
-        f"4. Recommandation argumentée du Solution Architect avec justification des choix techniques\n"
-        f"5. Risques préliminaires identifiés & points d'attention pour les comités d'architecture."
+        f"Un Dossier d'Architecture Technique (DAT) de niveau Grand Compte en Markdown rédigé impérativement en [{language}], structuré comme suit :\n"
+        f"1. 🏛️ Synthèse du besoin & Vision d'architecture (Phase A TOGAF) avec Schéma AS-IS (Mermaid)\n"
+        f"2. 🗺️ Cartographie C4 TO-BE Complète avec 5 Schémas Mermaid embarqués (Contexte L1, Conteneurs L2, Composants Hexagonaux L3, Déploiement Réseau Multi-AZ L4, Séquence de Flux)\n"
+        f"3. 📊 Dimensionnement capacitaire, volumétrie et calculs de charge (vCPU, RAM, IOPS, Partitions Kafka)\n"
+        f"4. 🔒 Sécurité Zero-Trust, Chiffrement KMS CMK, Gestion des Secrets et Garde-fous IA C2 MASSIF\n"
+        f"5. ⚡ Patterns de Résilience Big Tech (Circuit Breakers, Outbox, Idempotence, RTO/RPO)\n"
+        f"6. 🌍 Topologie des 4 Environnements (DEV, INT, PERF, PROD) et Déploiement Canary\n"
+        f"7. 💻 Code d'Infrastructure as Code (Terraform / OpenTofu HCL modulaire)\n"
+        f"8. 🩺 Observabilité SRE, Matrice SLI/SLO, Runbook d'incident et MCO."
     )
 
     return Task(

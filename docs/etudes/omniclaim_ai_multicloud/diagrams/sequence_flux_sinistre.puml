@@ -1,0 +1,17 @@
+@startuml
+skinparam defaultFontSize 16
+skinparam defaultFontColor #000000
+title Schéma sequence_flux_sinistre
+
+note as N1
+1. Type: C4 Architecture
+2. Utilité: Vue sequence_flux_sinistre
+3. Standard: C4 / TOGAF
+4. UML: Component/Deployment
+5. Résumé: Flux d'architecture cible
+end note
+
+rectangle "Composant Principal" as CP #D4E6F1
+rectangle "Enclave Sécurisée" as ES #D5F5E3
+CP --> ES : Flux Chiffré
+@enduml

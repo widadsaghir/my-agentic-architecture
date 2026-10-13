@@ -1,52 +1,68 @@
-# FICHE D'AUDIT ET AVIS DE CONFORMITÉ CISO
-**Projet :** Plateforme OmniClaim AI (AssurGlobal)  
-**Cadre de référence :** NIST SP 800-207 (Zero-Trust), RGPD, OWASP Top 10 for LLMs, Architecture Hexagonale, SAFe 6.  
-**Classification des données :** **C2 MASSIF** (Données à caractère personnel sensibles, données financières, documents justificatifs d'assurance).  
+# FICHE D'AUDIT ET D'AVIS DE CONFORMITÉ CISO
+**Programme :** Modernisation du Cœur Sinistres & Déploiement d'Agents IA en Production (Plateforme OmniClaim AI)  
+**Entreprise :** Groupe AssurGlobal  
+**Classification des Données :** **C2 MASSIF** (Données personnelles, financières, bancaires et de santé - RGPD strict)  
+**Référentiels :** NIST SP 800-207 (Zero-Trust), OWASP Top 10 for LLMs, RGPD, ISO/IEC 27001  
+**Date de l'Audit :** Octobre 2026  
+**Auditeur :** Chief Information Security Officer & Data Protection Architect (CISO)  
 
 ---
 
-### 1. Avis global du CISO
+## 1. 🛡️ Avis Global du CISO
 
-> **AVIS : FAVORABLE AVEC RÉSERVES MAJEURES (SOUS CONDITION DE RECONCEPTION DE LA TOPOLOGIE)**
+> **AVIS : FAVORABLE AVEC RÉSERVES MAJEURES (CONDITIONNÉ À L'HOMOLOGATION DCA ET AUX REMÉDIATIONS ARCHITECTURALES)**
 
-L'alignement sur les exigences de traçabilité, de cloisonnement et de gouvernance (Human-in-the-Loop) est globalement salué. Cependant, **l'architecture cible proposée (Scénario 3 - Multi-Cloud Hybride AWS/Azure) est invalidée en l'état** par la gouvernance de la sécurité des données. La complexité du réseau inter-cloud, la multiplication des frontières de confiance et les risques de fuite de métadonnées ou de latence incompatible avec la criticité métier imposent un recentrage de la stratégie d'infrastructure.
+### Justification de l'Avis
+L'analyse croisée du Dossier d'Architecture Technique (DAT) et du Rapport d'Audit Contradictoire (Red Team) met en évidence un déséquilibre critique : **une complexité technique excessive ("Over-Engineering") couplée à une surface d'exposition inter-cloud superflue**, qui font peser un risque inacceptable sur la sécurité des données C2 Massif et sur la résilience opérationnelle. 
+
+Toutefois, les garde-fous fondamentaux présentés (chiffrement CMK, cloisonnement réseau, masquage local des PII et interdiction de réentraînement des modèles par l'IA) vont dans le sens des exigences de conformité du Groupe AssurGlobal. L'avis est donc **favorable sous réserve de la mise en œuvre stricte des exigences de remédiation** formulées ci-dessous avant le passage en Dossier de Conformité Architecture (DCA).
 
 ---
 
-### 2. Matrice d'analyse de classification des données (Niveau C2 massif, impacts Cloud)
+## 2. 📊 Matrice d'Analyse de Classification des Données (C2 MASSIF)
 
-| Axe d'Analyse | Exigence C2 Massif & RGPD | Évaluation de la Proposition Initiale | Risque Sécurité / Conformité |
+La plateforme traite 15 millions de dossiers par an, contenant des pièces justificatives hautement sensibles (photographies de sinistres, factures nominatives, relevés d'identité bancaire - IBAN, et données de santé/cor corporelle).
+
+| Axe d'Analyse | Exigence C2 / C2 Massif | Évaluation de l'Architecture Actuelle | Risque Identifié |
 | :--- | :--- | :--- | :--- |
-| **Périmètre des PII** | Isolation stricte, traçabilité des accès, minimization des transferts. | Anonymisation locale et déterministe avant transmission externe. | **Moyen** : Dépend de la robustesse de l'algorithme d'anonymisation embarqué sur l'Ingestion AWS. |
-| **Hébergement des Modèles & Inférence** | Souveraineté des traitements, interdiction absolue de réentraînement sur les données clients. | Enclave Azure dédiée (Azure OpenAI / Llama-3). | **Élevé** : Le transit inter-cloud (AWS -> Azure) de charges complexes augmente la surface d'attaque et les risques d'exposition de métadonnées sensibles en transit. |
-| **Résidence des Données** | Stockage exclusif au sein de l'Union Européenne, conformité stricte aux exigences RGPD (Art. 32 & 44+). | Data Lake S3 (AWS) + Stockage Azure. | **Conforme** sous réserve de validation des régions de déploiement (ex: `eu-west-1` / `france-central`). |
+| **Confidentialité** | Chiffrement systématique au repos et en transit. Isolation stricte vis-à-vis des tiers. | Utilisation de clés CMK (KMS / Key Vault) et de TLS 1.3. Mais transit inter-cloud AWS/Azure complexe. | Exposition accrue lors des transferts inter-cloud; risque de fuite de métadonnées non chiffrées en transit. |
+| **Intégrité** | Immutabilité des journaux d'audit et des données de stockage (Data Lake). | Stockage S3 avec règles de chiffrement et blocage public. Pattern Outbox. | Absence de garantie d'immutabilité stricte (WORM - Write Once, Read Many) sur les buckets de stockage de preuves. |
+| **Disponibilité** | Continuité d'activité garantie (RPO = 0, RTO < 15 min). | Architecture Multi-AZ et réplication Aurora / Kafka. | Risque de panne en cascade lié à la complexité du pont inter-cloud et au dimensionnement Kafka inadapté (SPOF réseau). |
+| **Conformité RGPD** | Minimisation des données, droit à l'oubli, masquage rigoureux des PII (Données Pers. / Santé). | Présence d'un filtre d'anonymisation local par expression régulière et modèles NER avant envoi vers l'IA. | **Critique :** Un faux négatif du filtre NER local expose l'enclave IA (même privée) à des données C2 Massif, constituant une violation RGPD. |
 
 ---
 
-### 3. Exigences de sécurité obligatoires
+## 3. 🔒 Exigences de Sécurité Obligatoires (Hardening & Compliance)
 
-Pour tout passage en Dossier de Conformité Architecture (DCA), les exigences techniques suivantes sont **non négociables** :
+Pour lever les réserves de l'avis CISO, les impératifs techniques suivants doivent être intégrés et audités sans délai :
 
-1. **Chiffrement de bout en bout et gestion des secrets (KMS / Vault) :**
-   * Utilisation exclusive de clés maîtres client dédiées (**CMK - Customer Managed Keys**) gérées dans des HSM certifiés (AWS KMS / Azure Key Vault). 
-   * **Interdiction formelle** de stocker des clés d'API, des secrets de connexion ou des tokens d'accès en clair dans les fichiers de configuration, les variables d'environnement non chiffrées ou le code source (Software Craftsmanship / GitGuardian compliance).
-   * Chiffrement des flux en transit par TLS 1.3 obligatoire, adossé à un pinning de certificats et à l'interdiction des suites cryptographiques obsolètes.
-2. **Posture Zero-Trust (NIST SP 800-207) & Cloisonnement Réseau :**
-   * **Private Endpoints obligatoires** pour l'accès aux services cognitifs et aux bases de données vectorielles (Azure AI Search / S3). Aucune exposition sur l'Internet public.
-   * Mise en place d'un contrôle d'accès fondé sur l'identité et le contexte (Micro-segmentation, mTLS systématique entre les microservices sur Amazon EKS via un Service Mesh type Istio/Linkerd).
-3. **Protection contre l'OWASP Top 10 for LLMs :**
-   * Implémentation systématique de barrières de modération en amont et en aval de l'inférence (LLM Guardrails / NeMo Guardrails) pour contrer les injections de prompts indirectes (factures/devis malveillants).
-   * Validation rigoureuse des schémas de sortie des modèles (JSON Schema validation) pour empêcher toute exécution de code arbitraire ou d'hallucination structurelle critique.
+1. **Chiffrement de Bout en Bout & CMK Exclusif :**
+   * Interdiction absolue d'utiliser des clés gérées par le fournisseur cloud par défaut (SSE-S3 standard interdit). 
+   * Utilisation obligatoire et exclusive de clés maîtresses client (**CMK**) gérées dans AWS KMS et Azure Key Vault HSM, avec rotation automatique annuelle et traçabilité CloudTrail / Azure Monitor de chaque appel de déchiffrement.
+2. **Cloisonnement Réseau & Zero-Trust (NIST SP 800-207) :**
+   * Suppression de tout accès public direct. Tous les flux inter-services et inter-clouds doivent transiter exclusivement par des **Private Endpoints**, des liaisons privées dédiées (AWS Direct Connect / Azure ExpressRoute) et des règles de sécurité (Security Groups / Network ACLs) en mode *deny-by-default*.
+   * Isolation stricte des environnements (DEV, INT, PERF, PROD) sur des comptes cloud et des réseaux virtuels (VPC/VNet) étanches.
+3. **Sécurité des LLMs & OWASP Top 10 for LLMs :**
+   * Implantation obligatoire d'une double barrière de contrôle : le filtre de dé-identification locale des PII (NIR, IBAN, Noms) **ET** un système de garde-fous cognitifs (*NeMo Guardrails* / *Azure AI Content Safety*) pour contrer les injections de prompts indirectes via les PDF d'artisans.
+   * Clause contractuelle et technique inviolable : **Zéro réentraînement des modèles d'IA sur les données assurés d'AssurGlobal** (garantie d'isolement des données d'inférence).
+4. **Gestion Sécurisée des Secrets :**
+   * Interdiction formelle de stocker des secrets en clair dans les manifests Terraform, les images Docker ou le code source.
+   * Utilisation exclusive de HashiCorp Vault ou des gestionnaires natifs avec rotation automatique des secrets d'authentification tous les 30 jours maximum.
 
 ---
 
-### 4. Recommandations impératives pour l'homologation DCA
+## 4. 🚀 Recommandations Impératives pour l'Homologation DCA
 
-L'homologation du Dossier de Conformité Architecture (DCA) par le CISO est suspendue à la levée des réserves suivantes :
+Le passage devant l'Architecture Review Board (ARB) pour l'obtention de l'homologation formelle du **Dossier de Conformité Architecture (DCA)** est subordonné à la réalisation des actions correctrices suivantes :
 
-1. **Simplification topologique (Arbitrage Mono-Cloud) :**
-   * Il est demandé d'étudier en priorité un **alignement sur un modèle Mono-Cloud unifié (AWS natif avec Amazon Bedrock)** ou, à défaut, de justifier par une analyse de risque formelle la nécessité absolue du Scénario 3 (Multi-Cloud). La suppression de la liaison inter-cloud (Direct Connect / ExpressRoute) réduit drastiquement la surface d'attaque et les risques de rupture de service.
-2. **Durcissement du Plan de Continuité et du Mode Dégradé (Fail-Safe) :**
-   * Formalisation d'un scénario de repli synchrone (Fallback) : en cas d'indisponibilité de l'enclave IA ou de dépassement des seuils de latence, les dossiers doivent basculer de manière transparente et sécurisée vers une file de traitement humain (HITL) sans perte d'intégrité des données.
-3. **Audit de conformité du code et des dépendances :**
-   * Intégration de gates de sécurité obligatoires dans la pipeline CI/CD (SAST, SCA, scan de conteneurs et analyse dynamique des prompts) avant toute mise en production des agents IA.
+* **Action 1 : Simplification de l'Architecture (Alignment KISS / FinOps)**
+  * *Exigence :* Compte tenu de la volumétrie réelle (~1,4 à 5 requêtes/sec en pic), la complexité liée au pattern multi-cloud hybride AWS/Azure et au streaming lourd (Kafka/MSK) est jugée disproportionnée. Le Solution Architect doit présenter une **variante d'architecture Single-Cloud souveraine** (ex: tout AWS ou tout Azure) pour éliminer le SPOF du pont inter-cloud, réduire les coûts de transfert et simplifier la chaîne de traçabilité Zero-Trust.
+* **Action 2 : Audit de Robustesse du Filtre PII Local**
+  * *Exigence :* Avant toute mise en production, un test d'intrusion spécifique (Pentest IA / Red Teaming sur les flux de dé-identification) doit être conduit et validé par la Sécurité des Systèmes d'Information pour certifier l'étanchéité du masquage des données C2 Massif.
+* **Action 3 : Immutabilité du Data Lake (WORM)**
+  * *Exigence :* Les buckets S3 / Stockages de documents de preuves de sinistres doivent activer les politiques d'objet verrouillé (*S3 Object Lock* en mode *Compliance*) pour garantir l'intégrité légale et financière des pièces justificatives sur la durée légale de conservation.
+* **Action 4 : Plan de Continuité & Mode Dégradé IA**
+  * *Exigence :* Formalisation et test d'un runbook documenté de bascule automatique ("Circuit Breaker") en cas de panne de l'enclave LLM, garantissant que la baisse de disponibilité de l'IA ne bloque jamais le traitement des dossiers urgents mais bascule sur la file d'attente humaine sécurisée (HITL) sans perte de données.
+
+---
+*Fin de l'Avis de Sécurité CISO — Document officiel soumis au comité d'homologation (ARB).*

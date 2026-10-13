@@ -1,0 +1,25 @@
+sequenceDiagram
+    autonumber
+    actor Assuré
+    participant API as API Gateway (AWS)
+    participant Core as Claim Service (EKS)
+    participant Filter as Filtre Dé-identification PII (Local)
+    participant AzureAI as Enclave Azure OpenAI (Llama-3)
+    participant RuleEngine as Moteur de Règles Métier
+    participant HITL as Corbeille Gestionnaire (HITL)
+    participant Bank as Système de Paiement SEPA
+
+    Assuré->>API: Soumission Sinistre (Photos + Devis PDF)
+    API->>Core: Transmet le Payload brut
+    Core->>Filter: Masquage local PII (Noms, IBAN, Secu)
+    Filter->>AzureAI: Requête d'Inférence Anonymisée (via PrivateLink)
+    AzureAI-->>Core: JSON Normalisé (Score Fraude, Dommages, Montant)
+    Core->>RuleEngine: Évaluation barèmes & seuils (< 2k€ & Score < 0.15)
+    
+    alt Cas Simple (Montant < 2000 € & Score < 0.15)
+        RuleEngine->>Bank: Déclenchement Virement Automatique
+        Bank-->>Assuré: Notification & Virement Effectué
+    else Cas Complexe ou Ambigu (Montant >= 2000 € ou Score >= 0.15)
+        RuleEngine->>HITL: Suspension & Assignation Dossier au Gestionnaire Humain
+        HITL->>Assuré: Validation Humaine & Notification
+    end

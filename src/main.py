@@ -287,30 +287,16 @@ def main():
         career_file.write_text(career_report, encoding="utf-8")
         print(f"📈 Dossier de valorisation de carrière généré : {career_file}")
 
-        # Génération conjointe des schémas d'architecture (Draw.io, PlantUML, Mermaid)
+        # Génération conjointe & extraction dynamique des schémas d'architecture (Draw.io, PlantUML, Mermaid)
         diagrams_dir = study_path / "diagrams"
         diagrams_dir.mkdir(parents=True, exist_ok=True)
-        nodes = [
-            {"id": "Client", "label": "Assuré / Courtier", "type": "actor"},
-            {"id": "AWS_Ingestion", "label": "AWS MSK & EKS Services", "type": "service"},
-            {"id": "Azure_Cognitive", "label": "Azure OpenAI C2 Enclave", "type": "service"},
-            {"id": "Core_Database", "label": "PostgreSQL Aurora Multi-Cloud", "type": "database"},
-            {"id": "HITL_Backoffice", "label": "Portail Gestionnaire HITL > 2000€", "type": "service"}
-        ]
-        links = [
-            {"source": "Client", "target": "AWS_Ingestion", "label": "Déclaration sinistre (HTTPS)"},
-            {"source": "AWS_Ingestion", "target": "Azure_Cognitive", "label": "Direct Connect / ExpressRoute"},
-            {"source": "Azure_Cognitive", "target": "HITL_Backoffice", "label": "Suspension si > 2000 € ou fraude >= 0.15"},
-            {"source": "AWS_Ingestion", "target": "Core_Database", "label": "Persistance & Règlements"}
-        ]
-        DiagramExporter().export_diagram_bundle(
-            title=f"Architecture Cible — {study_title}",
-            nodes=nodes,
-            links=links,
+        design_output = str(design_task.output.raw) if hasattr(design_task, "output") and design_task.output else ""
+        DiagramExporter().extract_and_export_from_markdown(
+            markdown_text=design_output,
             output_dir=diagrams_dir,
             base_name="architecture_cible_omniclaim"
         )
-        print(f"🖼️ Schémas d'architecture (Draw.io, PlantUML, Mermaid) générés dans : {diagrams_dir}")
+        print(f"🖼️ Schémas d'architecture (Draw.io, PlantUML, Mermaid) générés et extraits dans : {diagrams_dir}")
 
         print(f"📦 Pack d'architecture complet (Livrables, Schémas, Observabilité & Carrière) généré dans : {study_path}")
 

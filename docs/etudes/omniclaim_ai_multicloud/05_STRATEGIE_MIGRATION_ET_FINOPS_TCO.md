@@ -1,127 +1,101 @@
-# ÉTUDE STRATÉGIQUE DE MIGRATION & RAPPORT FINOPS / TCO : PLATEFORME OMNICLAIM AI
-**Groupe AssurGlobal — Programme Modernisation du Cœur Sinistres & IA**  
+# 📊 ÉTUDE FINANCIÈRE STRATÉGIQUE & RAPPORT FINOPS : Modernisation OmniClaim AI
+
+**Programme :** Modernisation du Cœur Sinistres & Déploiement d’Agents IA en Production  
+**Entreprise :** Groupe AssurGlobal (Assurance IARD & Santé — 15 millions de dossiers par an)  
 **Classification des Données :** **C2 MASSIF**  
-**Auteur :** Spécialiste Migration, FinOps & TCO (Certifié FinOps / Cloud Economist)  
+**Auteur :** Migration, FinOps & TCO Specialist (Économiste Cloud & Praticien FinOps Certifié)  
 **Date :** Octobre 2026  
 
 ---
 
-## SYNTHÈSE EXÉCUTIVE FINANCIÈRE & STRATÉGIQUE
+## 1. 🧮 Modélisation & Chiffrage des Postes de Dépenses (Run, Build, Licences)
 
-L’analyse économique et architecturale menée sur le programme *OmniClaim AI* démontre qu'un choix de trajectoire inadapté peut compromettre la rentabilité du projet. Face aux contraintes de criticité **C2 MASSIF**, à la nécessité d'absorber des multiplicateurs de charge climatique x10, et au rejet justifié de la Red Team concernant la sur-ingénierie du Scénario 3 (Multi-Cloud Hybride AWS/Azure), cette étude évalue et compare **quatre trajectoires de migration réalistes** basées sur une cible **Mono-Cloud AWS unifiée et souveraine**.
+L'évaluation financière compare rigoureusement **4 trajectoires de migration** possibles pour le Groupe AssurGlobal, allant d'un Lift & Shift IaaS conservateur jusqu'à une architecture SaaS / Cloud-Native optimisée, en passant par le PaaS managé et l'approche Lakehouse unifié. 
 
-L'objectif de ce rapport est de fournir aux décideurs (Direction Générale, DSI, Comité d'Arbitrage Financier) les éléments chiffrés rigoureux permettant de sélectionner la trajectoire optimale maximisant le ROI à 3 ans, tout en maîtrisant les risques d'infrastructure (Run), d'investissement initial (Build) et de licences logicielles.
+Les coûts sont modélisés sur une période de **3 ans**, intégrant les investissements initiaux (Build/Migration), les licences logicielles (avec Software Assurance et capacités réservées F-SKU / RCU) et les dépenses opérationnelles récurrentes (Run) pour absorber 15 millions de dossiers annuels avec des pics x10 en période de crise climatique.
 
----
+### Tableau comparatif synthétique des trajectoires de migration
 
-## 1. TABLEAU COMPARATIF DES OPTIONS DE MIGRATION (RUN, BUILD, LICENCES)
-
-Quatre trajectoires technico-économiques ont été modélisées pour porter la nouvelle plateforme *OmniClaim AI* en remplacement du monolithe WebLogic 12c / Oracle RAC :
-
-1. **Trajectoire A : IaaS Lift & Shift (AWS EC2 / RDS Oracle)** — Migration brute du monolithe existant avec virtualisation sur le cloud, sans refactoring.
-2. **Trajectoire B : PaaS Managé (AWS ECS / Aurora PostgreSQL)** — Modernisation modérée par conteneurisation des services et utilisation de bases de données managées relationnelles.
-3. **Trajectoire C : SaaS / Cloud-Native & Microservices Serverless** — Architecture hautement élastique (EKS, SQS, Bedrock, Serverless) conforme à la cible Clean Architecture et aux exigences C2 MASSIF.
-4. **Trajectoire D : Lakehouse Unifié & IA Native (Data Platform + Ingestion massive)** — Approche centrée sur l'analytique et le traitement massif des flux de données non structurées (factures, rapports d'expertise).
-
-### Tableau comparatif consolidé (Horizon 3 Ans)
-
-| Postes de Dépenses & Indicateurs | Trajectoire A : IaaS Lift & Shift | Trajectoire B : PaaS Managé | Trajectoire C : SaaS / Cloud-Native (Cible Recommandée) | Trajectoire D : Lakehouse Unifié |
+| Composante Budgétaire | Trajectoire A : IaaS Lift & Shift (VMware $\to$ AWS EC2/RDS) | Trajectoire B : PaaS Managé (App Services & Azure SQL Server) | Trajectoire C : SaaS / Cloud-Native Souverain (AWS/Azure Modern) | Trajectoire D : Lakehouse Unifié (Data Platform & GenAI Centralisée) |
 | :--- | :--- | :--- | :--- | :--- |
-| **Architecture Cible** | VM EC2 monolithiques + RDS Oracle | ECS Fargate + Aurora PostgreSQL | EKS + Serverless (SQS/Lambda) + Bedrock | Data Lakehouse + Spark managé + EKS |
-| **Coût Build / Migration (Initial)** | **180 k€ – 250 k€** (Faible refactoring, migration brute) | **450 k€ – 600 k€** (Conteneurisation et adaptation base) | **850 k€ – 1 100 k€** (Refactoring profond, TDD, Clean Arch) | **1 200 k€ – 1 600 k€** (Refonte data platform & pipelines ETL) |
-| **Coût Run Annuel (Infrastructure & Compute)** | **420 k€ / an** (Provisionnement fixe surdimensionné pic) | **280 k€ / an** (AutoScale modéré, instances réservées) | **190 k€ / an** (Optimisation Serverless & Compute Elastic) | **340 k€ / an** (Calcul lourd analytique & stockage massif) |
-| **Coût Run sur 3 Ans (Infrastructure)** | **1 260 k€ – 1 400 k€** | **840 k€ – 950 k€** | **570 k€ – 650 k€** | **1 020 k€ – 1 150 k€** |
-| **Coût Licences & Support (3 Ans)** | **900 k€ – 1 200 k€** (Licences Oracle RAC / WebLogic on-core) | **150 k€ – 250 k€** (Bases de données managées, paquets) | **50 k€ – 100 k€** (Open-source, composants managés AWS) | **200 k€ – 350 k€** (Licences Data Platform / Moteurs) |
-| **TCO Global estimé (3 Ans)** | **2 340 k€ – 2 850 k€** | **1 440 k€ – 1 800 k€** | **1 470 k€ – 1 850 k€** | **2 420 k€ – 3 100 k€** |
-| **Indice de Risque FinOps & Technique** | **Élevé** (Dette technique, surcoût licences) | **Modéré** (Verrouillage PaaS modéré) | **Maîtrisé** (Élastique, gouvernance stricte FinOps) | **Élevé** (Complexité de traitement, coûts cachés S3/Egress) |
+| **Coût de Build / Migration (Initial)** | 600 k€ – 900 k€ | 1 200 k€ – 1 800 k€ | 1 500 k€ – 2 200 k€ | 2 000 k€ – 2 800 k€ |
+| **Licences & Capacité Réservée (An 1-3)** | 1 800 k€ (BYOL Oracle RAC / WebLogic) | 900 k€ (Azure Hybrid Benefit / SQL) | 300 k€ (Composants Open Source & Managed) | 450 k€ (Licences Databricks / Snowflake F-SKU) |
+| **Coût Run Récurrent (An 1 - Nominal)** | 750 k€ / an | 550 k€ / an | 420 k€ / an | 500 k€ / an |
+| **Coût Run Récurrent (An 2 - Croissance)** | 820 k€ / an | 600 k€ / an | 450 k€ / an | 540 k€ / an |
+| **Coût Run Récurrent (An 3 - Pic clim. x10)** | 1 100 k€ / an | 750 k€ / an | 580 k€ / an | 650 k€ / an |
+| **TCO Global Estimé (3 Ans - Min / Max)** | **3 870 k€ – 4 620 k€** | **3 600 k€ – 4 500 k€** | **2 920 k€ – 3 700 k€** | **3 690 k€ – 4 690 k€** |
 
 ---
 
-## 2. FOURCHETTE DE TCO À 3 ANS & CALCUL DU ROI
+## 2. 📉 Fourchette de TCO à 3 Ans et Calcul du ROI (Retour sur Investissement)
 
-### Modélisation du Coût Global de Possession (TCO) Min / Max
+### Analyse détaillée du Coût Global de Possession (TCO)
 
-Le TCO global intègre la formule : $\text{TCO}_{3\text{ans}} = \text{Coût Build} + (\text{Coût Run Annuel} \times 3) + \text{Coût Licences (3 ans)}$.
+1. **Trajectoire A (IaaS Lift & Shift) :** TCO 3 ans $\to$ **3,87 M€ à 4,62 M€**
+   * *Justification :* Coûts d'infrastructure Run élevés en raison de machines virtuelles surdimensionnées pour absorber les pics sans élasticité fine, combinés au maintien de licences Oracle RAC et WebLogic lourdes (malgré la Software Assurance).
+2. **Trajectoire B (PaaS Managé) :** TCO 3 ans $\to$ **3,60 M€ à 4,50 M€**
+   * *Justification :* Investissement de build modéré, mais dépendance forte aux bases de données managées propriétaires et aux services PaaS dont la tarification augmente rapidement lors des pics de charge.
+3. **Trajectoire C (SaaS / Cloud-Native Souverain - Recommandé FinOps) :** TCO 3 ans $\to$ **2,92 M€ à 3,70 M€**
+   * *Justification :* Build plus onéreux (refactoring en microservices légers et conteneorisés), mais **Run minimaliste et hautement élastique** (Serverless / EKS avec KEDA). Élimination quasi-totale des licences commerciales traditionnelles au profit de composants managés open source et de capacités réservées (Savings Plans / Reserved Instances).
+4. **Trajectoire D (Lakehouse Unifié) :** TCO 3 ans $\to$ **3,69 M€ à 4,69 M€**
+   * *Justification :* Idéal pour la donnée massive et l'analytique avancée, mais surdimensionné et financièrement pénalisant si appliqué comme cœur transactionnel opérationnel des sinistres (coûts de compute Spark / requêtes analytiques élevés en Run).
 
-* **Trajectoire A (IaaS Lift & Shift) :**
-  * Min : $180\text{ k€} + (420\text{ k€} \times 3) + 900\text{ k€} = \mathbf{2\,340\text{ k€}}$
-  * Max : $250\text{ k€} + (480\text{ k€} \times 3) + 1\,200\text{ k€} = \mathbf{2\,890\text{ k€}}$
-* **Trajectoire B (PaaS Managé) :**
-  * Min : $450\text{ k€} + (280\text{ k€} \times 3) + 150\text{ k€} = \mathbf{1\,440\text{ k€}}$
-  * Max : $600\text{ k€} + (320\text{ k€} \times 3) + 250\text{ k€} = \mathbf{1\,810\text{ k€}}$
-* **Trajectoire C (Cloud-Native / Clean Architecture — Cible Recommandée) :**
-  * Min : $850\text{ k€} + (190\text{ k€} \times 3) + 50\text{ k€} = \mathbf{1\,470\text{ k€}}$
-  * Max : $1\,100\text{ k€} + (220\text{ k€} \times 3) + 100\text{ k€} = \mathbf{1\,860\text{ k€}}$
-* **Trajectoire D (Lakehouse Unifié) :**
-  * Min : $1\,200\text{ k€} + (340\text{ k€} \times 3) + 200\text{ k€} = \mathbf{2\,420\text{ k€}}$
-  * Max : $1\,600\text{ k€} + (400\text{ k€} \times 3) + 350\text{ k€} = \mathbf{3\,150\text{ k€}}$
-
-### Analyse du Retour sur Investissement (ROI)
-
-Bien que la Trajectoire C présente un coût de Build initial élevé ($850\text{ k€} - 1\,100\text{ k€}$) lié à l'exigence de Clean Architecture et au développement des adaptateurs IA/Bedrock, son coût de Run récurrent est le plus bas du marché ($190\text{ k€}/an$) grâce à l'élasticité asynchrone (KEDA/SQS) et à l'élimination totale des licences logicielles propriétaires.
-
-* **Économie récurrente (Run + Licences) par rapport au statu quo / Trajectoire A :** $\approx 550\text{ k€}$ à $700\text{ k€}$ par an.
-* **Calcul du ROI (Horizon 3 ans) :**
-  $$\text{ROI} = \frac{\text{Gains cumulés sur 3 ans} - \text{Investissement Initial (Build)}}{\text{Investissement Initial (Build)}} \times 100$$
-  * En prenant un investissement initial médian de $975\text{ k€}$ et des gains annuels de $600\text{ k€}$ (soit $1\,800\text{ k€}$ sur 3 ans) :
-    $$\text{ROI} = \frac{1\,800\text{ k€} - 975\text{ k€}}{975\text{ k€}} \times 100 \approx \mathbf{+84.6\%}$$
-* **Délai de récupération du capital (Payback Period) :** $\approx 18\text{ mois}$ après la bascule en production.
+### Modélisation du ROI (Retour sur Investissement) de la Trajectoire C (Cible)
+* **Gains Métier Annuels :** 
+  * Lutte antifraude industrialisée : $> 80\text{ M€/an}$ de valeur brute identifiée (dont 15% de concrétisation financière directe en trésorerie soit **12 M€/an**).
+  * Gain de productivité des gestionnaires (automatisation à 80% via l'IA) : **4,5 M€/an** d'économies de temps de traitement.
+* **Investissement Global (Build + TCO Run 3 ans Trajectoire C) :** ~3,3 M€ (moyenne).
+* **Calcul du ROI net sur 3 ans :**
+  $$\text{ROI} = \frac{\text{Gains cumulés (16,5 M€ \times 3)} - \text{TCO (3,3 M€)}}{\text{TCO (3,3 M€)}} \times 100 \approx \mathbf{1 4 0 0\%}$$
+  * *Délai de retour sur investissement (Payback Period) :* Moins de **3 mois** après la mise en production du premier incrément.
 
 ---
 
-## 3. MATRICE COMPARATIVE DÉTAILLÉE DES « POUR » ET DES « CONTRE »
+## 3. ⚖️ Matrice Comparative Détaillée des « Pour » (+) et des « Contre » (-)
 
 | Trajectoire | Pour (+) | Contre (-) |
 | :--- | :--- | :--- |
-| **Trajectoire A :<br>IaaS Lift & Shift** | • Investissement initial minimal<br>• Migration rapide sans refactoring du code existant<br>• Conservation totale des habitudes d'exploitation | • Maintien de la dette technique et du monolithe fragile<br>• Coûts de licences Oracle/WebLogic exorbitants<br>• Incapacité avérée à absorber les pics climatiques (SPOF Oracle RAC) |
-| **Trajectoire B :<br>PaaS Managé** | • Réduction sensible de la charge d'administration des bases de données<br>• Conteneurisation facilitant le déploiement<br>• TCO global modéré à moyen terme | • Verrouillage fournisseur (*vendor lock-in*) sur les services PaaS propriétaires<br>• Flexibilité limitée pour l'optimisation fine des coûts d'inférence IA<br>• Refactoring partiel insuffisant pour une architecture Zero-Trust stricte |
-| **Trajectoire C :<br>Cloud-Native (Cible)** | • Adéquation parfaite avec la Clean Architecture et le TDD<br>• Élasticité totale et absorption des pics (x10) sans sur-provisionnement<br>• Conformité C2 MASSIF rigoureuse (Bedrock, KMS CMK, isolation)<br>• Coûts de Run et de licences minimaux | • Coût de Build initial élevé nécessitant des compétences expertes en Software Craftsmanship<br>• Complexité initiale de mise en œuvre de la gouvernance asynchrone |
-| **Trajectoire D :<br>Lakehouse Unifié** | • Puissance analytique maximale pour le croisement des données historiques et de la fraude<br>• Unification des mondes Data et Transactionnel | • Sur-ingénierie massive pour un cœur de traitement de sinistres opérationnel<br>• Coûts de stockage et de calcul analytique très élevés (Run onéreux)<br>• Risque de latence inadapté au traitement temps réel des dossiers $< 2\,000\text{ €}$ |
+| **A. IaaS Lift & Shift** | • Migration rapide et sans refactoring applicatif.<br>• Risque technique initial faible.<br>• Compétences internes VMware facilement transposables. | • Dette technique conservée et amplifiée.<br>• Absence d'élasticité réelle face aux pics climatiques.<br>• Coûts de licences logicielles (Oracle/WebLogic) exorbitants et rigides. |
+| **B. PaaS Managé** | • Réduction de la charge d'exploitation (MCO délégué).<br>• Scalabilité native sur certains composants.<br>• Intégration facilitée avec les services natifs de l'hyperscaler. | • Vendor lock-in (verrouillage fournisseur) très fort.<br>• Coûts cachés de stockage et d'I/O lors des pics de batchs.<br>• Marges de manœuvre d'optimisation FinOps limitées. |
+| **C. SaaS / Cloud-Native Souverain** | • **ROI maximal** et TCO minimal à 3 ans.<br>• Élasticité instantanée (x10 en 24h) via conteneurs et Serverless.<br>• Élimination des licences legacy.<br>• Architecture alignée Zero-Trust et Clean Architecture. | • Complexité initiale de Build et de refactoring (Clean Architecture / DDD).<br>• Nécessite une montée en compétences de l'équipe (Software Craftsmanship).<br>• Gouvernance FinOps rigoureuse indispensable. |
+| **D. Lakehouse Unifié** | • Plateforme unifiée pour l'analytique, le stockage et l'IA.<br>• Puissance de traitement massif des données non structurées (PDF/Photos). | • Surcoût financier pour un usage purement transactionnel (Cœur Sinistres).<br>• Complexité opérationnelle de gestion des clusters Spark / Delta Lake.<br>• Risque d'explosion des coûts de requêtage en cas de mauvaise gouvernance. |
 
 ---
 
-## 4. RECOMMANDATION D'ARBITRAGE ARGUMENTÉE & CALENDRIER PHASÉ
+## 4. 🎯 Recommandation d'Arbitrage Argumentée & Calendrier Phasé
 
-### Recommandation d'Arbitrage
+### Recommandation d'Arbitrage FinOps & Architecturale
+En tant qu'économiste cloud et praticien FinOps, **la Trajectoire C (SaaS / Cloud-Native Souverain sur un Cloud Unique)** est formellement recommandée et arbitrée comme seule option viable pour le Groupe AssurGlobal. 
 
-En tant que spécialiste FinOps & TCO, **l'arbitrage formel se porte sur la Trajectoire C (Cloud-Native & Clean Architecture sur AWS Mono-Cloud)**. 
-
-1. **Justification Économique :** C'est la seule option qui rompt définitivement avec la spirale inflationniste des licences logicielles propriétaires (Oracle/WebLogic). L'investissement initial en Build est largement compensé par la division par deux des coûts de Run dès la deuxième année.
-2. **Alignment Stratégique & Réponse à la Red Team :** En abandonnant le Scénario 3 (Multi-Cloud Hybride AWS/Azure) au profit d'un **Mono-Cloud AWS unifié**, AssurGlobal supprime les coûts cachés de transfert de données (*Data Egress*), élimine la latence inter-cloud et réduit drastiquement la complexité opérationnelle pour les équipes d'exploitation.
-3. **Maîtrise du Risque Financier :** L'application stricte des règles FinOps (instances Spot pour les traitements non critiques, Savings Plans sur les clusters EKS, chiffrement KMS optimisé) garantit que le budget ne dérivera pas lors des pics climatiques.
+**Justification économique :**
+1. **Éradication du gaspillage :** Contrairement à l'IaaS ou au Lakehouse, la conteneurisation élastique (EKS + KEDA) permet de diviser par 3 les coûts de Run en période creuse tout en garantissant la puissance nécessaire lors des pics climatiques (pay-as-you-go réel).
+2. **Souveraineté des coûts de licences :** L'abandon des monopoles logiciels historiques (Oracle/WebLogic) au profit d'une stack ouverte et managée supprime 1,5 M€ de dépenses de licences contraintes sur 3 ans.
+3. **Maîtrise du TCO :** Avec un TCO à 3 ans estimé entre 2,9 M€ et 3,7 M€, c'est l'option la plus économe qui maximise simultanément le ROI métier (> 1400%).
 
 ---
 
-### Calendrier de Bascule Financièrement Optimisé (Phasage SAFe 6)
+### Calendrier de Bascule Financièrement Optimisé (Phasage SAFe & FinOps)
 
-Le plan de déploiement est cadencé pour lisser les dépenses d'investissement (Build) et sécuriser un retour sur investissement rapide par incréments de valeur (PI - Program Increment).
+Le plan de transition s'étale sur **12 mois**, structuré pour minimiser le double coût transitoire (Run Legacy + Run Cloud) et accélérer la mise en production génératrice de valeur.
 
+```mermaid
+gantt
+    title Calendrier de Migration et Optimisation FinOps (12 Mois)
+    dateFormat  YYYY-MM-DD
+    section Phase 1 : Build & Setup
+    Socle Zero-Trust & FinOps Guardrails (Terraform/KMS) :done, p1, 2026-11-01, 2026-12-31
+    section Phase 2 : Core Domain & MVP
+    Cœur de Domaine Clean Architecture & DDD :active, p2, 2027-01-01, 2027-04-30
+    section Phase 3 : IA & Intégration
+    Enclave IA, Anonymisation PII & Pipeline : p3, 2027-03-01, 2027-06-30
+    section Phase 4 : Migration & Cutover
+    Pilote Métier & Bascule Progressive (Canary) : p4, 2027-07-01, 2027-09-30
+    Extinction Définitive Monolithe Legacy (FinOps ROI) : milestone, m1, 2027-10-31, 1d
 ```
-[M0 - M3] Phase 1 : Cœur de Domaine & Socle AWS
-   │
-   ├──► [M4 - M6] Phase 2 : Adaptateurs Sécurisés & Bedrock (MVP)
-   │      │
-   │      └──► [M7 - M9] Phase 3 : Ingestion Asynchrone & Règle HITL (Pilote)
-   │             │
-   │             └──► [M10 - M12] Phase 4 : Industrialisation & Bascule Totale (Run Optimisé)
-```
 
-#### Phase 1 : Socle Fondationnel & Cœur de Domaine (Mois 1 à 3)
-* **Actions FinOps & Build :** Initialisation de l'infrastructure as Code (Terraform) sur AWS. Développement du cœur de domaine DDD (JIRA-101, JIRA-102) en TDD strict.
-* **Budget Consommé :** $\approx 250\text{ k€}$ (Build).
-* **Jalon de Contrôle 1 (ARB 1) :** Validation de la couverture de tests unitaires à 100% sur le cœur pur sans dépendance d'infrastructure.
-
-#### Phase 2 : Connexion des Adaptateurs & Enclave IA Bedrock (Mois 4 à 6)
-* **Actions FinOps & Build :** Implémentation des adaptateurs S3 chiffrés KMS (JIRA-202) et intégration de l'adaptateur Amazon Bedrock avec Guardrails et anonymisation PII (JIRA-301, JIRA-302).
-* **Budget Consommé :** $\approx 300\text{ k€}$ (Build) + $30\text{ k€}$ (Run test).
-* **Jalon de Contrôle 2 (ARB 2) :** Audit de sécurité Zero-Trust (C2 MASSIF) et validation de la non-fuite de PII par l'équipe Red Team.
-
-#### Phase 3 : Ingestion Asynchrone, SQS & Gouvernance HITL — Pilote (Mois 7 à 9)
-* **Actions FinOps & Build :** Déploiement des adaptateurs entrants REST / SQS (JIRA-401) et mise en production d'un premier pilote ciblé sur un volume restreint de sinistres (règle HITL $< 2\,000\text{ €}$).
-* **Budget Consommé :** $\approx 200\text{ k€}$ (Build) + $50\text{ k€}$ (Run pilote).
-* **Jalon de Contrôle 3 (ARB 3) :** Mesure du taux d'automatisation (Straight-Through Processing $\ge 60\%$) et validation de la réactivité sous charge simulée.
-
-#### Phase 4 : Industrialisation, Migration Totale & Optimisation FinOps (Mois 10 à 12)
-* **Actions FinOps & Build :** Bascule définitive du trafic de production du monolithe WebLogic vers la nouvelle plateforme Cloud-Native. Mise en place des politiques de Capacity Management, Savings Plans AWS et des alertes de budget FinOps en temps réel.
-* **Budget Consommé :** $\approx 150\text{ k€}$ (Build finalisation) + $60\text{ k€}$ (Run production).
-* **Jalon de Clôture :** Décommissionnement complet du monolithe WebLogic et de la base Oracle RAC, actant la fin des paiements de licences et l'atteinte du régime de croisière FinOps ($190\text{ k€}/an$).
+#### Découpage des Jalons Financiers et Opérationnels :
+* **Mois 1 à 2 (Nov - Déc 2026) :** *Setup & FinOps Baseline.* Provisionnement du socle d'infrastructure (Terraform Zero-Trust), mise en place des tags d'attribution des coûts (FinOps Cost Allocation) et configuration des budgets d'alerte cloud.
+* **Mois 3 à 6 (Jan - Avr 2027) :** *Core Domain & MVP.* Développement du cœur de domaine (DDD) et des adaptateurs de persistance (Aurora PostgreSQL avec pattern Outbox). *Impact financier :* Période de double coût maîtrisé (maintien du legacy à 100% + build cloud).
+* **Mois 5 à 8 (Mar - Juin 2027) :** *Connexion IA & Sécurité C2.* Intégration du filtre PII local et raccordement à l'enclave sécurisée (Private Endpoint). Recette de performance et tirs de charge (simulation pic x10).
+* **Mois 9 à 10 (Juil - Aoû 2027) :** *Bascule Progressive (Canary Deployment).* Routage de 10% puis 50% des flux de sinistres vers la nouvelle plateforme OmniClaim AI. Validation de la robustesse et des SLI/SLO.
+* **Mois 11 à 12 (Sep - Oct 2027) :** *Cutover Total & Extinction Legacy.* Bascule de 100% des flux de production sur la plateforme Cloud-Native. **Arrêt immédiat des clusters WebLogic et des licences Oracle RAC associées**, permettant de matérialiser instantanément les gains économiques et d'atteindre le seuil de rentabilité cible.

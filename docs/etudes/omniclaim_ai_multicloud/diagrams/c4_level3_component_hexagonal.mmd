@@ -1,0 +1,22 @@
+graph TD
+    subgraph "Adapters (Inbound)"
+        REST[REST Controller / Webhooks]
+        KAFKA_IN[Kafka Event Consumer]
+    end
+
+    subgraph "Core Domain (Domain-Driven Design)"
+        REST -->|Port Inbound| USECASE[ClaimProcessingUseCase]
+        KAFKA_IN -->|Port Inbound| USECASE
+        USECASE --> DOMAIN[Claim Aggregator / Amount Value Object]
+    end
+
+    subgraph "Adapters (Outbound - Ports & Adapters)"
+        DOMAIN -->|Port Outbound ClaimAnalyzerPort| LLM_ADAPTER[Azure AI Adapter]
+        DOMAIN -->|Port Outbound EventPublisherPort| KAFKA_OUT[Kafka Event Publisher]
+        DOMAIN -->|Port Outbound RepositoryPort| DB_ADAPTER[PostgreSQL / Aurora Adapter]
+    end
+
+    classDef core fill:#3498db,stroke:#2980b9,stroke-width:2px;
+    classDef adapter fill:#e67e22,stroke:#d35400,stroke-width:2px;
+    class USECASE,DOMAIN core;
+    class REST,KAFKA_IN,LLM_ADAPTER,KAFKA_OUT,DB_ADAPTER adapter;
