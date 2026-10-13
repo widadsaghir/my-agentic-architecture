@@ -214,11 +214,13 @@ La feuille de route d'implémentation est découpée en 5 briques incrémentales
   * Répertoire de doctrine d'entreprise (`knowledge/doctrine/`) : Zero-Trust C2, Craftsmanship Hexagonal/DDD, Patrons Cloud WAF, Gouvernance SAFe.
   * Base vectorielle locale persistante (`chroma_db/`) avec `ArchitectureRAGManager`.
   * Outil CrewAI `KnowledgeSearchTool` injecté dans Solution Architect et CISO.
-* **Brique 4 : Génération des Livrables & Outil GitPublisher** ⚪ *(En attente)*
-  * Génération multi-formats (`DAT.md`, `.puml`, `.mmd`, `.drawio`), exports Jira et adaptateur déterministe `GitPublisher` (avec validation HITL).
-* **Brique 5 : Méta-Gouvernance, Personal Branding & Auto-Maintenance** ⚪ *(En attente)*
-  * 5.1 Meta-Agent (Agent Zero - Self-Healing, analyse de logs et mise à jour de prompts).
-  * 5.2 Agent Carrière & Personal Branding (CV dynamique, veille certifications et posts LinkedIn).
+* **Brique 4 : Génération des Livrables & Outil GitPublisher** 🟢 *(Terminé)*
+  * Génération multi-formats (`DAT.md`, `.puml`, `.mmd`, `.drawio`) via `DiagramExporter`.
+  * Exportation automatique du pack multi-fichiers via `--study-dir` et export Jira CSV via `JiraBacklogExporter`.
+  * Adaptateur déterministe `GitPublisher` avec scan anti-secrets et porte bloquante Human-in-the-Loop (`[O/N]`).
+* **Brique 5 : Méta-Gouvernance, Personal Branding & Auto-Maintenance** 🟢 *(Terminé)*
+  * 5.1 Meta-Agent (Agent Zero - Self-Healing) avec outil `LogAnalyzer` et tâche `create_meta_maintenance_task`.
+  * 5.2 Agent Carrière & Personal Branding avec outil `CareerExporter` et tâche `create_career_branding_task`.
 
 ---
 

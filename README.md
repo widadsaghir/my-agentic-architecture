@@ -2,7 +2,7 @@
 
 [![CI Quality Pipeline](https://github.com/widadsaghir/my-agentic-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/widadsaghir/my-agentic-architecture/actions/workflows/ci.yml)
 ![Python Version](https://img.shields.io/badge/python-3.13-blue.svg)
-![Tests](https://img.shields.io/badge/tests-39%20passed-brightgreen.svg)
+![Tests](https://img.shields.io/badge/tests-45%20passed-brightgreen.svg)
 ![Architecture](https://img.shields.io/badge/architecture-hexagonal%20%7C%20TOGAF%2010-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 

@@ -3,7 +3,7 @@
 **Projet :** Multi-Agent Architecture Platform (AAP)  
 **Rôle :** Lead Enterprise & Solution Architect (Software Crafter)  
 **Piliers :** Architecture Hexagonale, Clean Code, Test-Driven Development (TDD), Architectural Fitness Functions & Built-in Quality (SAFe 6)  
-**Version :** 2.0 — Référentiel Exhaustif des 39 Tests Automatisés & Grille des Patterns Associés  
+**Version :** 2.1 — Référentiel Exhaustif des 45 Tests Automatisés & Grille des Patterns Associés  
 **Date :** Octobre 2026  
 
 ---
@@ -79,13 +79,15 @@ Notre suite de tests est découpée en **4 couches complémentaires** au sein de
 | **`test_jira_exporter.py`** | 1 | **Interoperability Pattern** | Vérifie le parsing des User Stories et l'exportation CSV avec délimiteur **point-virgule (`;`)** et encodage UTF-8-sig pour Excel Français. |
 | **`test_diagram_exporter.py`** | 1 | **Multi-Format Generation** | Prouve la génération conjointe des 3 formats de schémas (Draw.io, PlantUML et Mermaid). |
 | **`test_knowledge_rag.py`** | 2 | **Local Vector Store Retrieval** | Valide l'ingestion modulaire de la doctrine dans ChromaDB local et l'outil `KnowledgeSearchTool`. |
-| **`test_tasks.py`** | 6 | **Agentic Prompt Contract** | Valide l'injection stricte de la langue (`--language`) et les mots-clés de doctrine pour les 6 tâches (Conception, Challenge, CISO, Crafter, SAFe, FinOps). |
+| **`test_tasks.py`** | 8 | **Agentic Prompt Contract** | Valide l'injection stricte de la langue (`--language`) et les mots-clés de doctrine pour les 8 tâches (Conception, Challenge, CISO, Crafter, SAFe, FinOps, Méta-Gouvernance, Carrière). |
+| **`test_meta_agent.py`** | 2 | **Self-Healing & Observability** | Valide les attributs du Meta-Agent (Agent Zero) et l'outil `LogAnalyzer` (analyse des erreurs et avertissements dans les traces). |
+| **`test_career_agent.py`** | 2 | **Career Growth & Personal Branding** | Valide les attributs de l'Agent Carrière et l'outil `CareerExporter` (génération bullet points CV et brouillon de post LinkedIn REX). |
 | **`test_config.py`** | 3 | **Fail-Fast Configuration** | Vérifie la lecture du `.env` et la levée d'erreur immédiate si la clé d'API est manquante ou restée sur la valeur par défaut. |
 | **`test_ciso_agent.py`** | 1 | **Domain Persona Invariant** | Valide les attributs du CISO (Zero-Trust, classification C2 massif, non-délégation). |
 | **`test_crafter_safe_agents.py`** | 2 | **Domain Persona Invariant** | Valide les attributs du Crafter (Hexagone, DDD, TDD) et du SAFe Enabler (Jira, DoD, ART). |
 | **`test_challenger_agent.py`** | 1 | **Reflection & Critique Pattern** | Valide la posture contradictoire de la Red Team (anti-SPOF, KISS, YAGNI, Golden Hammer). |
 | **`test_finops_agent.py`** | 1 | **Domain Persona Invariant** | Valide les attributs de l'agent FinOps (TCO, rentabilité Cloud, coûts comparatifs). |
-| **TOTAL GÉNÉRAL** | **39** | **Built-in Quality Totale** | **39 tests exécutés en ~30 secondes à 0 token et 100% de succès.** |
+| **TOTAL GÉNÉRAL** | **45** | **Built-in Quality Totale** | **45 tests exécutés en ~40 secondes à 0 token et 100% de succès.** |
 
 ---
 
