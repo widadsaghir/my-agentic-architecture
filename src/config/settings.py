@@ -23,13 +23,13 @@ class AppConfig:
         # Synchronisation avec la variable standard attendue par LangChain / Google
         os.environ["GOOGLE_API_KEY"] = self.api_key
 
-        self.worker_model = os.getenv("GEMINI_WORKER_MODEL", "gemini-3.8-flash")
-        self.manager_model = os.getenv("GEMINI_MANAGER_MODEL", "gemini-3.8-flash")
+        self.worker_model = os.getenv("GEMINI_WORKER_MODEL", "gemini-3.5-flash-lite")
+        self.manager_model = os.getenv("GEMINI_MANAGER_MODEL", "gemini-3.5-flash-lite")
 
     def _resolve_model(self, model_name: str) -> str:
         """Résout le nom de modèle vers une version active supportée par l'API Gemini."""
-        if "1.5" in model_name or "2.5" in model_name or ("pro" in model_name and "flash" not in model_name):
-            return "gemini/gemini-3.8-flash"
+        if any(v in model_name for v in ["1.5", "2.5", "3.7", "3.8", "flash-latest"]) or ("pro" in model_name and "flash" not in model_name) or ("lite" not in model_name and "3.5" in model_name):
+            return "gemini/gemini-3.5-flash-lite"
         if not model_name.startswith("gemini/"):
             return f"gemini/{model_name}"
         return model_name

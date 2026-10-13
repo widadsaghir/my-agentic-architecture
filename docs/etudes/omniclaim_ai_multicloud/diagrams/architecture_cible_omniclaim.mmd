@@ -1,0 +1,12 @@
+flowchart TB
+    %% Architecture Cible — Plateforme OmniClaim AI
+    Client["👤 Assure / Courtier"]
+    AWS_Ingestion["🖥️ AWS MSK & EKS Services"]
+    Azure_Cognitive["🖥️ Azure OpenAI C2 Enclave"]
+    Core_Database[("🗄️ PostgreSQL Aurora Multi-Cloud")]
+    HITL_Backoffice["🖥️ Portail Gestionnaire HITL > 2000€"]
+
+    Client -->|"Declaration sinistre (HTTPS)"| AWS_Ingestion
+    AWS_Ingestion -->|"Direct Connect / ExpressRoute"| Azure_Cognitive
+    Azure_Cognitive -->|"Suspension si > 2000 € ou fraude >= 0.15"| HITL_Backoffice
+    AWS_Ingestion -->|"Persistance & Reglements"| Core_Database

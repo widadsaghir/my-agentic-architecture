@@ -10,40 +10,52 @@ class JiraBacklogExporter:
     """
     def parse_stories_from_markdown(self, markdown_text: str) -> List[Dict[str, Any]]:
         """
-        Extrait les User Stories et leurs attributs structurés depuis le Markdown de l'agent SAFe.
+        Extrait les User Stories et Enabler Stories depuis le livrable Markdown.
+        Supporte les variantes d'en-têtes Markdown :
+        - '### User Story ID'
+        - '#### ID : Titre'
+        - '### ID : Titre'
         """
         stories = []
-        # Découpe par section de User Story
-        raw_blocks = re.split(r"###\s+User Story\s+[`\*]*([A-Z0-9_-]+)[`\*]*", markdown_text)
+        pattern = re.compile(r"(?:^|\n)#{3,4}\s+(?:User Story\s+)?([A-Z]+-\d+)(?:\s*:\s*([^\n]+))?")
+        matches = list(pattern.finditer(markdown_text))
 
-        # Le premier bloc est l'intro, ensuite on a des paires (story_id, block_content)
-        if len(raw_blocks) > 1:
-            for i in range(1, len(raw_blocks), 2):
-                story_id = raw_blocks[i].strip()
-                block = raw_blocks[i+1] if i+1 < len(raw_blocks) else ""
+        # Fallback si format générique '### User Story ID'
+        if not matches:
+            pattern = re.compile(r"(?:^|\n)###\s+User Story\s+[`\*]*([A-Z0-9_-]+)[`\*]*")
+            matches = list(pattern.finditer(markdown_text))
 
-                # Extraction des champs
-                title_match = re.search(r"\*\s*\*\*Titre\s*:\*\*\s*(.+)", block)
-                format_match = re.search(r"\*\s*\*\*Format\s*:\*\*\s*(.+)", block)
-                points_match = re.search(r"\*\s*\*\*Estimation\s*:\*\*\s*(\d+)", block)
-                crit_match = re.search(r"\*\s*\*\*Critères d'Acceptation\s*:\*\*\s*(.+?)(?=\*\s*\*\*|$)", block, re.DOTALL)
-                dod_match = re.search(r"\*\s*\*\*Definition of Done\s*:\*\*\s*(.+?)(?=\n###|\Z)", block, re.DOTALL)
+        for idx, match in enumerate(matches):
+            story_id = match.group(1).strip()
+            inline_title = match.group(2).strip() if len(match.groups()) > 1 and match.group(2) else ""
 
-                title = title_match.group(1).strip() if title_match else f"User Story {story_id}"
-                desc = format_match.group(1).strip() if format_match else block.strip()
-                points = points_match.group(1).strip() if points_match else "5"
-                acceptance = crit_match.group(1).strip().replace("\n", " ") if crit_match else ""
-                dod = dod_match.group(1).strip().replace("\n", " ") if dod_match else ""
+            # Délimitation du bloc de la story jusqu'à la prochaine story ou fin
+            start_pos = match.end()
+            end_pos = matches[idx + 1].start() if idx + 1 < len(matches) else len(markdown_text)
+            block = markdown_text[start_pos:end_pos]
 
-                stories.append({
-                    "issue_type": "Story",
-                    "id": story_id,
-                    "summary": f"[{story_id}] {title}",
-                    "description": desc,
-                    "story_points": points,
-                    "acceptance_criteria": acceptance,
-                    "definition_of_done": dod
-                })
+            # Extraction des champs
+            title_match = re.search(r"\*\s*\*\*Titre\s*:\*\*\s*(.+)", block)
+            format_match = re.search(r"\*\s*\*\*Description.*?\*\*\s*[:\n]\s*(.+?)(?=\n\*\s*\*\*|\Z)", block, re.DOTALL)
+            points_match = re.search(r"\*\s*\*\*Estimation\s*:\*\*\s*(\d+)", block)
+            crit_match = re.search(r"\*\s*\*\*Critères d'Acceptation.*?\*\*\s*[:\n]\s*(.+?)(?=\n\*\s*\*\*|\Z)", block, re.DOTALL)
+            dod_match = re.search(r"\*\s*\*\*Definition of Done.*?\*\*\s*[:\n]\s*(.+?)(?=\n#|\Z)", block, re.DOTALL)
+
+            title = inline_title or (title_match.group(1).strip() if title_match else f"User Story {story_id}")
+            desc = format_match.group(1).strip() if format_match else block.strip()
+            points = points_match.group(1).strip() if points_match else "5"
+            acceptance = crit_match.group(1).strip().replace("\n", " ") if crit_match else ""
+            dod = dod_match.group(1).strip().replace("\n", " ") if dod_match else ""
+
+            stories.append({
+                "issue_type": "Story",
+                "id": story_id,
+                "summary": f"[{story_id}] {title}",
+                "description": desc,
+                "story_points": points,
+                "acceptance_criteria": acceptance,
+                "definition_of_done": dod
+            })
 
         return stories
 
