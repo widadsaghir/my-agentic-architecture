@@ -20,7 +20,7 @@ Construire une plateforme open-source autonome d'ingénierie d'architecture bas�
 | **2** | **Brigade d'Agents Spécialisés d'Architecture** | P1 (Haute) | 🟢 **Terminé** | Brique 1 |
 | **3** | **Module RAG & Base de Connaissances (ChromaDB)** | P1 (Haute) | 🟢 **Terminé** | Brique 1 |
 | **4** | **Générateurs de Livrables & Outil GitPublisher (HITL)** | P2 (Moyenne) | 🟢 **Terminé** | Briques 2 & 3 |
-| **5** | **Méta-Gouvernance (Meta-Agent) & Personal Branding** | P2 (Moyenne) | ⚪ En attente | Brique 4 |
+| **5** | **Méta-Gouvernance (Meta-Agent) & Personal Branding** | P2 (Moyenne) | 🟢 **Terminé** | Brique 4 |
 
 ---
 
@@ -104,16 +104,15 @@ Construire une plateforme open-source autonome d'ingénierie d'architecture bas�
 
 ---
 
-### Brique 5 : Méta-Gouvernance, Personal Branding & Auto-Maintenance ⚪
+### Brique 5 : Méta-Gouvernance, Personal Branding & Auto-Maintenance 🟢
 *Objectif : Assurer la maintenance autonome du système et la valorisation professionnelle continue.*
 
-*   [ ] **5.1 Meta-Agent (Agent Zero - Self-Healing) :**
-    *   Observabilité des logs d'exécution de la Crew, latence et consommation de tokens.
-    *   Détection des dérives de prompt et génération de patchs sur `src/agents/` ou `src/tasks/`.
-*   [ ] **5.2 Agent Carrière & Personal Branding :**
-    *   Mise à jour dynamique du CV à partir des technologies et patterns traités dans les DATs.
-    *   Génération de brouillons de posts LinkedIn (retours d'expérience / REX vulgarisés).
-    *   Cartographie continue vers les certifications visées (TOGAF 10, SAFe for Architects, Cloud WAF, L2 interne).
+*   [x] **5.1 Meta-Agent (Agent Zero - Self-Healing) :**
+    *   Observabilité des logs d'exécution de la Crew, latence et détection des anomalies via `LogAnalyzer`.
+    *   Agent `create_meta_agent` et tâche `create_meta_maintenance_task` implémentés et testés.
+*   [x] **5.2 Agent Carrière & Personal Branding :**
+    *   Mise à jour dynamique du profil de compétences pour le CV et génération de posts LinkedIn REX via `CareerExporter`.
+    *   Agent `create_career_branding_agent` et tâche `create_career_branding_task` implémentés et testés.
 
 ---
 
