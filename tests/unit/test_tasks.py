@@ -6,7 +6,9 @@ from src.tasks.architecture_tasks import (
     create_challenge_task,
     create_software_crafting_task,
     create_safe_delivery_task,
-    create_finops_task
+    create_finops_task,
+    create_meta_maintenance_task,
+    create_career_branding_task
 )
 
 @pytest.fixture
@@ -85,6 +87,30 @@ def test_finops_task_language_and_doctrine(agent):
     assert "tco" in desc_lower
     assert "coût" in desc_lower or "budget" in desc_lower or "comparatif" in desc_lower
     assert task.context == []
+
+def test_meta_maintenance_task_language_and_doctrine(agent):
+    """Vérifie que la tâche Meta-Agent intègre l'observabilité, la détection des dérives et la langue."""
+    task = create_meta_maintenance_task(agent, context_tasks=[], language="French")
+
+    assert "[French]" in task.description
+    assert "[French]" in task.expected_output
+    desc_lower = task.description.lower()
+    assert "log" in desc_lower or "trace" in desc_lower
+    assert "dérive" in desc_lower or "prompt" in desc_lower or "anomalie" in desc_lower
+    assert task.context == []
+
+def test_career_branding_task_language_and_doctrine(agent):
+    """Vérifie que la tâche Carrière & Branding intègre le CV, LinkedIn et les certifications."""
+    task = create_career_branding_task(agent, context_tasks=[], language="French")
+
+    assert "[French]" in task.description
+    assert "[French]" in task.expected_output
+    desc_lower = task.description.lower()
+    assert "cv" in desc_lower
+    assert "linkedin" in desc_lower
+    assert "certification" in desc_lower
+    assert task.context == []
+
 
 
 

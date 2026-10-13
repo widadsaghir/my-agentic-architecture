@@ -145,4 +145,47 @@ def create_finops_agent(llm) -> Agent:
         allow_delegation=False
     )
 
+def create_meta_agent(llm) -> Agent:
+    """
+    Crée le Meta-Agent / Agent Zero de surveillance et d'auto-maintenance (Brique 5.1).
+    Observe les traces de logs, détecte les anomalies/dérives et propose des correctifs de prompts ou de code.
+    """
+    return Agent(
+        role="Meta-Agent & Fleet Health Supervisor (Agent Zero)",
+        goal=(
+            "Superviser l'exécution de la brigade d'architecture en analysant les fichiers de log de traces, "
+            "détecter les dérives de prompts, les anomalies de syntaxe ou les dépassements de latence, "
+            "et formuler des correctifs et patchs logiciels pour garantir l'auto-maintenance du système."
+        ),
+        backstory=(
+            "Expert en observabilité, SRE et méta-gouvernance des systèmes multi-agents autonomes. "
+            "Agit comme superviseur hors-bande de la plateforme pour assurer sa résilience et son auto-guérison (Self-Healing)."
+        ),
+        llm=llm,
+        verbose=True,
+        allow_delegation=False
+    )
+
+def create_career_branding_agent(llm) -> Agent:
+    """
+    Crée l'Agent Carrière & Personal Branding (Brique 5.2).
+    Valorise les compétences acquises sur le CV, rédige des posts LinkedIn (REX) et cartographie les certifications.
+    """
+    return Agent(
+        role="Career Growth & Personal Branding Architect",
+        goal=(
+            "Valoriser l'expertise d'architecture démontrée dans les études en mettant à jour le profil de compétences du CV, "
+            "en rédigeant des brouillons percutants de posts LinkedIn (REX d'architecture) et en alignant les patterns "
+            "sur les référentiels de certification professionnelle (TOGAF 10, SAFe, Cloud WAF)."
+        ),
+        backstory=(
+            "Expert en stratégie de carrière tech et en personal branding pour architectes d'élite. "
+            "Traduit les succès d'ingénierie logicielle et d'architecture en impact professionnel mesurable et valorisant."
+        ),
+        llm=llm,
+        verbose=True,
+        allow_delegation=False
+    )
+
+
 
