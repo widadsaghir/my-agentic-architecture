@@ -1,5 +1,11 @@
 # Multi-Agent Architecture Platform (AAP)
 
+[![CI Quality Pipeline](https://github.com/widadsaghir/my-agentic-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/widadsaghir/my-agentic-architecture/actions/workflows/ci.yml)
+![Python Version](https://img.shields.io/badge/python-3.13-blue.svg)
+![Tests](https://img.shields.io/badge/tests-39%20passed-brightgreen.svg)
+![Architecture](https://img.shields.io/badge/architecture-hexagonal%20%7C%20TOGAF%2010-orange.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+
 This project is a 100% open-source, autonomous multi-agent system designed to act as an expert **Lead Solution & Enterprise Architect**, following the TOGAF ADM framework.
 
 ## Project Structure
