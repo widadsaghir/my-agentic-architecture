@@ -172,6 +172,97 @@ class DiagramExporter:
             "drawio": str(drawio_file)
         }
 
+    @classmethod
+    def sanitize_mermaid(cls, code: str) -> str:
+        """
+        Nettoie et sécurise le code Mermaid pour compatibilité GitHub absolue :
+        - Remplace '<==>' par '<-->'.
+        - Échappe les caractères réservés (&, <, >) dans les messages de séquence et labels.
+        - Enveloppe de guillemets les labels entre pipes |"..."| contenant des caractères spéciaux.
+        - Enveloppe de guillemets les textes de nœuds avec parenthèses ["..."].
+        """
+        import re
+        lines = code.splitlines()
+        sanitized = []
+        is_sequence = "sequencediagram" in code.lower()
+
+        for line in lines:
+            l = line
+            # Remplacement des flèches bidirectionnelles invalides
+            l = l.replace("<==>", "<-->")
+
+            # Traitement des diagrammes de séquence
+            if is_sequence:
+                l = re.sub(r"<\s*", "inf. à ", l)
+                l = re.sub(r">=\s*", "sup. ou égal à ", l)
+                l = re.sub(r">\s*", "sup. à ", l)
+                if "actor " not in l and "participant " not in l:
+                    l = l.replace("&", "et")
+
+            # Sécurisation des labels de liens |...|
+            def quote_pipe_label(m):
+                lbl = m.group(1).strip()
+                if not (lbl.startswith('"') and lbl.endswith('"')):
+                    lbl = lbl.replace("&", "et").replace("<", "inf. à ").replace(">", "sup. à ")
+                    return f'|"{lbl}"|'
+                return m.group(0)
+
+            l = re.sub(r"\|([^\|]+)\|", quote_pipe_label, l)
+
+            # Sécurisation des nœuds avec parenthèses ID[Texte (détail)] -> ID["Texte (détail)"]
+            def quote_bracket(m):
+                nid = m.group(1)
+                content = m.group(2).strip()
+                if not (content.startswith('"') and content.endswith('"')) and not (content.startswith('("') and content.endswith('")')):
+                    return f'{nid}["{content}"]'
+                return m.group(0)
+
+            l = re.sub(r"([A-Za-z0-9_-]+)\[([^\[\]\"\(\)]*[\(\)/][^\[\]\"\(\)]*)\]", quote_bracket, l)
+
+            sanitized.append(l)
+
+        return "\n".join(sanitized)
+
+    @classmethod
+    def parse_mermaid_to_nodes_and_links(cls, code: str) -> tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+        """
+        Extrait les nœuds réels et les connexions depuis un bloc Mermaid pour
+        alimenter les moteurs de génération Draw.io XML et PlantUML.
+        """
+        import re
+        nodes: Dict[str, Dict[str, Any]] = {}
+        links: List[Dict[str, Any]] = []
+
+        # 1. Extraction des nœuds : ID["Label"], ID[Label], ID[("Label")]
+        node_pattern = re.compile(r'([A-Za-z0-9_-]+)(?:\[\(?"?([^"\]\)]+)"?\)?\]|\(\("?([^"\]\)]+)"?\)\))')
+        for match in node_pattern.finditer(code):
+            nid = match.group(1).strip()
+            lbl = match.group(2) or match.group(3) or nid
+            if nid.lower() not in ["subgraph", "end", "classdef", "class", "style"]:
+                ntype = "database" if "[(" in match.group(0) else "service"
+                if "actor" in code.lower() and nid in ["U", "P", "Assure", "Client"]:
+                    ntype = "actor"
+                nodes[nid] = {"id": nid, "label": lbl.strip(), "type": ntype}
+
+        # 2. Extraction des liens : A -->|"label"| B ou A --> B ou A <--> B
+        link_pattern = re.compile(r'([A-Za-z0-9_-]+)\s*(?:-->|<-->|<==>|-.->|==>)\s*(?:\|"?([^"\|]+)"?\|)?\s*([A-Za-z0-9_-]+)')
+        for match in link_pattern.finditer(code):
+            src = match.group(1).strip()
+            lbl = match.group(2) or "Flux Sécurisé"
+            tgt = match.group(3).strip()
+            if src in nodes and tgt in nodes:
+                links.append({"source": src, "target": tgt, "label": lbl.strip()})
+
+        node_list = list(nodes.values())
+        if not node_list:
+            node_list = [
+                {"id": "Service_A", "label": "Composant Amont", "type": "service"},
+                {"id": "Service_B", "label": "Composant Aval", "type": "service"}
+            ]
+            links = [{"source": "Service_A", "target": "Service_B", "label": "Flux Sécurisé"}]
+
+        return node_list, links
+
     def extract_and_export_from_markdown(
         self,
         markdown_text: str,
@@ -222,27 +313,20 @@ class DiagramExporter:
                 puml_file = out_path / f"{diag_name}.puml"
                 drawio_file = out_path / f"{diag_name}.drawio"
 
-                mmd_file.write_text(mmd_content, encoding="utf-8")
+                # Sécurisation de la syntaxe Mermaid
+                sanitized_mmd = self.sanitize_mermaid(mmd_content)
+                mmd_file.write_text(sanitized_mmd, encoding="utf-8")
 
-                # Génération PlantUML Air-Gap propre
-                puml_file.write_text(
-                    f"@startuml\nskinparam defaultFontSize 16\nskinparam defaultFontColor #000000\n"
-                    f"title Schéma {diag_name}\n\n"
-                    f"note as N1\n1. Type: C4 Architecture\n2. Utilité: Vue {diag_name}\n"
-                    f"3. Standard: C4 / TOGAF\n4. UML: Component/Deployment\n5. Résumé: Flux d'architecture cible\nend note\n\n"
-                    f"rectangle \"Composant Principal\" as CP #D4E6F1\n"
-                    f"rectangle \"Enclave Sécurisée\" as ES #D5F5E3\n"
-                    f"CP --> ES : Flux Chiffré\n@enduml\n",
-                    encoding="utf-8"
-                )
+                # Extraction dynamique des vrais nœuds et liens pour alimenter Draw.io et PlantUML
+                parsed_nodes, parsed_links = self.parse_mermaid_to_nodes_and_links(sanitized_mmd)
 
-                # Génération Draw.io XML
-                nodes = [
-                    {"id": "Service_A", "label": "Composant Amont", "type": "service"},
-                    {"id": "Service_B", "label": "Composant Aval", "type": "service"}
-                ]
-                links = [{"source": "Service_A", "target": "Service_B", "label": "Flux Sécurisé"}]
-                drawio_file.write_text(self.generate_drawio_xml(f"Schéma {diag_name}", nodes, links), encoding="utf-8")
+                # Génération PlantUML Air-Gap dynamique
+                puml_content = self.generate_plantuml(f"Schéma {diag_name}", parsed_nodes, parsed_links)
+                puml_file.write_text(puml_content, encoding="utf-8")
+
+                # Génération Draw.io XML dynamique avec les vrais composants
+                drawio_content = self.generate_drawio_xml(f"Schéma {diag_name}", parsed_nodes, parsed_links)
+                drawio_file.write_text(drawio_content, encoding="utf-8")
 
                 if idx == 0 or diag_name == base_name:
                     results = {"puml": str(puml_file), "mmd": str(mmd_file), "drawio": str(drawio_file)}

@@ -175,7 +175,15 @@ Mettre en place une suite de tests automatisée découpée en 4 couches exécut�
 Chaque étude d'architecture doit générer un dossier structuré dans `docs/etudes/<nom_etude>/` comprenant :
 1. `00_CAHIER_DES_CHARGES_INPUT.md` : Expression de besoin et contraintes initiales archivées.
 2. `00_DECISION_ARBITRAGE_ET_SYNTHESE_CONVERGENCE.md` (Manager) : Décision arbitrée de l'ARB réconciliant le DAT final.
-3. `01_DOSSIER_ARCHITECTURE_TECHNIQUE_DAT.md` (Solution Architect) : Justification des choix structurants, dimensionnement et résilience.
+3. `01_DOSSIER_ARCHITECTURE_TECHNIQUE_DAT.md` (Solution Architect) : Dossier d'Architecture Technique complet au standard Big Tech (Netflix/Amazon/Spotify) structuré en 8 chapitres :
+   * Schéma AS-IS embarqué (Mermaid illustrant la dette, batchs nocturnes et SPOF).
+   * Les 4 niveaux C4 TO-BE + Diagramme de Séquence temps réel (5 schémas Mermaid embarqués).
+   * Dimensionnement capacitaire quantifié fin (vCPU, RAM, Partitions Kafka, IOPS SSD, pool de connexions).
+   * Sécurité Zero-Trust C2 MASSIF, mTLS, OIDC et rotation des clés KMS CMK / Vault tous les 30 jours.
+   * Patterns de résilience Big Tech (Circuit Breakers, Transactional Outbox, Idempotence, RTO < 15 min, RPO = 0).
+   * Topologie étanche des 4 environnements (DEV, INT, PERF, PROD) et déploiement continu Canary.
+   * Squelette complet d'Infrastructure as Code (Terraform / OpenTofu HCL modulaire).
+   * Volet Exploitation, MCO & SRE (SLI/SLO 99.99%, métriques RED/USE, OpenTelemetry, Runbook d'incident).
 4. `02_RAPPORT_AUDIT_CONTRADICTOIRE.md` (Challenger Red Team) : Analyse critique des risques, SPOF et traque de la sur-ingénierie.
 5. `03_AVIS_HOMOLOGATION_SECURITE_DCA.md` (CISO) : Classification des données, étanchéité Zero-Trust, chiffrement CMK et avis formel DCA.
 6. `04_CONCEPTION_HEXAGONALE_ET_DDD.md` (Software Crafter) : Découplage Ports & Adapters, agrégats DDD, matrice de testabilité TDD 100%.
