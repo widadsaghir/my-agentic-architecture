@@ -1,17 +1,68 @@
 @startuml
 skinparam defaultFontSize 16
 skinparam defaultFontColor #000000
-title Schéma sequence_flux_sinistre
+skinparam roundCorner 10
+skinparam sequenceArrowThickness 2
+skinparam packageTitleAlignment left
+
+title Diagramme de Séquence — Traitement Nominal, Inférence IA Souveraine & Arbitrage HITL
 
 note as N1
-1. Type: C4 Architecture
-2. Utilité: Vue sequence_flux_sinistre
-3. Standard: C4 / TOGAF
-4. UML: Component/Deployment
-5. Résumé: Flux d'architecture cible
+1. Type : Diagramme de Séquence d'Interaction
+2. Utilité : Détailler la chronologie des échanges synchrones et asynchrones de bout en bout
+3. Standard : UML 2.5 / TOGAF 10 ADM Phase C (Architecture Applicative)
+4. Équivalent UML : Sequence Diagram (Interaction Standard)
+5. Résumé : Flux complet du dépôt mobile jusqu'au virement bancaire ou arbitrage gestionnaire
 end note
 
-rectangle "Composant Principal" as CP #D4E6F1
-rectangle "Enclave Sécurisée" as ES #D5F5E3
-CP --> ES : Flux Chiffré
+autonumber
+
+actor "Assuré / Client" as CLIENT #FADBD8
+participant "Amazon API Gateway\n& AWS WAF" as API #FF9900
+participant "Claim Microservice\n(Cluster Amazon EKS)" as CORE #AED6F1
+participant "Filtre PII Local\n(Dé-identification EKS)" as PII #D4EFDF
+participant "Enclave Azure OpenAI\n(Llama-3 GPU / PrivateLink)" as AI #5DADE2
+participant "IndemnificationPolicy\n(Moteur Règles Métier)" as RULES #A9DFBF
+participant "Portail Gestionnaire\n(Corbeille HITL)" as HITL #F5CBA7
+participant "Passerelle SEPA\n(Système Bancaire)" as BANK #D5F5E3
+
+CLIENT -> API : Soumission déclaration sinistre\n(Photos JPEG + Devis PDF)
+activate API
+API -> CORE : Transmission payload brut (mTLS)
+activate CORE
+CORE -> PII : Dé-identification PII locale (NIR, IBAN masqués)
+activate PII
+PII --> CORE : Payload anonymisé (Zéro PII)
+deactivate PII
+
+CORE -> AI : Requête d'inférence sécurisée\n(Liaison Direct Connect / PrivateLink)
+activate AI
+AI --> CORE : JSON normalisé (Score Fraude, Dommages, Montant)
+deactivate AI
+
+CORE -> RULES : Évaluation barèmes contractuels\n(Règle HITL : Seuil 2 000 € & Fraude 0.15)
+activate RULES
+
+alt Cas Simple (Montant < 2 000 € ET Score Fraude < 0.15)
+    RULES --> CORE : Accord d'indemnisation automatique (STP 60%)
+    CORE -> BANK : Ordre de virement bancaire instantané\n(Message XML ISO 20022 pacs.008)
+    activate BANK
+    BANK --> CLIENT : Virement exécuté sur compte assuré (15 min)
+    deactivate BANK
+    CORE --> API : Confirmation de traitement automatisé
+    API --> CLIENT : Notification accord & déblocage fonds
+else Cas Complexe ou Suspect (Montant >= 2 000 € OU Score Fraude >= 0.15)
+    RULES --> CORE : Détection ambiguïté ou risque élevé
+    CORE -> HITL : Suspension traitement & assignation corbeille humaine\n(Pré-remplissage avec synthèse IA)
+    activate HITL
+    HITL -> CLIENT : Notification mise en instruction par gestionnaire
+    deactivate HITL
+    CORE --> API : Accusé de réception dossier en cours d'examen
+    API --> CLIENT : Statut dossier mis à jour (48h max)
+end
+
+deactivate RULES
+deactivate CORE
+deactivate API
+
 @enduml

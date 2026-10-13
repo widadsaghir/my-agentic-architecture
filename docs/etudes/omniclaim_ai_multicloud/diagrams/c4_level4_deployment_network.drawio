@@ -1,1 +1,106 @@
-<mxfile host="Electron" version="21.6.8" type="device"><diagram id="ArchDiagram" name="Schéma c4_level4_deployment_network"><mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff"><root><mxCell id="0" /><mxCell id="1" parent="0" /><mxCell id="Service_A" value="Composant Amont" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=12;fontStyle=1" vertex="1" parent="1"><mxGeometry x="80" y="80" width="180" height="70" as="geometry" /></mxCell><mxCell id="Service_B" value="Composant Aval" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=12;fontStyle=1" vertex="1" parent="1"><mxGeometry x="300" y="200" width="180" height="70" as="geometry" /></mxCell><mxCell id="edge_0" value="Flux Sécurisé" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F618D;strokeWidth=2;" edge="1" parent="1" source="Service_A" target="Service_B"><mxGeometry relative="1" as="geometry" /></mxCell></root></mxGraphModel></diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2026-10-13T14:48:00.000Z" agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="diagram_c4_l4" name="C4 Niveau 4 Déploiement Réseau Multi-AZ">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1100" background="#FFFFFF">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Note Cartouche -->
+        <mxCell id="cartouche_l4" value="&lt;b&gt;C4 Niveau 4 : Deployment Diagram — Topologie Réseau Physique Multi-AZ AWS &amp;amp; Azure&lt;/b&gt;&lt;br&gt;&lt;hr&gt;• Résilience : 3 Availability Zones AWS (eu-west-1a, 1b, 1c) avec bascule transparente RTO &amp;lt; 15 min, RPO = 0&lt;br&gt;• Réseau Hybride : AWS Direct Connect Gateway relié à Azure ExpressRoute via Equinix Cloud Exchange (10 Gbps)&lt;br&gt;• Isolation C2 MASSIF : Zéro IP publique sur les nœuds EKS, Aurora, Kafka et enclaves Azure OpenAI" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="800" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Container AWS Region -->
+        <mxCell id="cont_aws_reg" value="AWS Region eu-west-1 (Irlande) — VPC var.vpc_cidr_block (Multi-AZ)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFF8E7;strokeColor=#F39C12;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="980" height="620" as="geometry"/>
+        </mxCell>
+
+        <!-- AZ-A -->
+        <mxCell id="cont_az_a" value="Availability Zone eu-west-1a" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FEF5E7;strokeColor=#F8C471;fontSize=12;" vertex="1" parent="cont_aws_reg">
+          <mxGeometry x="30" y="50" width="280" height="420" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_pub_a" value="&lt;b&gt;Subnet Public AZ-A&lt;/b&gt;&lt;br&gt;ALB Ingress Node A&lt;br&gt;NAT Gateway AZ-A" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAD7A0;strokeColor=#D68910;" vertex="1" parent="cont_az_a">
+          <mxGeometry x="20" y="40" width="240" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_app_a" value="&lt;b&gt;Subnet Privé App AZ-A&lt;/b&gt;&lt;br&gt;EKS Node Group A (m6i.4xlarge)&lt;br&gt;Pods ClaimService (Istio mTLS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#2980B9;" vertex="1" parent="cont_az_a">
+          <mxGeometry x="20" y="150" width="240" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_data_a" value="&lt;b&gt;Subnet Isolé Données AZ-A&lt;/b&gt;&lt;br&gt;• Aurora PostgreSQL Primary (Write)&lt;br&gt;• Broker MSK Kafka Node 01" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_az_a">
+          <mxGeometry x="20" y="270" width="240" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- AZ-B -->
+        <mxCell id="cont_az_b" value="Availability Zone eu-west-1b" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FEF5E7;strokeColor=#F8C471;fontSize=12;" vertex="1" parent="cont_aws_reg">
+          <mxGeometry x="350" y="50" width="280" height="420" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_pub_b" value="&lt;b&gt;Subnet Public AZ-B&lt;/b&gt;&lt;br&gt;ALB Ingress Node B&lt;br&gt;NAT Gateway AZ-B" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAD7A0;strokeColor=#D68910;" vertex="1" parent="cont_az_b">
+          <mxGeometry x="20" y="40" width="240" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_app_b" value="&lt;b&gt;Subnet Privé App AZ-B&lt;/b&gt;&lt;br&gt;EKS Node Group B (m6i.4xlarge)&lt;br&gt;Pods ClaimService (Istio mTLS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#2980B9;" vertex="1" parent="cont_az_b">
+          <mxGeometry x="20" y="150" width="240" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_data_b" value="&lt;b&gt;Subnet Isolé Données AZ-B&lt;/b&gt;&lt;br&gt;• Aurora Read Replica 01&lt;br&gt;• Broker MSK Kafka Node 02" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_az_b">
+          <mxGeometry x="20" y="270" width="240" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- AZ-C -->
+        <mxCell id="cont_az_c" value="Availability Zone eu-west-1c" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FEF5E7;strokeColor=#F8C471;fontSize=12;" vertex="1" parent="cont_aws_reg">
+          <mxGeometry x="670" y="50" width="280" height="420" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_app_c" value="&lt;b&gt;Subnet Privé App AZ-C&lt;/b&gt;&lt;br&gt;EKS Node Group C (Standby)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#2980B9;" vertex="1" parent="cont_az_c">
+          <mxGeometry x="20" y="150" width="240" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_data_c" value="&lt;b&gt;Subnet Isolé Données AZ-C&lt;/b&gt;&lt;br&gt;• Aurora Read Replica 02&lt;br&gt;• Broker MSK Kafka Node 03" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_az_c">
+          <mxGeometry x="20" y="270" width="240" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- Transit Gateway -->
+        <mxCell id="node_tgw" value="&lt;b&gt;AWS Transit Gateway &amp;amp; Direct Connect Gateway&lt;/b&gt;&lt;br&gt;BGP Peering Redondé &amp;amp; Route Tables Strictes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F39C12;strokeColor=#B9770E;fontColor=#FFFFFF;" vertex="1" parent="cont_aws_reg">
+          <mxGeometry x="30" y="500" width="920" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Container Interconnexion Fibre -->
+        <mxCell id="cont_fibre" value="Interconnexion Fibre Dédiée (Equinix Cloud Exchange)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E8F8F5;strokeColor=#16A085;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="380" width="260" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_pipe_fibre" value="&lt;b&gt;Liaison Fibre 10 Gbps Redondée&lt;/b&gt;&lt;br&gt;Chiffrement IPsec AES-256&lt;br&gt;&lt;font color='#27AE60'&gt;Latence &amp;lt; 3 ms garantie&lt;/font&gt;&lt;br&gt;SLA 99.999% disponibilité" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A3E4D7;strokeColor=#16A085;" vertex="1" parent="cont_fibre">
+          <mxGeometry x="20" y="45" width="220" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Container Azure Region -->
+        <mxCell id="cont_az_reg" value="Azure Region francecentral (Paris) — VNet var.azure_vnet_cidr" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EBF5FB;strokeColor=#2980B9;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="160" width="400" height="620" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_az_gw" value="&lt;b&gt;Azure ExpressRoute Gateway&lt;/b&gt;&lt;br&gt;Terminaison IPsec &amp;amp; Gateway Subnet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0089D6;strokeColor=#004C87;fontColor=#FFFFFF;" vertex="1" parent="cont_az_reg">
+          <mxGeometry x="30" y="50" width="340" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="cont_az_priv" value="Private Subnet Cognitive (Zéro IP Publique)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#D4E6F1;strokeColor=#7FB3D5;fontSize=12;" vertex="1" parent="cont_az_reg">
+          <mxGeometry x="30" y="150" width="340" height="420" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_openai" value="&lt;b&gt;Private Endpoint : Azure OpenAI&lt;/b&gt;&lt;br&gt;Inférence GPT-4o &amp;amp; Llama-3 70B GPU" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5DADE2;strokeColor=#1B4F72;fontColor=#FFFFFF;" vertex="1" parent="cont_az_priv">
+          <mxGeometry x="20" y="50" width="300" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_search" value="&lt;b&gt;Private Endpoint : Azure AI Search&lt;/b&gt;&lt;br&gt;Index Vectoriel &amp;amp; Embeddings Fraud" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#A9DFBF;strokeColor=#229954;" vertex="1" parent="cont_az_priv">
+          <mxGeometry x="20" y="160" width="300" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_vault" value="&lt;b&gt;Private Endpoint : Azure Key Vault HSM&lt;/b&gt;&lt;br&gt;Gestion des Clés FIPS 140-2 L3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="cont_az_priv">
+          <mxGeometry x="20" y="280" width="300" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Flux -->
+        <mxCell id="l1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_pub_a" target="node_app_a" parent="1"/>
+        <mxCell id="l2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_pub_b" target="node_app_b" parent="1"/>
+        <mxCell id="l3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_app_a" target="node_data_a" parent="1"/>
+        <mxCell id="l4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_app_b" target="node_data_b" parent="1"/>
+        <mxCell id="l5" value="Réplication Aurora Synchrone" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;dashed=1;strokeColor=#27AE60;" edge="1" source="node_data_a" target="node_data_b" parent="1"/>
+        <mxCell id="l6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_app_a" target="node_tgw" parent="1"/>
+        <mxCell id="l7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_app_b" target="node_tgw" parent="1"/>
+        <mxCell id="l8" value="Direct Connect" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=3;strokeColor=#16A085;" edge="1" source="node_tgw" target="node_pipe_fibre" parent="1"/>
+        <mxCell id="l9" value="ExpressRoute" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=3;strokeColor=#16A085;" edge="1" source="node_pipe_fibre" target="node_az_gw" parent="1"/>
+        <mxCell id="l10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_az_gw" target="pe_openai" parent="1"/>
+        <mxCell id="l11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_az_gw" target="pe_search" parent="1"/>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

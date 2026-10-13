@@ -1,0 +1,49 @@
+flowchart TD
+    subgraph CANAUX["Canaux d'Acquisition Clients & Partenaires"]
+        WEB["Portail Assuré Monolithique (JSP / Struts 1.3)"]
+        AGENCE["Postes Agences & Courtage (Client Lourd VB.NET)"]
+        EXPERT["Plateforme Experts & Garages (Flux Batch FTP Plat)"]
+    end
+
+    subgraph DC_LEGACY["Datacenter On-Premise Historique (SPOF Majeur)"]
+        FW["Pare-feu Physique Périmétrique (CheckPoint HA Actif/Passif)"]
+        
+        subgraph CLUSTER_APP["Cluster Applicatif WebLogic 12c (2 VMs VMware ESXi)"]
+            SRV1["Instance WebLogic Srv01 (32 vCPU, 128 Go RAM)"]
+            SRV2["Instance WebLogic Srv02 (32 vCPU, 128 Go RAM)"]
+        end
+
+        subgraph BATCH_CORE["Moteur Batch Nocturne (PL/SQL Legacy)"]
+            BATCH["Ordonnanceur Control-M + Scripts PL/SQL (Batch 8h)"]
+            LOCK_TABLE["Contention Transactionnelle (TX Locks sur CLAIM_SETTLEMENT)"]
+        end
+
+        subgraph DATA_TIER["Tier Persistance & Données (Oracle 19c RAC)"]
+            ORACLE1["Nœud Oracle RAC 01 (Baie SAN Fibre Channel)"]
+            ORACLE2["Nœud Oracle RAC 02 (ASM Storage)"]
+        end
+
+        subgraph STORAGE_NAS["Stockage Fichiers Partagé (NAS NetApp NFS/SMB)"]
+            NAS["Volume NFS 40 To (Photos JPEG & Devis PDF Non Indexés)"]
+        end
+    end
+
+    WEB -->|"HTTP / SSL 1.2 (Port 443)"| FW
+    AGENCE -->|"SOAP 1.1 / RPC (Port 7001)"| FW
+    EXPERT -->|"FTP non sécurisé (Port 21)"| FW
+
+    FW -->|"Load Balancing Hardware (F5 BIG-IP)"| CLUSTER_APP
+    CLUSTER_APP -->|"JDBC Synchrone (Pool 200 Connexions)"| ORACLE1
+    CLUSTER_APP -->|"JDBC Synchrone"| ORACLE2
+    CLUSTER_APP -->|"Montage NFS v3 (Latence I/O élevée)"| NAS
+
+    BATCH -->|"Exécution batch nocturne 22h-06h"| ORACLE1
+    BATCH --> LOCK_TABLE
+    LOCK_TABLE -.->|"Blocage des transactions temps réel"| CLUSTER_APP
+
+    classDef legacy fill:#FADBD8,stroke:#C0392B,stroke-width:2px,color:#000000;
+    classDef warning fill:#FDEBD0,stroke:#D35400,stroke-width:2px,stroke-dasharray: 5 5,color:#000000;
+    classDef storage fill:#E8F8F5,stroke:#16A085,stroke-width:2px,color:#000000;
+    class WEB,AGENCE,EXPERT,FW,SRV1,SRV2,ORACLE1,ORACLE2 legacy;
+    class BATCH,LOCK_TABLE warning;
+    class NAS storage;

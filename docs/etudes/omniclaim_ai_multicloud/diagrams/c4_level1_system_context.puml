@@ -1,0 +1,52 @@
+@startuml
+skinparam defaultFontSize 16
+skinparam defaultFontColor #000000
+skinparam roundCorner 10
+skinparam linetype ortho
+skinparam packageTitleAlignment left
+
+title C4 Niveau 1 (System Context Diagram) — Écosystème OmniClaim AI & Frontières Externes
+
+note as N1
+1. Type : Diagramme de Contexte Système C4 (Niveau 1)
+2. Utilité : Définir les frontières du système d'information, les acteurs humains et les partenaires tiers
+3. Standard : Modèle C4 (Simon Brown) / TOGAF 10 ADM Phase A & B
+4. Équivalent UML : Diagramme de Cas d'Utilisation / Contexte Global
+5. Résumé : Plateforme OmniClaim AI interconnectée aux assurés, experts, banques SEPA et registres
+end note
+
+package "Acteurs Humains (Rôles Métier)" as USERS #FDEDEC {
+    actor "Assuré / Client Final\n==Déclaration mobile & Web\nSuivi indemnisation 15 min" as USER_CLIENT #FADBD8
+    actor "Artisans & Experts Partenaires\n==Carrossiers, réparateurs\nUpload devis & factures PDF" as USER_EXPERT #FADBD8
+    actor "Gestionnaire Sinistres AssurGlobal\n==Portail d'Arbitrage HITL\nValidation dossiers > 2 000 €" as USER_HITL #FADBD8
+}
+
+package "Système Cœur de Métier (AssurGlobal)" as CORE_SYS #EBF5FB {
+    rectangle "Plateforme OmniClaim AI\n==Système Intelligent de Traitement Sinistres\nIngestion Temps Réel, Inférence Multimodale,\nDétection de Fraude & Paiement Automatisé" as SYSTEM_OMNICLAIM #3498DB
+}
+
+package "Systèmes Externes & Partenaires Réglementés" as EXT_SYS #E8F8F5 {
+    rectangle "Passerelle Bancaire SEPA\n==Virements instantanés pacs.008\nRèglement automatisé < 2 000 €" as BANK_SYS #A3E4D7
+    rectangle "Fournisseur d'Identité OIDC\n==FranceConnect / Portail Client\nAuthentification forte mTLS" as IDP_SYS #A3E4D7
+    rectangle "Registres Officiels & Référentiels\n==SIV (Système Immatriculation)\nRegistre National des Véhicules" as REG_SYS #A3E4D7
+    rectangle "Système de Gestion Contrats (Legacy)\n==Vérification des garanties souscrites\net franchises applicables" as LEGACY_CONTRACTS #FAD7A0
+}
+
+USER_CLIENT --> SYSTEM_OMNICLAIM : 1. Déclaration sinistre & photos dégâts (HTTPS)
+USER_EXPERT --> SYSTEM_OMNICLAIM : 2. Soumission devis chiffré & factures (Portail Partenaire)
+SYSTEM_OMNICLAIM --> USER_HITL : 3. Routage suspension si montant > 2000 € ou fraude >= 0.15
+USER_HITL --> SYSTEM_OMNICLAIM : 4. Décision d'arbitrage & approbation humaine
+
+SYSTEM_OMNICLAIM --> IDP_SYS : Validation identité assurée (OAuth 2.0 / JWT)
+SYSTEM_OMNICLAIM --> REG_SYS : Vérification carte grise & historique véhicule
+SYSTEM_OMNICLAIM --> LEGACY_CONTRACTS : Contrôle plafonds & garanties du contrat
+SYSTEM_OMNICLAIM --> BANK_SYS : 5. Ordre de virement bancaire automatique (ISO 20022)
+
+legend right
+| Couleur | Rôle dans l'Écosystème |
+| #FADBD8 | Utilisateurs finaux et partenaires métier |
+| #3498DB | Système OmniClaim AI (Frontière d'étude) |
+| #A3E4D7 / #FAD7A0 | Systèmes bancaires, d'identité et registres externes |
+endlegend
+
+@enduml

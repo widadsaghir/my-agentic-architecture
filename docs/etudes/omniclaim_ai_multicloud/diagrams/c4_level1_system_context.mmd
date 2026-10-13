@@ -1,0 +1,34 @@
+flowchart TD
+    subgraph USERS["Acteurs Humains (Rôles Métier)"]
+        CLIENT["Assuré / Client Final"]
+        EXPERT["Artisans et Experts Partenaires"]
+        GESTIONNAIRE["Gestionnaire Sinistres AssurGlobal (Portail HITL)"]
+    end
+
+    subgraph SYSTEM_BORDER["Périmètre AssurGlobal"]
+        OMNICLAIM["Plateforme OmniClaim AI (Cœur Ingestion & Inférence)"]
+    end
+
+    subgraph PARTENAIRES["Systèmes Externes & Partenaires Réglementés"]
+        BANQUE["Passerelle Bancaire SEPA (ISO 20022 pacs.008)"]
+        IDP["Fournisseur d'Identité OIDC (FranceConnect / Portail)"]
+        SIV["Registres Officiels (SIV Immatriculations)"]
+        CONTRACTS["Système Gestion Contrats (Legacy)"]
+    end
+
+    CLIENT -->|"1. Déclaration sinistre et photos dégâts"| OMNICLAIM
+    EXPERT -->|"2. Soumission devis chiffré et factures"| OMNICLAIM
+    OMNICLAIM -->|"3. Routage si montant sup. à 2000 € ou fraude sup. à 0.15"| GESTIONNAIRE
+    GESTIONNAIRE -->|"4. Décision arbitrage et déblocage"| OMNICLAIM
+
+    OMNICLAIM -->|"Vérification identité assurée"| IDP
+    OMNICLAIM -->|"Vérification carte grise et véhicule"| SIV
+    OMNICLAIM -->|"Contrôle garanties et franchises"| CONTRACTS
+    OMNICLAIM -->|"5. Ordre de virement bancaire automatique"| BANQUE
+
+    classDef user fill:#FADBD8,stroke:#C0392B,stroke-width:2px;
+    classDef core fill:#AED6F1,stroke:#2980B9,stroke-width:3px;
+    classDef ext fill:#D5F5E3,stroke:#27AE60,stroke-width:2px;
+    class CLIENT,EXPERT,GESTIONNAIRE user;
+    class OMNICLAIM core;
+    class BANQUE,IDP,SIV,CONTRACTS ext;

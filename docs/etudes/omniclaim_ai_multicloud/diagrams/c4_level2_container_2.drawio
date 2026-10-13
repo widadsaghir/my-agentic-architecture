@@ -1,1 +1,99 @@
-<mxfile host="Electron" version="21.6.8" type="device"><diagram id="ArchDiagram" name="Schéma c4_level2_container_2"><mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff"><root><mxCell id="0" /><mxCell id="1" parent="0" /><mxCell id="Service_A" value="Composant Amont" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=12;fontStyle=1" vertex="1" parent="1"><mxGeometry x="80" y="80" width="180" height="70" as="geometry" /></mxCell><mxCell id="Service_B" value="Composant Aval" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=12;fontStyle=1" vertex="1" parent="1"><mxGeometry x="300" y="200" width="180" height="70" as="geometry" /></mxCell><mxCell id="edge_0" value="Flux Sécurisé" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F618D;strokeWidth=2;" edge="1" parent="1" source="Service_A" target="Service_B"><mxGeometry relative="1" as="geometry" /></mxCell></root></mxGraphModel></diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2026-10-13T14:46:00.000Z" agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="diagram_c4_l2" name="C4 Niveau 2 Container Multi-Cloud">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1100" background="#FFFFFF">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Note Cartouche -->
+        <mxCell id="cartouche_l2" value="&lt;b&gt;C4 Niveau 2 : Container Diagram — Topologie Hybride Multi-Cloud &amp;amp; IA&lt;/b&gt;&lt;br&gt;&lt;hr&gt;• Framework : C4 Model (Simon Brown) / TOGAF 10 ADM Phase C&lt;br&gt;• Architecture : AWS Event Ingestion (Kafka MSK / EKS) + Azure Cognitive Enclave (Private Endpoints C2 MASSIF)&lt;br&gt;• Sécurité : Liaison chiffrée Direct Connect &amp;lt; 3ms, zéro exposition internet des LLMs" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#E8F8F5;strokeColor=#1ABC9C;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="700" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Container AWS -->
+        <mxCell id="cont_aws" value="Cloud AWS (Zone Ingestion Temps Réel &amp; Microservices EKS)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFF8E7;strokeColor=#F39C12;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="600" height="620" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_gw" value="&lt;b&gt;Amazon API Gateway &amp;amp; AWS WAF&lt;/b&gt;&lt;br&gt;mTLS, Rate Limiting &amp;amp; Anti-DDoS&lt;br&gt;&lt;font color='#888888'&gt;Port HTTPS 443&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=#D35400;fontColor=#FFFFFF;" vertex="1" parent="cont_aws">
+          <mxGeometry x="30" y="50" width="240" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_msk" value="&lt;b&gt;Amazon MSK (Kafka Streaming)&lt;/b&gt;&lt;br&gt;24 Partitions | Rétention 7 jours&lt;br&gt;&lt;font color='#888888'&gt;Débit 6.94 Mo/s en pic tempête&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5B041;strokeColor=#D68910;" vertex="1" parent="cont_aws">
+          <mxGeometry x="320" y="50" width="250" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_eks" value="&lt;b&gt;Cluster Amazon EKS (K8s 1.30)&lt;/b&gt;&lt;br&gt;Microservices Métier Hexagonaux&lt;br&gt;35 Pods actifs en pic x10 (KEDA autoscaler)&lt;br&gt;Node Groups m6i.4xlarge (16 vCPU, 64 Go)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#2980B9;fontSize=12;" vertex="1" parent="cont_aws">
+          <mxGeometry x="30" y="160" width="540" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_s3" value="&lt;b&gt;Data Lake S3 Immuable&lt;/b&gt;&lt;br&gt;Bucket Object Lock (WORM)&lt;br&gt;Chiffrement KMS CMK Dédié&lt;br&gt;Stockage Photos &amp;amp; Devis 40 To" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#FAD7A0;strokeColor=#E67E22;" vertex="1" parent="cont_aws">
+          <mxGeometry x="30" y="290" width="250" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_aurora" value="&lt;b&gt;Amazon Aurora PostgreSQL&lt;/b&gt;&lt;br&gt;db.r6g.4xlarge Multi-AZ (3 AZs)&lt;br&gt;Pool PgBouncer 500 Connexions&lt;br&gt;Transactional Outbox Pattern" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_aws">
+          <mxGeometry x="320" y="290" width="250" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_kms" value="&lt;b&gt;AWS KMS (Customer Managed Key)&lt;/b&gt;&lt;br&gt;Clé Maîtresse Dédiée C2 MASSIF&lt;br&gt;Rotation annuelle automatique" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5CBA7;strokeColor=#DC7633;" vertex="1" parent="cont_aws">
+          <mxGeometry x="30" y="420" width="540" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_pii" value="&lt;b&gt;Filtre Local Dé-identification PII&lt;/b&gt;&lt;br&gt;Masquage déterministe NIR, IBAN, noms avant sortie réseau" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4EFDF;strokeColor=#2ECC71;" vertex="1" parent="cont_aws">
+          <mxGeometry x="30" y="510" width="540" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Container Interconnexion -->
+        <mxCell id="cont_interco" value="Interconnexion Dédiée Cloud-to-Cloud" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E8F8F5;strokeColor=#16A085;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="680" y="320" width="280" height="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_dc" value="&lt;b&gt;AWS Direct Connect &amp;lt;=&amp;gt; Azure ExpressRoute&lt;/b&gt;&lt;br&gt;Liaison Fibre Dédiée 10 Gbps&lt;br&gt;Chiffrement IPsec de bout en bout&lt;br&gt;&lt;font color='#27AE60'&gt;Latence garantie &amp;lt; 3 ms&lt;/font&gt;&lt;br&gt;&lt;font color='#922B21'&gt;Zéro transit sur Internet Public&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A3E4D7;strokeColor=#16A085;" vertex="1" parent="cont_interco">
+          <mxGeometry x="20" y="50" width="240" height="170" as="geometry"/>
+        </mxCell>
+
+        <!-- Container Azure -->
+        <mxCell id="cont_azure" value="Cloud Azure (Zone Cognitive &amp; Enclave IA Souveraine C2 MASSIF)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EBF5FB;strokeColor=#2980B9;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="160" width="600" height="620" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_vnet" value="&lt;b&gt;Azure Virtual Network Isolé&lt;/b&gt;&lt;br&gt;Private Subnets (Zero Public IP) | Network Security Groups" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0089D6;strokeColor=#004C87;fontColor=#FFFFFF;" vertex="1" parent="cont_azure">
+          <mxGeometry x="30" y="50" width="540" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_guard" value="&lt;b&gt;Garde-Fous IA (Azure AI Content Safety &amp;amp; NeMo)&lt;/b&gt;&lt;br&gt;Détection Anti-Prompt Injection, Jailbreak &amp;amp; Modération" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85C1E9;strokeColor=#2980B9;" vertex="1" parent="cont_azure">
+          <mxGeometry x="30" y="130" width="540" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_llm" value="&lt;b&gt;Enclave Cognitive Privée (Azure OpenAI &amp;amp; Llama-3 70B GPU)&lt;/b&gt;&lt;br&gt;Modèles Multimodaux Dédiés | Quota PTU Réservé&lt;br&gt;&lt;font color='#27AE60'&gt;Engagement Contractuel : 0 Apprentissage sur Données Client&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5DADE2;strokeColor=#1B4F72;fontColor=#FFFFFF;" vertex="1" parent="cont_azure">
+          <mxGeometry x="30" y="230" width="540" height="85" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_search" value="&lt;b&gt;Azure AI Search (Vector Database)&lt;/b&gt;&lt;br&gt;Embeddings vectoriels des sinistres historiques&lt;br&gt;Graphes de corrélation de fraudes récurrentes" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#A9DFBF;strokeColor=#229954;" vertex="1" parent="cont_azure">
+          <mxGeometry x="30" y="350" width="250" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_akv" value="&lt;b&gt;Azure Key Vault HSM&lt;/b&gt;&lt;br&gt;Module Cryptographique FIPS 140-2 L3&lt;br&gt;Gestion des clés CMK Azure &amp;amp; Secrets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="cont_azure">
+          <mxGeometry x="320" y="350" width="250" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="node_pe" value="&lt;b&gt;Azure Private Endpoints&lt;/b&gt;&lt;br&gt;Points de terminaison 100% privés intégrés au VNet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F8F5;strokeColor=#16A085;" vertex="1" parent="cont_azure">
+          <mxGeometry x="30" y="480" width="540" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Flux Connecteurs -->
+        <mxCell id="f1" value="1. Déclaration" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_gw" target="node_msk" parent="1"/>
+        <mxCell id="f2" value="2. Stream Kafka" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_msk" target="node_eks" parent="1"/>
+        <mxCell id="f3" value="Stockage brut" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_eks" target="node_s3" parent="1"/>
+        <mxCell id="f4" value="Outbox &amp; State" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_eks" target="node_aurora" parent="1"/>
+        <mxCell id="f5" value="3. Dé-identification" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_eks" target="node_pii" parent="1"/>
+        <mxCell id="f6" value="4. Direct Connect" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=3;strokeColor=#16A085;" edge="1" source="node_pii" target="node_dc" parent="1"/>
+        <mxCell id="f7" value="5. ExpressRoute" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=3;strokeColor=#16A085;" edge="1" source="node_dc" target="node_vnet" parent="1"/>
+        <mxCell id="f8" value="Filtre Safety" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_vnet" target="node_guard" parent="1"/>
+        <mxCell id="f9" value="6. Inférence IA" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_guard" target="node_llm" parent="1"/>
+        <mxCell id="f10" value="Index sémantique" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_llm" target="node_search" parent="1"/>
+        <mxCell id="f11" value="Clés CMK HSM" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_llm" target="node_akv" parent="1"/>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

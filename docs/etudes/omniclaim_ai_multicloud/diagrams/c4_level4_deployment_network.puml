@@ -1,17 +1,80 @@
 @startuml
 skinparam defaultFontSize 16
 skinparam defaultFontColor #000000
-title Schéma c4_level4_deployment_network
+skinparam roundCorner 10
+skinparam linetype ortho
+skinparam packageTitleAlignment left
+
+title C4 Niveau 4 (Deployment Diagram) — Topologie Réseau Physique Multi-AZ AWS & Azure
 
 note as N1
-1. Type: C4 Architecture
-2. Utilité: Vue c4_level4_deployment_network
-3. Standard: C4 / TOGAF
-4. UML: Component/Deployment
-5. Résumé: Flux d'architecture cible
+1. Type : Diagramme de Déploiement C4 (Niveau 4)
+2. Utilité : Cartographie physique des VPC, sous-réseaux, zones de disponibilité et peering cloud
+3. Standard : Modèle C4 / TOGAF 10 ADM Phase D (Architecture Technique & Infrastructure)
+4. Équivalent UML : Diagramme de Déploiement Physique & Réseau
+5. Résumé : AWS Multi-AZ (3 AZs) interconnecté via Direct Connect à l'enclave Azure PrivateLink
 end note
 
-rectangle "Composant Principal" as CP #D4E6F1
-rectangle "Enclave Sécurisée" as ES #D5F5E3
-CP --> ES : Flux Chiffré
+package "AWS Region eu-west-1 (Irlande) — VPC var.vpc_cidr_block" as AWS_VPC #FFF9E6 {
+    package "Availability Zone eu-west-1a" as AZ_A #FEF5E7 {
+        rectangle "Subnet Public AZ-A\n==NAT Gateway & ALB Node A" as PUB_A #F8C471
+        rectangle "Subnet Privé App AZ-A\n==EKS Worker Node A (m6i.4xlarge)\nPods ClaimService (Istio Mesh)" as APP_A #AED6F1
+        database "Subnet Isolé Données AZ-A\n==Aurora PostgreSQL Primary (Write)\n==Broker MSK Kafka Node 01" as DATA_A #D5F5E3
+    }
+
+    package "Availability Zone eu-west-1b" as AZ_B #FEF5E7 {
+        rectangle "Subnet Public AZ-B\n==ALB Node B (Failover)" as PUB_B #F8C471
+        rectangle "Subnet Privé App AZ-B\n==EKS Worker Node B (m6i.4xlarge)\nPods ClaimService (Istio Mesh)" as APP_B #AED6F1
+        database "Subnet Isolé Données AZ-B\n==Aurora PostgreSQL Read Replica 01\n==Broker MSK Kafka Node 02" as DATA_B #D5F5E3
+    }
+
+    package "Availability Zone eu-west-1c" as AZ_C #FEF5E7 {
+        rectangle "Subnet Privé App AZ-C\n==EKS Worker Node C (Standby)" as APP_C #AED6F1
+        database "Subnet Isolé Données AZ-C\n==Aurora PostgreSQL Read Replica 02\n==Broker MSK Kafka Node 03" as DATA_C #D5F5E3
+    }
+
+    rectangle "AWS Transit Gateway & Direct Connect GW\n==Attachement VPC & BGP Peering" as AWS_TGW #F39C12
+}
+
+package "Interconnexion Télécom Dédiée (Equinix Cloud Exchange)" as TELCO #E8F8F5 {
+    rectangle "Liaison Fibre Dédiée 10 Gbps Redondée\n==IPsec AES-GCM 256 bits | Latence < 3ms\nZéro transit sur Internet Public" as FIBRE #1ABC9C
+}
+
+package "Azure Region francecentral (Paris) — VNet var.azure_vnet_cidr" as AZURE_VNET #EBF5FB {
+    rectangle "Azure ExpressRoute Gateway\n==Terminaison IPsec & Peering Privé" as AZ_GW #0089D6
+
+    package "Private Subnet Cognitive (Zéro IP Publique)" as AZ_SUB {
+        rectangle "Private Endpoint : Azure OpenAI\n==Inférence GPT-4o / Llama-3 70B" as PE_AI #5DADE2
+        rectangle "Private Endpoint : Azure AI Search\n==Index Vectoriel Sinistres" as PE_SEARCH #A9DFBF
+        rectangle "Private Endpoint : Azure Key Vault\n==HSM FIPS 140-2 Level 3" as PE_AKV #FADBD8
+    }
+}
+
+PUB_A --> APP_A : Routage mTLS
+PUB_B --> APP_B : Routage mTLS
+
+APP_A --> DATA_A : JDBC / Kafka Write
+APP_B --> DATA_B : Read Replica / Kafka
+APP_C --> DATA_C : Read Replica / Kafka
+
+DATA_A <--> DATA_B : Réplication synchrone Aurora
+DATA_A <--> DATA_C : Réplication synchrone Aurora
+
+APP_A --> AWS_TGW : Flux d'inférence privé
+APP_B --> AWS_TGW : Flux d'inférence privé
+
+AWS_TGW <--> FIBRE : 10 Gbps Dédié
+FIBRE <--> AZ_GW : 10 Gbps Dédié
+
+AZ_GW --> PE_AI : PrivateLink sécurisé
+AZ_GW --> PE_SEARCH : PrivateLink sécurisé
+AZ_GW --> PE_AKV : PrivateLink sécurisé
+
+legend right
+| Couleur | Zone Réseau & Résilience |
+| #FEF5E7 | AWS Multi-AZ (Tolérance panne datacenter : RTO < 15 min, RPO = 0) |
+| #1ABC9C | Liaison Fibre Dédiée Redondée (Direct Connect / ExpressRoute) |
+| #EBF5FB | Enclave IA Souveraine Azure (100% Private Endpoints C2 MASSIF) |
+endlegend
+
 @enduml

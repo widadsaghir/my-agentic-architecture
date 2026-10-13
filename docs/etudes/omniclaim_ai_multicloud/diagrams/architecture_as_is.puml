@@ -1,0 +1,70 @@
+@startuml
+skinparam defaultFontSize 16
+skinparam defaultFontColor #000000
+skinparam roundCorner 10
+skinparam linetype ortho
+skinparam packageTitleAlignment left
+
+title Architecture Technique Existante (AS-IS) — Monolithe On-Premise AssurGlobal
+
+note as N1
+1. Type : Schéma d'Architecture Technique Existante (AS-IS)
+2. Utilité : Mettre en évidence les goulets d'étranglement, dettes techniques et SPOF
+3. Standard : Modélisation d'Architecture d'Entreprise (TOGAF 10 ADM Phase B)
+4. Équivalent UML : Diagramme de Déploiement & Composants Physiques
+5. Résumé : Monolithe WebLogic 12c sur Oracle 19c RAC avec contention nocturne de 8h
+end note
+
+package "Canaux d'Acquisition (Clients & Partenaires)" as CANAUX {
+    rectangle "Portail Web Assuré\n==JSP / Struts 1.3\n(Port HTTPS 443)" as WEB #FADBD8
+    rectangle "Postes Agences & Courtage\n==Client Lourd VB.NET\n(Port SOAP 7001)" as AGENCE #FADBD8
+    rectangle "Partenaires Experts\n==Flux Batch Plat\n(Port FTP 21)" as EXPERT #FADBD8
+}
+
+package "Datacenter On-Premise Historique (SPOF Majeur)" as DC {
+    rectangle "Pare-feu Physique Périmétrique\n==CheckPoint HA Actif/Passif" as FW #EDBB99
+
+    package "Cluster Applicatif WebLogic 12c (VMware ESXi)" as APP_TIER {
+        rectangle "Instance WebLogic Srv01\n==32 vCPU | 128 Go RAM\nJVM HotSpot 1.8" as SRV1 #F5B7B1
+        rectangle "Instance WebLogic Srv02\n==32 vCPU | 128 Go RAM\nJVM HotSpot 1.8" as SRV2 #F5B7B1
+    }
+
+    package "Moteur Batch Nocturne (PL/SQL Legacy)" as BATCH_TIER {
+        rectangle "Ordonnanceur Control-M\n==Batchs PL/SQL (22h - 06h)\nCalcul d'indemnisation 8h" as BATCH #FAD7A0
+        rectangle "Contention Transactionnelle\n==TX Locks exclusifs sur\nTABLE CLAIM_SETTLEMENT" as LOCK #F5CBA7
+    }
+
+    package "Tier Données & Persistance" as DB_TIER {
+        database "Cluster Oracle 19c RAC 01\n==Baie SAN Fibre Channel\nASM Storage" as ORA1 #D5F5E3
+        database "Cluster Oracle 19c RAC 02\n==Baie SAN Fibre Channel\nASM Storage" as ORA2 #D5F5E3
+    }
+
+    package "Stockage Fichiers Non Indexé" as NAS_TIER {
+        database "Serveur NAS NetApp\n==Volume NFS v3 (40 To)\nPhotos JPEG & Devis PDF" as NAS #D4E6F1
+    }
+}
+
+WEB --> FW : Flux Web Assuré
+AGENCE --> FW : Flux Agences
+EXPERT --> FW : Upload Devis FTP
+
+FW --> SRV1 : Load Balancing Hardware (F5)
+FW --> SRV2 : Load Balancing Hardware (F5)
+
+SRV1 --> ORA1 : JDBC Synchrone (Pool 200 conn.)
+SRV2 --> ORA2 : JDBC Synchrone (Pool 200 conn.)
+SRV1 --> NAS : Montage NFS (Latence I/O)
+SRV2 --> NAS : Montage NFS (Latence I/O)
+
+BATCH --> ORA1 : Exécution scripts PL/SQL
+BATCH --> LOCK : Génération verrous
+LOCK ..> APP_TIER : Blocage des requêtes temps réel
+
+legend right
+| Couleur | Signification |
+| #FADBD8 / #F5B7B1 | Composant Legacy / Dette Technique Critique |
+| #FAD7A0 / #F5CBA7 | Point de Contention Majeur (SPOF / Verrous) |
+| #D5F5E3 / #D4E6F1 | Persistance Données On-Premise |
+endlegend
+
+@enduml

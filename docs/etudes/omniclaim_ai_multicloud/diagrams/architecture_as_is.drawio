@@ -1,0 +1,110 @@
+<mxfile host="app.diagrams.net" modified="2026-10-13T14:45:00.000Z" agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="diagram_as_is" name="Architecture Technique AS-IS">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" background="#FFFFFF">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Note Explicative Cartouche -->
+        <mxCell id="note_cartouche" value="&lt;b&gt;Dossier d'Architecture Technique (DAT) — État Existant (AS-IS)&lt;/b&gt;&lt;br&gt;&lt;hr&gt;• Standard : TOGAF 10 ADM (Phase B Business &amp;amp; IT Architecture)&lt;br&gt;• Équivalent UML : Deployment Diagram&lt;br&gt;• Constat : Monolithe WebLogic 12c sur VMWARE &amp;amp; Oracle 19c RAC (SPOF et contention 8h)" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="580" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Container Canaux d'Acquisition -->
+        <mxCell id="cont_canaux" value="Canaux d'Acquisition (Clients &amp; Partenaires)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FDEDEC;strokeColor=#E6B0AA;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="340" height="520" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_web" value="&lt;b&gt;Portail Assuré Monolithique&lt;/b&gt;&lt;br&gt;JSP / Struts 1.3&lt;br&gt;&lt;font color='#888888'&gt;Port HTTPS 443&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="cont_canaux">
+          <mxGeometry x="30" y="60" width="280" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_agence" value="&lt;b&gt;Postes Agences &amp;amp; Courtage&lt;/b&gt;&lt;br&gt;Client Lourd VB.NET Legacy&lt;br&gt;&lt;font color='#888888'&gt;Port SOAP RPC 7001&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="cont_canaux">
+          <mxGeometry x="30" y="180" width="280" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_expert" value="&lt;b&gt;Partenaires Experts &amp;amp; Garages&lt;/b&gt;&lt;br&gt;Upload Fichiers Batch Plat&lt;br&gt;&lt;font color='#888888'&gt;Port FTP non sécurisé 21&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="cont_canaux">
+          <mxGeometry x="30" y="300" width="280" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Container Datacenter On-Premise -->
+        <mxCell id="cont_dc" value="Datacenter On-Premise Historique (SPOF &amp; Dette Technique)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F4F6F6;strokeColor=#BDC3C7;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="440" y="160" width="1080" height="520" as="geometry"/>
+        </mxCell>
+
+        <!-- Pare-feu -->
+        <mxCell id="node_fw" value="&lt;b&gt;Pare-Feu Physique Périmétrique&lt;/b&gt;&lt;br&gt;CheckPoint HA (Actif/Passif) &amp;amp; F5 Load Balancer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDBB99;strokeColor=#D35400;" vertex="1" parent="cont_dc">
+          <mxGeometry x="40" y="180" width="220" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Cluster WebLogic -->
+        <mxCell id="cont_app" value="Cluster WebLogic 12c (VMware ESXi)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EBF5FB;strokeColor=#AED6F1;fontSize=12;" vertex="1" parent="cont_dc">
+          <mxGeometry x="310" y="50" width="320" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_srv1" value="&lt;b&gt;Instance WebLogic Srv01&lt;/b&gt;&lt;br&gt;32 vCPU | 128 Go RAM&lt;br&gt;Monolithe EAR / Java 8" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4E6F1;strokeColor=#2980B9;" vertex="1" parent="cont_app">
+          <mxGeometry x="30" y="40" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_srv2" value="&lt;b&gt;Instance WebLogic Srv02&lt;/b&gt;&lt;br&gt;32 vCPU | 128 Go RAM&lt;br&gt;Monolithe EAR / Java 8" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4E6F1;strokeColor=#2980B9;" vertex="1" parent="cont_app">
+          <mxGeometry x="30" y="120" width="260" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Batch & Contention -->
+        <mxCell id="cont_batch" value="Moteur Batch Nocturne (Contention)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FEF9E7;strokeColor=#F9E79F;fontSize=12;" vertex="1" parent="cont_dc">
+          <mxGeometry x="310" y="280" width="320" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_batch" value="&lt;b&gt;Ordonnanceur Control-M&lt;/b&gt;&lt;br&gt;Scripts PL/SQL Nocturnes (22h - 06h)&lt;br&gt;&lt;font color='#C0392B'&gt;Durée de calcul : 8 heures&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCF3CF;strokeColor=#F39C12;" vertex="1" parent="cont_batch">
+          <mxGeometry x="30" y="40" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_lock" value="&lt;b&gt;Contention Transactionnelle&lt;/b&gt;&lt;br&gt;Verrous exclusifs (TX Locks)&lt;br&gt;&lt;font color='#922B21'&gt;TABLE CLAIM_SETTLEMENT bloquée&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;strokeWidth=2;" vertex="1" parent="cont_batch">
+          <mxGeometry x="30" y="120" width="260" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Persistance Oracle RAC -->
+        <mxCell id="cont_oracle" value="Tier Persistance Données (Oracle RAC)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E8F8F5;strokeColor=#A3E4D7;fontSize=12;" vertex="1" parent="cont_dc">
+          <mxGeometry x="680" y="50" width="360" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_ora1" value="&lt;b&gt;Cluster Oracle 19c RAC Nœud 01&lt;/b&gt;&lt;br&gt;Baie SAN Fibre Channel | ASM Storage&lt;br&gt;&lt;font color='#888888'&gt;SGBD Relationnel Monolithique&lt;/font&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_oracle">
+          <mxGeometry x="40" y="40" width="280" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_ora2" value="&lt;b&gt;Cluster Oracle 19c RAC Nœud 02&lt;/b&gt;&lt;br&gt;Baie SAN Fibre Channel | ASM Storage" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_oracle">
+          <mxGeometry x="40" y="125" width="280" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Stockage Fichiers NAS -->
+        <mxCell id="cont_nas" value="Stockage Documents Partagé" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EAECEE;strokeColor=#D5D8DC;fontSize=12;" vertex="1" parent="cont_dc">
+          <mxGeometry x="680" y="280" width="360" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_nas" value="&lt;b&gt;Serveur NAS NetApp NFS v3&lt;/b&gt;&lt;br&gt;Volume Disque 40 To Non Indexé&lt;br&gt;Photos JPEG &amp;amp; Devis PDF Non Structurés&lt;br&gt;&lt;font color='#C0392B'&gt;Latence I/O et saturation I/O en pic&lt;/font&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#E8F8F5;strokeColor=#16A085;" vertex="1" parent="cont_nas">
+          <mxGeometry x="40" y="55" width="280" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- Connexions Flux -->
+        <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#C0392B;" edge="1" source="node_web" target="node_fw" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#C0392B;" edge="1" source="node_agence" target="node_fw" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#C0392B;" edge="1" source="node_expert" target="node_fw" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge4" value="LB F5 Hardware" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" source="node_fw" target="node_srv1" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" source="node_fw" target="node_srv2" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge6" value="JDBC Synchrone" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" source="node_srv1" target="node_ora1" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge7" value="Montage NFS v3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#16A085;" edge="1" source="node_srv2" target="node_nas" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge8" value="Batch 8h" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#F39C12;" edge="1" source="node_batch" target="node_ora1" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge9" value="Blocage TX" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;dashed=1;strokeColor=#C0392B;" edge="1" source="node_lock" target="node_srv2" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

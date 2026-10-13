@@ -1,1 +1,104 @@
-<mxfile host="Electron" version="21.6.8" type="device"><diagram id="ArchDiagram" name="Schéma c4_level3_component_hexagonal"><mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff"><root><mxCell id="0" /><mxCell id="1" parent="0" /><mxCell id="Service_A" value="Composant Amont" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=12;fontStyle=1" vertex="1" parent="1"><mxGeometry x="80" y="80" width="180" height="70" as="geometry" /></mxCell><mxCell id="Service_B" value="Composant Aval" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=12;fontStyle=1" vertex="1" parent="1"><mxGeometry x="300" y="200" width="180" height="70" as="geometry" /></mxCell><mxCell id="edge_0" value="Flux Sécurisé" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F618D;strokeWidth=2;" edge="1" parent="1" source="Service_A" target="Service_B"><mxGeometry relative="1" as="geometry" /></mxCell></root></mxGraphModel></diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2026-10-13T14:47:00.000Z" agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="diagram_c4_l3" name="C4 Niveau 3 Composants Hexagonaux">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1100" background="#FFFFFF">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Note Cartouche -->
+        <mxCell id="cartouche_l3" value="&lt;b&gt;C4 Niveau 3 : Component Diagram — Architecture Hexagonale &amp;amp; DDD&lt;/b&gt;&lt;br&gt;&lt;hr&gt;• Clean Architecture : Ports &amp;amp; Adapters (Alistair Cockburn) + Domain-Driven Design (Eric Evans)&lt;br&gt;• Invariant : Zéro dépendance d'infrastructure dans le Core Domain (Spring, AWS SDK, Azure bannis du domaine)&lt;br&gt;• Testabilité : Couverture TDD 100% sur l'Agrégat Racine Claim et les Value Objects" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#FEF9E7;strokeColor=#F1C40F;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="750" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Container Inbound Adapters -->
+        <mxCell id="cont_inbound" value="Inbound Adapters (Adaptateurs Primaires / Pilotes)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EBF5FB;strokeColor=#AED6F1;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="340" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_rest" value="&lt;b&gt;ClaimRestController&lt;/b&gt;&lt;br&gt;OpenAPI 3.0 / mTLS&lt;br&gt;Validation des DTO entrants" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4E6F1;strokeColor=#2980B9;" vertex="1" parent="cont_inbound">
+          <mxGeometry x="30" y="60" width="280" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_kafka_in" value="&lt;b&gt;ClaimKafkaEventConsumer&lt;/b&gt;&lt;br&gt;MSK Streaming Consumer&lt;br&gt;Gestion Idempotence &amp;amp; DLT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4E6F1;strokeColor=#2980B9;" vertex="1" parent="cont_inbound">
+          <mxGeometry x="30" y="220" width="280" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_hitl_in" value="&lt;b&gt;HitlBackofficeController&lt;/b&gt;&lt;br&gt;Portail Gestionnaires Sinistres&lt;br&gt;Validation arbitrage humain &amp;gt; 2k€" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4E6F1;strokeColor=#2980B9;" vertex="1" parent="cont_inbound">
+          <mxGeometry x="30" y="380" width="280" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Container Core Domain -->
+        <mxCell id="cont_domain" value="Core Domain (Cœur de Métier DDD Pur — Zéro Dépendance Framework)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E8F8F5;strokeColor=#A3E4D7;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="420" y="160" width="800" height="600" as="geometry"/>
+        </mxCell>
+
+        <!-- Ports Entrants -->
+        <mxCell id="p_in1" value="&lt;i&gt;&amp;lt;&amp;lt;Port Inbound&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;SubmitClaimUseCase&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_domain">
+          <mxGeometry x="40" y="60" width="200" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_in2" value="&lt;i&gt;&amp;lt;&amp;lt;Port Inbound&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;ReviewHitlClaimUseCase&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_domain">
+          <mxGeometry x="40" y="380" width="200" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Agrégat Racine -->
+        <mxCell id="agg_claim" value="&lt;b&gt;Agrégat Racine : Claim&lt;/b&gt;&lt;br&gt;État du sinistre : SUBMITTED, IN_REVIEW, APPROVED, REJECTED&lt;br&gt;Validation des règles métier et invariants" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2ECC71;strokeColor=#1E8449;fontColor=#FFFFFF;fontStyle=1;" vertex="1" parent="cont_domain">
+          <mxGeometry x="280" y="180" width="260" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- Value Objects -->
+        <mxCell id="vo_box" value="&lt;b&gt;Value Objects Immuables&lt;/b&gt;&lt;br&gt;• ClaimAmount (cents: int)&lt;br&gt;• FraudScore (score: float)&lt;br&gt;• VehiclePlate / PolicyNumber" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9DFBF;strokeColor=#229954;" vertex="1" parent="cont_domain">
+          <mxGeometry x="280" y="340" width="260" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Domain Service -->
+        <mxCell id="dom_srv" value="&lt;b&gt;Domain Service : IndemnificationPolicy&lt;/b&gt;&lt;br&gt;Règle HITL : Si montant &amp;gt; 2 000 € ou fraude &amp;gt;= 0.15 ➔ Suspension" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9DFBF;strokeColor=#229954;" vertex="1" parent="cont_domain">
+          <mxGeometry x="280" y="450" width="260" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Ports Sortants SPI -->
+        <mxCell id="spi_ai" value="&lt;i&gt;&amp;lt;&amp;lt;Port Outbound SPI&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;ClaimAnalyzerPort&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_domain">
+          <mxGeometry x="580" y="60" width="190" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="spi_evt" value="&lt;i&gt;&amp;lt;&amp;lt;Port Outbound SPI&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;EventPublisherPort&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_domain">
+          <mxGeometry x="580" y="180" width="190" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="spi_repo" value="&lt;i&gt;&amp;lt;&amp;lt;Port Outbound SPI&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;ClaimRepositoryPort&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_domain">
+          <mxGeometry x="580" y="300" width="190" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="spi_pay" value="&lt;i&gt;&amp;lt;&amp;lt;Port Outbound SPI&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;PaymentGatewayPort&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_domain">
+          <mxGeometry x="580" y="420" width="190" height="65" as="geometry"/>
+        </mxCell>
+
+        <!-- Container Outbound Adapters -->
+        <mxCell id="cont_outbound" value="Outbound Adapters (Adaptateurs Secondaires d'Infrastructure)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FDEDEC;strokeColor=#F5B7B1;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="160" width="480" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="ad_ai" value="&lt;b&gt;AzureOpenAiAdapter&lt;/b&gt;&lt;br&gt;Client WebClient PrivateLink &amp;amp; Circuit Breaker (Resilience4j)&lt;br&gt;Appel LLM anonymisé (Score Fraude, Extraction devis)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="cont_outbound">
+          <mxGeometry x="30" y="55" width="420" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ad_evt" value="&lt;b&gt;KafkaTransactionalOutboxAdapter&lt;/b&gt;&lt;br&gt;Émission Événements MSK via Table Outbox&lt;br&gt;Garantie de non-perte de messages transactionnels" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="cont_outbound">
+          <mxGeometry x="30" y="175" width="420" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ad_repo" value="&lt;b&gt;PostgresAuroraRepositoryAdapter&lt;/b&gt;&lt;br&gt;Spring Data JDBC / Idempotence DB&lt;br&gt;Pool PgBouncer &amp;amp; Chiffrement KMS CMK" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="cont_outbound">
+          <mxGeometry x="30" y="295" width="420" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ad_pay" value="&lt;b&gt;SepaPaymentGatewayAdapter&lt;/b&gt;&lt;br&gt;Génération messages bancaires ISO 20022 (pacs.008)&lt;br&gt;Clés d'idempotence X-Request-ID (UUID v4)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="cont_outbound">
+          <mxGeometry x="30" y="415" width="420" height="75" as="geometry"/>
+        </mxCell>
+
+        <!-- Relations -->
+        <mxCell id="r1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_rest" target="p_in1" parent="1"/>
+        <mxCell id="r2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_kafka_in" target="p_in1" parent="1"/>
+        <mxCell id="r3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="node_hitl_in" target="p_in2" parent="1"/>
+        <mxCell id="r4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="p_in1" target="agg_claim" parent="1"/>
+        <mxCell id="r5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="p_in2" target="agg_claim" parent="1"/>
+        <mxCell id="r6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="agg_claim" target="spi_ai" parent="1"/>
+        <mxCell id="r7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="agg_claim" target="spi_evt" parent="1"/>
+        <mxCell id="r8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="agg_claim" target="spi_repo" parent="1"/>
+        <mxCell id="r9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="agg_claim" target="spi_pay" parent="1"/>
+        <mxCell id="r10" value="Implémente" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;dashed=1;strokeColor=#C0392B;" edge="1" source="ad_ai" target="spi_ai" parent="1"/>
+        <mxCell id="r11" value="Implémente" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;dashed=1;strokeColor=#C0392B;" edge="1" source="ad_evt" target="spi_evt" parent="1"/>
+        <mxCell id="r12" value="Implémente" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;dashed=1;strokeColor=#C0392B;" edge="1" source="ad_repo" target="spi_repo" parent="1"/>
+        <mxCell id="r13" value="Implémente" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;dashed=1;strokeColor=#C0392B;" edge="1" source="ad_pay" target="spi_pay" parent="1"/>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,17 +1,77 @@
 @startuml
 skinparam defaultFontSize 16
 skinparam defaultFontColor #000000
-title Schéma c4_level3_component_hexagonal
+skinparam roundCorner 10
+skinparam linetype ortho
+skinparam packageTitleAlignment left
+
+title C4 Niveau 3 (Component Diagram) — Architecture Hexagonale & Domain-Driven Design (DDD)
 
 note as N1
-1. Type: C4 Architecture
-2. Utilité: Vue c4_level3_component_hexagonal
-3. Standard: C4 / TOGAF
-4. UML: Component/Deployment
-5. Résumé: Flux d'architecture cible
+1. Type : Diagramme de Composants C4 (Niveau 3)
+2. Utilité : Détailler la structure interne découplée du microservice d'instruction des sinistres
+3. Standard : Modèle C4 / Clean Architecture (Alistair Cockburn & Eric Evans)
+4. Équivalent UML : Diagramme de Structure Composite & Composants
+5. Résumé : Cœur de domaine pur isolé des frameworks par Ports & Adapters (TDD 100%)
 end note
 
-rectangle "Composant Principal" as CP #D4E6F1
-rectangle "Enclave Sécurisée" as ES #D5F5E3
-CP --> ES : Flux Chiffré
+package "Inbound Adapters (Adaptateurs Primaires / Pilotes)" as IN_ADAPTERS #EBF5FB {
+    rectangle "ClaimRestController\n==Contrôleur REST Spring\nValidation OpenAPI & mTLS" as REST #AED6F1
+    rectangle "ClaimKafkaEventConsumer\n==Consumer Streaming MSK\nDeserializer Avro & Idempotence" as KAFKA_IN #AED6F1
+    rectangle "HitlBackofficeController\n==API Portail Gestionnaires\nValidation des arbitrages humains" as HITL_CTRL #AED6F1
+}
+
+package "Core Domain (Cœur de Métier DDD Pur — Zéro Dépendance Infra)" as CORE #D5F5E3 {
+    package "Application Layer (Ports Entrants / Use Cases)" as USECASES {
+        interface "SubmitClaimUseCase\n==Interface Port Entrant API" as UC_SUBMIT #A9DFBF
+        interface "ReviewHitlClaimUseCase\n==Interface Port Entrant API" as UC_HITL #A9DFBF
+    }
+
+    package "Domain Layer (Règles Métier & Invariants)" as DOMAIN_MODEL {
+        rectangle "Agrégat Racine : Claim\n==Entité Principale du Sinistre\nInvariants & Transition d'état" as AGG_CLAIM #52BE80
+        rectangle "Value Objects Immuables\n==ClaimAmount (cents: int)\n==FraudScore (val: float)\n==VehiclePlate / NIR" as VO #7DCEA0
+        rectangle "Domain Service : IndemnificationPolicy\n==Calcul des barèmes contractuels\n==Règle d'arbitrage HITL > 2000 €" as DOM_SRV #52BE80
+    }
+
+    package "Outbound Ports (Ports Sortants / SPI)" as OUT_PORTS {
+        interface "ClaimAnalyzerPort\n==Contrat d'Analyse IA Découplé" as SPI_AI #A9DFBF
+        interface "EventPublisherPort\n==Contrat de Publication Événements" as SPI_EVT #A9DFBF
+        interface "ClaimRepositoryPort\n==Contrat de Persistance Sinistre" as SPI_REPO #A9DFBF
+        interface "PaymentGatewayPort\n==Contrat d'Ordre de Virement" as SPI_PAY #A9DFBF
+    }
+}
+
+package "Outbound Adapters (Adaptateurs Secondaires / Dirigés)" as OUT_ADAPTERS #FDEDEC {
+    rectangle "AzureOpenAiAdapter\n==Client WebClient PrivateLink\nCircuit Breaker Resilience4j (2% 5xx)\nRetry Exponentiel & Fallback" as ADAPT_AI #F5B7B1
+    rectangle "KafkaTransactionalOutboxAdapter\n==Publisher Événements MSK\nTransactional Outbox Table" as ADAPT_EVT #F5B7B1
+    rectangle "PostgresAuroraRepositoryAdapter\n==Spring Data JDBC / SQL Idempotent\nPool PgBouncer & Chiffrement CMK" as ADAPT_REPO #F5B7B1
+    rectangle "SepaPaymentGatewayAdapter\n==Générateur XML ISO 20022 (pacs.008)\nIdempotency-Key UUID v4" as ADAPT_PAY #F5B7B1
+}
+
+REST --> UC_SUBMIT : Appelle
+KAFKA_IN --> UC_SUBMIT : Appelle
+HITL_CTRL --> UC_HITL : Appelle
+
+UC_SUBMIT --> AGG_CLAIM : Modifie
+UC_HITL --> AGG_CLAIM : Modifie
+AGG_CLAIM *-- VO : Contient
+AGG_CLAIM --> DOM_SRV : Applique règles
+
+AGG_CLAIM --> SPI_AI : Délègue analyse
+AGG_CLAIM --> SPI_EVT : Émet événement
+AGG_CLAIM --> SPI_REPO : Persiste état
+AGG_CLAIM --> SPI_PAY : Déclenche paiement
+
+ADAPT_AI ..|> SPI_AI : Implémente
+ADAPT_EVT ..|> SPI_EVT : Implémente
+ADAPT_REPO ..|> SPI_REPO : Implémente
+ADAPT_PAY ..|> SPI_PAY : Implémente
+
+legend right
+| Couleur | Rôle dans l'Architecture Hexagonale |
+| #AED6F1 | Adaptateurs Entrants (Pilotes : REST, Kafka, HITL) |
+| #D5F5E3 / #52BE80 | Cœur de Métier Pur DDD (Zéro framework, 100% TDD) |
+| #F5B7B1 | Adaptateurs Sortants (Infrastructure : IA, DB, Outbox, SEPA) |
+endlegend
+
 @enduml

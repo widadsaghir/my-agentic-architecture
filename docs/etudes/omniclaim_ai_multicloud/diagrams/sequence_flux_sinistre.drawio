@@ -1,1 +1,126 @@
-<mxfile host="Electron" version="21.6.8" type="device"><diagram id="ArchDiagram" name="Schéma sequence_flux_sinistre"><mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff"><root><mxCell id="0" /><mxCell id="1" parent="0" /><mxCell id="Service_A" value="Composant Amont" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=12;fontStyle=1" vertex="1" parent="1"><mxGeometry x="80" y="80" width="180" height="70" as="geometry" /></mxCell><mxCell id="Service_B" value="Composant Aval" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AED6F1;strokeColor=#1F618D;fontSize=12;fontStyle=1" vertex="1" parent="1"><mxGeometry x="300" y="200" width="180" height="70" as="geometry" /></mxCell><mxCell id="edge_0" value="Flux Sécurisé" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F618D;strokeWidth=2;" edge="1" parent="1" source="Service_A" target="Service_B"><mxGeometry relative="1" as="geometry" /></mxCell></root></mxGraphModel></diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2026-10-13T14:50:00.000Z" agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="diagram_seq_hitl" name="Diagramme de Séquence HITL">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1100" background="#FFFFFF">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Note Cartouche -->
+        <mxCell id="cartouche_seq" value="&lt;b&gt;Diagramme de Séquence : Flux Nominal &amp;amp; Arbitrage HITL — OmniClaim AI&lt;/b&gt;&lt;br&gt;&lt;hr&gt;• Traitement Temps Réel : Dé-identification PII ➔ Inférence LLM privée ➔ Évaluation barèmes&lt;br&gt;• Cas Simple (&amp;lt; 2 000 € &amp;amp; Fraude &amp;lt; 0.15) : Virement SEPA instantané en 15 minutes (STP 60%)&lt;br&gt;• Cas Complexe (&amp;gt;= 2 000 € ou Fraude &amp;gt;= 0.15) : Suspension et affectation corbeille gestionnaire (HITL)" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="800" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Lifelines (Participants) -->
+        <mxCell id="p_client" value="Assuré (Mobile)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="1">
+          <mxGeometry x="60" y="150" width="120" height="700" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_api" value="API Gateway (AWS)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFE0B2;strokeColor=#FB8C00;" vertex="1" parent="1">
+          <mxGeometry x="230" y="150" width="140" height="700" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_core" value="ClaimService (EKS)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#BBDEFB;strokeColor=#1976D2;" vertex="1" parent="1">
+          <mxGeometry x="420" y="150" width="140" height="700" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_pii" value="Filtre PII Local" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#C8E6C9;strokeColor=#388E3C;" vertex="1" parent="1">
+          <mxGeometry x="610" y="150" width="130" height="700" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_ai" value="Azure OpenAI C2" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#B3E5FC;strokeColor=#0288D1;" vertex="1" parent="1">
+          <mxGeometry x="790" y="150" width="140" height="700" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_rules" value="Moteur Règles Métier" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#D1C4E9;strokeColor=#7B1FA2;" vertex="1" parent="1">
+          <mxGeometry x="980" y="150" width="150" height="700" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_hitl" value="Portail HITL (Humain)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFECB3;strokeColor=#FFA000;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="150" width="150" height="700" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_bank" value="Système SEPA" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#E8F8F5;strokeColor=#27AE60;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="150" width="140" height="700" as="geometry"/>
+        </mxCell>
+
+        <!-- Activations & Messages -->
+        <mxCell id="m1" value="1. Déclaration sinistre (photos + devis)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry x="120" y="220" as="geometry">
+            <mxPoint x="120" y="220" as="sourcePoint"/>
+            <mxPoint x="300" y="220" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="2. Payload brut (mTLS)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry x="300" y="250" as="geometry">
+            <mxPoint x="300" y="250" as="sourcePoint"/>
+            <mxPoint x="490" y="250" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="3. Dé-identification PII" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry x="490" y="280" as="geometry">
+            <mxPoint x="490" y="280" as="sourcePoint"/>
+            <mxPoint x="675" y="280" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" value="Payload anonymisé (0 PII)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="675" y="310" as="geometry">
+            <mxPoint x="675" y="310" as="sourcePoint"/>
+            <mxPoint x="490" y="310" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" value="4. Inférence IA souveraine (Direct Connect)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeWidth=2;strokeColor=#0288D1;" edge="1" parent="1">
+          <mxGeometry x="490" y="340" as="geometry">
+            <mxPoint x="490" y="340" as="sourcePoint"/>
+            <mxPoint x="860" y="340" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" value="JSON normalisé (Score Fraude, Devis structuré)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="860" y="380" as="geometry">
+            <mxPoint x="860" y="380" as="sourcePoint"/>
+            <mxPoint x="490" y="380" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="5. Évaluation barèmes (&amp;lt; 2k€ &amp;amp; Score &amp;lt; 0.15)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry x="490" y="420" as="geometry">
+            <mxPoint x="490" y="420" as="sourcePoint"/>
+            <mxPoint x="1055" y="420" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Frame Alt Cas Simple -->
+        <mxCell id="alt_box" value="alt [Cas Simple : Montant &lt; 2 000 € ET Score &lt; 0.15] (60% du flux)" style="shape=umlFrame;whiteSpace=wrap;html=1;width=450;height=30;fillColor=#E8F8F5;strokeColor=#27AE60;" vertex="1" parent="1">
+          <mxGeometry x="380" y="470" width="1170" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="m8" value="Accord automatique (STP)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="1055" y="520" as="geometry">
+            <mxPoint x="1055" y="520" as="sourcePoint"/>
+            <mxPoint x="490" y="520" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" value="6. Ordre de virement instantané (pacs.008)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeWidth=2;strokeColor=#27AE60;" edge="1" parent="1">
+          <mxGeometry x="490" y="550" as="geometry">
+            <mxPoint x="490" y="550" as="sourcePoint"/>
+            <mxPoint x="1450" y="550" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" value="7. Notification virement effectué (15 min)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry x="1450" y="590" as="geometry">
+            <mxPoint x="1450" y="590" as="sourcePoint"/>
+            <mxPoint x="120" y="590" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Frame Else Cas Complexe -->
+        <mxCell id="else_box" value="else [Cas Complexe ou Suspect : Montant &gt;= 2 000 € OU Score &gt;= 0.15]" style="shape=umlFrame;whiteSpace=wrap;html=1;width=490;height=30;fillColor=#FDEDEC;strokeColor=#C0392B;" vertex="1" parent="1">
+          <mxGeometry x="380" y="640" width="1170" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="m11" value="Suspension &amp;amp; Routage Corbeille HITL" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;strokeWidth=2;strokeColor=#C0392B;" edge="1" parent="1">
+          <mxGeometry x="490" y="690" as="geometry">
+            <mxPoint x="490" y="690" as="sourcePoint"/>
+            <mxPoint x="1255" y="690" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" value="Prise en charge par gestionnaire &amp;amp; examen approfondi" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="1255" y="730" as="geometry">
+            <mxPoint x="1255" y="730" as="sourcePoint"/>
+            <mxPoint x="120" y="730" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

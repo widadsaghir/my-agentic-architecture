@@ -1,17 +1,62 @@
 @startuml
 skinparam defaultFontSize 16
 skinparam defaultFontColor #000000
-title Schéma c4_level2_container_2
+skinparam roundCorner 10
+skinparam linetype ortho
+skinparam packageTitleAlignment left
+
+title C4 Niveau 2 (Container Diagram) — Topologie Hybride Multi-Cloud & Enclave IA Souveraine
 
 note as N1
-1. Type: C4 Architecture
-2. Utilité: Vue c4_level2_container_2
-3. Standard: C4 / TOGAF
-4. UML: Component/Deployment
-5. Résumé: Flux d'architecture cible
+1. Type : Diagramme de Conteneurs C4 (Niveau 2)
+2. Utilité : Cartographier les applications, files d'attente, bases de données et enclaves d'inférence IA
+3. Standard : Modèle C4 (Simon Brown) / TOGAF 10 ADM Phase C (Architecture Applicative)
+4. Équivalent UML : Diagramme de Composants & Sous-Systèmes Logiques
+5. Résumé : Découplage Ingestion AWS (Kafka MSK, EKS) et Enclave Cognitive Azure (OpenAI C2 MASSIF)
 end note
 
-rectangle "Composant Principal" as CP #D4E6F1
-rectangle "Enclave Sécurisée" as ES #D5F5E3
-CP --> ES : Flux Chiffré
+package "Cloud AWS (Zone Ingestion Temps Réel & Traitement)" as AWS #FFF8E7 {
+    rectangle "Amazon API Gateway & WAF\n==mTLS, Rate Limiting & Anti-DDoS\nHTTPS Port 443" as GW #FF9900
+    rectangle "Amazon MSK (Kafka Cluster)\n==24 Partitions | Rétention 7 jours\nDébit nominal 6.94 Mo/s" as MSK #F5B041
+    rectangle "Cluster Amazon EKS (Kubernetes 1.30)\n==Node Group m6i.4xlarge (16 vCPU, 64 Go)\n35 pods actifs en pic x10 (KEDA)" as EKS #AED6F1
+    database "Data Lake S3 Immuable\n==Bucket Object Lock (WORM)\nChiffrement KMS CMK Dédié" as S3 #FAD7A0
+    database "Amazon Aurora PostgreSQL\n==db.r6g.4xlarge Multi-AZ (3 AZs)\nPgBouncer Pool 500 Connexions" as DB #D5F5E3
+    rectangle "AWS Key Management Service\n==KMS CMK Clé Client Dédiée\nRotation annuelle automatique" as KMS #F5CBA7
+}
+
+package "Interconnexion Dédiée Cloud-to-Cloud (Direct Connect / ExpressRoute)" as INTERCO #E8F8F5 {
+    rectangle "Liaison Fibre Dédiée 10 Gbps\n==Chiffrement IPsec de bout en bout\nLatence réseau garantie < 3 ms\nZéro transit sur Internet Public" as DC_GW #1ABC9C
+}
+
+package "Cloud Azure (Zone Cognitive & IA Souveraine C2 MASSIF)" as AZURE #EBF5FB {
+    rectangle "Azure Virtual Network Isolé\n==Private Subnets (Zero Public IP)\nNetwork Security Groups stricts" as VNET #0089D6
+    rectangle "Filtre Guardrails IA\n==Azure AI Content Safety & NeMo\nAnti-Prompt Injection & Dé-identification PII" as GUARD #85C1E9
+    rectangle "Enclave Cognitive Souveraine\n==Azure OpenAI (GPT-4o) & Llama-3 70B GPU\nQuota PTU Réservé | 0 Apprentissage Client" as LLM #5DADE2
+    database "Azure AI Search (Vector DB)\n==Embeddings vectoriels sinistres\nIndexation sémantique fraudes" as SEARCH #A9DFBF
+    rectangle "Azure Key Vault HSM\n==FIPS 140-2 Level 3 Hardware Security\nRotation dynamique des secrets 30j" as AKV #FADBD8
+}
+
+GW --> MSK : 1. Ingestion asynchrone (Kafka Event)
+MSK --> EKS : 2. Dépilement streaming (Consumer Groups)
+EKS --> S3 : 3. Stockage photos & devis bruts
+EKS --> DB : 4. Persistance état & Outbox
+EKS --> KMS : Chiffrement KMS
+
+MSK <--> DC_GW : Pont streaming sécurisé
+DC_GW <--> VNET : Flux privé chiffré (< 3 ms)
+
+VNET --> GUARD : 5. Transmission payload anonymisé
+GUARD --> LLM : 6. Inférence IA sécurisée
+LLM --> SEARCH : Recherche similarité sémantique
+LLM --> AKV : Gestion des clés & certificats
+LLM --> DC_GW : 7. Retour scoring fraude & préjudice
+
+legend right
+| Couleur | Environnement & Rôle |
+| #FF9900 / #F5B041 | AWS Core Infrastructure (Ingestion & Stream) |
+| #0089D6 / #5DADE2 | Azure Cognitive IA Souveraine (Enclave C2 MASSIF) |
+| #1ABC9C | Interconnexion Direct Connect Privée (0 Transit Web) |
+| #D5F5E3 / #FAD7A0 | Persistance Données & Data Lake Immuable |
+endlegend
+
 @enduml

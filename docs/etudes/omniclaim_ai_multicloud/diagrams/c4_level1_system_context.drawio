@@ -1,0 +1,64 @@
+<mxfile host="app.diagrams.net" modified="2026-10-13T14:49:00.000Z" agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="diagram_c4_l1" name="C4 Niveau 1 System Context">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1100" background="#FFFFFF">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Note Cartouche -->
+        <mxCell id="cartouche_l1" value="&lt;b&gt;C4 Niveau 1 : System Context Diagram — Écosystème Global OmniClaim AI&lt;/b&gt;&lt;br&gt;&lt;hr&gt;• Framework : C4 Model (Simon Brown) / TOGAF 10 ADM Phase A (Architecture Vision)&lt;br&gt;• Frontières : AssurGlobal Core vs Partenaires Réglementés (Banques SEPA, Registres SIV, IDP)&lt;br&gt;• Gouvernance : Décaissement automatique &amp;lt; 2 000 € / Arbitrage Gestionnaire Humain (HITL)" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#E8F8F5;strokeColor=#1ABC9C;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="750" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Container Acteurs Humains -->
+        <mxCell id="cont_acteurs" value="Acteurs Métier (Utilisateurs)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FDEDEC;strokeColor=#E6B0AA;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="320" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_client" value="&lt;b&gt;Assuré / Client Final&lt;/b&gt;&lt;br&gt;Application Mobile &amp;amp; Espace Web&lt;br&gt;Déclaration sinistre &amp;amp; photos" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="cont_acteurs">
+          <mxGeometry x="130" y="60" width="60" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_expert" value="&lt;b&gt;Artisans &amp;amp; Garages Agréés&lt;/b&gt;&lt;br&gt;Portail Partenaire B2B&lt;br&gt;Upload devis &amp;amp; factures PDF" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="cont_acteurs">
+          <mxGeometry x="130" y="240" width="60" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_hitl" value="&lt;b&gt;Gestionnaire Humain (HITL)&lt;/b&gt;&lt;br&gt;Portail Backoffice AssurGlobal&lt;br&gt;Arbitrage dossiers complexes &amp;gt; 2k€" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#FADBD8;strokeColor=#C0392B;" vertex="1" parent="cont_acteurs">
+          <mxGeometry x="130" y="420" width="60" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Système Central -->
+        <mxCell id="cont_system" value="Périmètre d'Étude AssurGlobal" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EBF5FB;strokeColor=#AED6F1;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="420" y="160" width="480" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="sys_omniclaim" value="&lt;b&gt;&lt;font style='font-size: 16px;'&gt;Plateforme OmniClaim AI&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;hr&gt;• Ingestion streaming temps réel (MSK Kafka)&lt;br&gt;• Traitement microservices conteneurisés (EKS)&lt;br&gt;• Enclave IA souveraine C2 MASSIF (Azure OpenAI)&lt;br&gt;• Détection de fraude &amp;amp; OCR devis multimodal&lt;br&gt;• Moteur de règles d'indemnisation &amp;amp; HITL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3498DB;strokeColor=#1B4F72;fontColor=#FFFFFF;align=left;spacing=15;" vertex="1" parent="cont_system">
+          <mxGeometry x="40" y="140" width="400" height="320" as="geometry"/>
+        </mxCell>
+
+        <!-- Systèmes Tiers -->
+        <mxCell id="cont_tiers" value="Partenaires &amp; Systèmes Externes Réglementés" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E8F8F5;strokeColor=#A3E4D7;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="960" y="160" width="420" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_bank" value="&lt;b&gt;Passerelle Bancaire SEPA&lt;/b&gt;&lt;br&gt;Virements instantanés ISO 20022 (pacs.008)&lt;br&gt;Règlements &amp;lt; 2 000 € en temps réel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_tiers">
+          <mxGeometry x="30" y="60" width="360" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_idp" value="&lt;b&gt;Fournisseur d'Identité OIDC&lt;/b&gt;&lt;br&gt;FranceConnect / Identity Provider Assuré&lt;br&gt;Validation des jetons JWT &amp;amp; mTLS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_tiers">
+          <mxGeometry x="30" y="180" width="360" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_siv" value="&lt;b&gt;Registres Véhicules Officiels (SIV)&lt;/b&gt;&lt;br&gt;Vérification carte grise &amp;amp; historique d'accidents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;" vertex="1" parent="cont_tiers">
+          <mxGeometry x="30" y="300" width="360" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_legacy" value="&lt;b&gt;Système de Gestion Contrats (Legacy)&lt;/b&gt;&lt;br&gt;Vérification des franchises et plafonds garantis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCF3CF;strokeColor=#F39C12;" vertex="1" parent="cont_tiers">
+          <mxGeometry x="30" y="420" width="360" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Flux -->
+        <mxCell id="fx1" value="Déclaration photos (HTTPS)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="act_client" target="sys_omniclaim" parent="1"/>
+        <mxCell id="fx2" value="Upload devis PDF" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="act_expert" target="sys_omniclaim" parent="1"/>
+        <mxCell id="fx3" value="Routage si &amp;gt; 2 000 € ou fraude &amp;gt;= 0.15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#C0392B;" edge="1" source="sys_omniclaim" target="act_hitl" parent="1"/>
+        <mxCell id="fx4" value="Virement bancaire SEPA" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;strokeColor=#27AE60;" edge="1" source="sys_omniclaim" target="ext_bank" parent="1"/>
+        <mxCell id="fx5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="sys_omniclaim" target="ext_idp" parent="1"/>
+        <mxCell id="fx6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="sys_omniclaim" target="ext_siv" parent="1"/>
+        <mxCell id="fx7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=2;" edge="1" source="sys_omniclaim" target="ext_legacy" parent="1"/>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
