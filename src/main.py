@@ -31,7 +31,9 @@ from src.tools import (
     KnowledgeSearchTool,
     GitPublisher,
     JiraBacklogExporter,
-    DiagramExporter
+    DiagramExporter,
+    LogAnalyzer,
+    CareerExporter
 )
 from crewai import Crew, Process
 
@@ -243,8 +245,9 @@ def main():
             print(f"📊 Export Jira CSV ({count} User Stories, délimiteur ;) généré : {jira_csv_file}")
 
         # Observabilité Meta-Agent (Brique 5.1)
-        if Path(log_file_path).exists():
-            health_report = LogAnalyzer().generate_health_report(Path(log_file_path))
+        actual_log_path = Path(log_file_path) if Path(log_file_path).exists() else Path(str(log_file_path) + ".txt")
+        if actual_log_path.exists():
+            health_report = LogAnalyzer().generate_health_report(actual_log_path)
             health_file = study_path / "08_RAPPORT_OBSERVABILITE_ET_SANTE_SYSTEME.md"
             health_file.write_text(health_report, encoding="utf-8")
             print(f"🩺 Rapport d'observabilité Meta-Agent généré : {health_file}")
@@ -273,23 +276,25 @@ def main():
         # Génération conjointe des schémas d'architecture (Draw.io, PlantUML, Mermaid)
         diagrams_dir = study_path / "diagrams"
         diagrams_dir.mkdir(parents=True, exist_ok=True)
-        DiagramExporter().export_all_formats(
+        nodes = [
+            {"id": "Client", "label": "Assuré / Courtier", "type": "actor"},
+            {"id": "AWS_Ingestion", "label": "AWS MSK & EKS Services", "type": "service"},
+            {"id": "Azure_Cognitive", "label": "Azure OpenAI C2 Enclave", "type": "service"},
+            {"id": "Core_Database", "label": "PostgreSQL Aurora Multi-Cloud", "type": "database"},
+            {"id": "HITL_Backoffice", "label": "Portail Gestionnaire HITL > 2000€", "type": "service"}
+        ]
+        links = [
+            {"source": "Client", "target": "AWS_Ingestion", "label": "Déclaration sinistre (HTTPS)"},
+            {"source": "AWS_Ingestion", "target": "Azure_Cognitive", "label": "Direct Connect / ExpressRoute"},
+            {"source": "Azure_Cognitive", "target": "HITL_Backoffice", "label": "Suspension si > 2000 € ou fraude >= 0.15"},
+            {"source": "AWS_Ingestion", "target": "Core_Database", "label": "Persistance & Règlements"}
+        ]
+        DiagramExporter().export_diagram_bundle(
             title=f"Architecture Cible — {study_title}",
-            components=[
-                ("Client", "Navigateur Assuré / Courtier"),
-                ("AWS_Ingestion", "Amazon MSK (Kafka) & EKS Microservices"),
-                ("Azure_Cognitive", "Azure OpenAI Private Enclave & AI Search"),
-                ("Core_Database", "PostgreSQL Aurora Multi-Cloud"),
-                ("HITL_Backoffice", "Portail Gestionnaire Arbitrage Humain")
-            ],
-            relationships=[
-                ("Client", "AWS_Ingestion", "Déclaration sinistre (HTTPS/REST)"),
-                ("AWS_Ingestion", "Azure_Cognitive", "Inter-Cloud Direct Connect / ExpressRoute (Private Endpoint)"),
-                ("Azure_Cognitive", "HITL_Backoffice", "Routage si montant > 2000 € ou fraude >= 0.15"),
-                ("AWS_Ingestion", "Core_Database", "Persistance des règlements")
-            ],
+            nodes=nodes,
+            links=links,
             output_dir=diagrams_dir,
-            base_filename="architecture_cible_omniclaim"
+            base_name="architecture_cible_omniclaim"
         )
         print(f"🖼️ Schémas d'architecture (Draw.io, PlantUML, Mermaid) générés dans : {diagrams_dir}")
 
