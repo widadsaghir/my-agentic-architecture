@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Brigade d'Agents Archi — L'Architecte Augmenté (AAP)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: 16in 9in landscape;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* Thème Sombre Haute Définition & Contraste Maximal */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #030712;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(2, 132, 199, 0.28) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.22) 0%, transparent 45%);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Barre Supérieure Flottante Frosted Glass */
+        .controls-bar {
+            position: fixed;
+            top: 14px;
+            z-index: 1000;
+            background: rgba(11, 23, 48, 0.96);
+            backdrop-filter: blur(25px);
+            padding: 8px 22px;
+            border-radius: 100px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 0 1.5px rgba(56, 189, 248, 0.4);
+        }
+
+        .brand-tag {
+            color: #38bdf8;
+            font-size: 13.5px;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-right: 8px;
+        }
+
+        .slide-counter-badge {
+            background: #0284c7;
+            color: #ffffff;
+            font-size: 12.5px;
+            font-weight: 800;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            margin-right: 6px;
+            box-shadow: 0 0 14px rgba(2, 132, 199, 0.6);
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.08);
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: rgba(56, 189, 248, 0.28);
+            color: #ffffff;
+            border-color: #38bdf8;
+            transform: translateY(-1px);
+        }
+
+        .btn.btn-active {
+            background: #0284c7;
+            color: #ffffff;
+            border-color: #38bdf8;
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.65);
+        }
+
+        .btn-nav-arrow {
+            background: #0c2144;
+            color: #38bdf8;
+            font-size: 14px;
+            font-weight: 900;
+            padding: 6px 12px;
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-nav-arrow:hover {
+            background: #0284c7;
+            color: #ffffff;
+        }
+
+        .btn-fullscreen {
+            background: #059669;
+            color: #ffffff;
+            border: 1px solid #10b981;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.45);
+        }
+
+        .btn-fullscreen:hover {
+            background: #10b981;
+        }
+
+        /* Scène Diapositive 16:9 */
+        .stage-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 65px 35px 20px 35px;
+        }
+
+        .slide-canvas {
+            width: 1540px;
+            height: 855px;
+            max-width: 95vw;
+            max-height: calc(100vh - 85px);
+            background: #070e20;
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            border-radius: 24px;
+            box-shadow: 0 45px 110px -20px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.08);
+            padding: 32px 54px 28px 54px;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            animation: slideFadeIn 0.22s ease-out;
+        }
+
+        .slide-canvas.active {
+            display: flex;
+        }
+
+        @keyframes slideFadeIn {
+            from { opacity: 0; transform: scale(0.992); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* En-Tête Diapositive */
+        .slide-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.14);
+            padding-bottom: 12px;
+            margin-bottom: 14px;
+        }
+
+        .brand-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12.5px;
+            font-weight: 900;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 4px;
+        }
+
+        .badge-framework {
+            background: rgba(56, 189, 248, 0.18);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+        }
+
+        .slide-heading {
+            margin: 0;
+            font-size: 34px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -0.6px;
+            line-height: 1.15;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
+        }
+
+        .slide-subheading {
+            font-size: 16.5px;
+            color: #94a3b8;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .author-box {
+            text-align: right;
+            border-left: 2px solid rgba(255, 255, 255, 0.16);
+            padding-left: 20px;
+        }
+
+        .author-name {
+            font-size: 19px;
+            font-weight: 900;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .author-title {
+            font-size: 13.5px;
+            font-weight: 800;
+            color: #38bdf8;
+            margin-top: 2px;
+        }
+
+        .author-board {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        /* Bandeau d'Accroche Forte */
+        .statement-card {
+            background: linear-gradient(90deg, rgba(2, 132, 199, 0.28) 0%, rgba(15, 23, 42, 0.75) 100%);
+            border-left: 6px solid #38bdf8;
+            padding: 13px 24px;
+            border-radius: 0 14px 14px 0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            border-top: 1px solid rgba(56, 189, 248, 0.25);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+            border-right: 1px solid rgba(56, 189, 248, 0.25);
+        }
+
+        .statement-icon {
+            font-size: 24px;
+            color: #38bdf8;
+            flex-shrink: 0;
+        }
+
+        .statement-quote {
+            font-size: 17.5px;
+            font-weight: 800;
+            color: #f8fafc;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* Ligne de Métriques KPIs Géantes */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .metric-pill {
+            border-radius: 16px;
+            padding: 14px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1.5px solid;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+        }
+
+        .metric-number {
+            font-size: 32px;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.1;
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: 13px;
+            font-weight: 800;
+            color: #e2e8f0;
+            line-height: 1.3;
+        }
+
+        .theme-blue { border-color: rgba(56, 189, 248, 0.55); }
+        .theme-blue .metric-number { color: #38bdf8; text-shadow: 0 0 16px rgba(56, 189, 248, 0.6); }
+
+        .theme-green { border-color: rgba(16, 185, 129, 0.55); }
+        .theme-green .metric-number { color: #10b981; text-shadow: 0 0 16px rgba(16, 185, 129, 0.6); }
+
+        .theme-orange { border-color: rgba(245, 158, 11, 0.55); }
+        .theme-orange .metric-number { color: #f59e0b; text-shadow: 0 0 16px rgba(245, 158, 11, 0.6); }
+
+        .theme-purple { border-color: rgba(168, 85, 247, 0.55); }
+        .theme-purple .metric-number { color: #a855f7; text-shadow: 0 0 16px rgba(168, 85, 247, 0.6); }
+
+        .theme-red { border-color: rgba(244, 63, 94, 0.55); }
+        .theme-red .metric-number { color: #f43f5e; text-shadow: 0 0 16px rgba(244, 63, 94, 0.6); }
+
+        .theme-teal { border-color: rgba(20, 184, 166, 0.55); }
+        .theme-teal .metric-number { color: #2dd4bf; text-shadow: 0 0 16px rgba(45, 212, 191, 0.6); }
+
+        /* Cartes Bento Aérées & Contrastées */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 16px;
+            flex-grow: 1;
+        }
+
+        .bento-col-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            flex-grow: 1;
+        }
+
+        .bento-card {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1.5px solid rgba(255, 255, 255, 0.14);
+            border-radius: 18px;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
+        }
+
+        .bento-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .bento-title {
+            font-size: 17px;
+            font-weight: 900;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+
+        .bento-badge {
+            font-size: 11.5px;
+            font-weight: 900;
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .badge-blue { background: rgba(56, 189, 248, 0.25); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.5); }
+        .badge-red { background: rgba(244, 63, 94, 0.25); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.5); }
+        .badge-green { background: rgba(16, 185, 129, 0.25); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.5); }
+        .badge-purple { background: rgba(168, 85, 247, 0.25); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.5); }
+        .badge-orange { background: rgba(245, 158, 11, 0.25); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.5); }
+
+        .bento-body {
+            font-size: 15px;
+            color: #e2e8f0;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .bento-list {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .bento-list li {
+            margin-bottom: 8px;
+            color: #f1f5f9;
+        }
+
+        .bento-list strong {
+            color: #ffffff;
+            font-weight: 900;
+        }
+
+        /* Cadre Schéma SVG Autonome Zéro Dépendance */
+        .diagram-container {
+            width: 100%;
+            flex-grow: 1;
+            background: #040914;
+            border: 2px solid rgba(56, 189, 248, 0.4);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.85);
+        }
+
+        .diagram-container svg {
+            width: 100%;
+            height: 100%;
+            max-height: 520px;
+        }
+
+        /* Tableau Exécutif Sombre */
+        .table-responsive {
+            width: 100%;
+            flex-grow: 1;
+            overflow: auto;
+            border: 1.5px solid rgba(56, 189, 248, 0.3);
+            border-radius: 18px;
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .exec-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .exec-table th {
+            background: #0f2042;
+            color: #38bdf8;
+            font-weight: 900;
+            padding: 12px 18px;
+            position: sticky;
+            top: 0;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.45);
+        }
+
+        .exec-table td {
+            padding: 11px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .exec-table tr:hover td {
+            background: rgba(56, 189, 248, 0.15);
+            color: #ffffff;
+        }
+
+        .tag-format {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 6px;
+            background: rgba(56, 189, 248, 0.22);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+        }
+
+        /* Pied de Page */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1.5px solid rgba(255, 255, 255, 0.14);
+            padding-top: 10px;
+            margin-top: 10px;
+            font-size: 12.5px;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-tag {
+            color: #38bdf8;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-right {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 900;
+            color: #ffffff;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barre Flottante de Contrôle -->
+    <div class="controls-bar">
+        <div class="brand-tag">
+            <span>⚡</span> BRIGADE AGENTS ARCHI
+        </div>
+        <div class="slide-counter-badge" id="slide-counter">Slide 1 / 9</div>
+        <button class="btn btn-nav-arrow" onclick="prevSlide()" title="Précédent (Flèche Gauche)">◀</button>
+        <button class="btn btn-nav-arrow" onclick="nextSlide()" title="Suivant (Flèche Droite ou Espace)">▶</button>
+        
+        <button class="btn nav-slide-btn btn-active" onclick="showSlide(1)">1. Titre</button>
+        <button class="btn nav-slide-btn" onclick="showSlide(2)">2. Constat</button>
+        <button class="btn nav-slide-btn" onclick="showSlide(3)">3. Rupture</button>
+        <button class="btn nav-slide-btn" onclick="showSlide(4)">4. Brigade 9 Agents</button>
+        <button class="btn nav-slide-btn" onclick="showSlide(5)">5. Archi Framework</button>
+        <button class="btn nav-slide-btn" onclick="showSlide(6)">6. Workflow</button>
+        <button class="btn nav-slide-btn" onclick="showSlide(7)">7. Études Réelles</button>
+        <button class="btn nav-slide-btn" onclick="showSlide(8)">8. Démo Vidéo</button>
+        <button class="btn nav-slide-btn" onclick="showSlide(9)">9. Synthèse Q/R</button>
+
+        <button class="btn btn-fullscreen" onclick="toggleFullScreen()" title="Plein Écran (Touche F)">⛶ Plein Écran</button>
+    </div>
+
+    <!-- Scène Principale -->
+    <div class="stage-container">
+
+        <!-- ==========================================
+             SLIDE 1 : TITRE & ACCROCHE EXECUTIVE
+        =========================================== -->
+        <section class="slide-canvas active" id="slide-1">
+            <div class="slide-top">
+                <div>
+                    <div class="brand-eyebrow">
+                        COMMUNAUTÉ D'ARCHITECTURE SOLUTION & ENTREPRISE
+                        <span class="badge-framework">TOGAF 10</span>
+                        <span class="badge-framework">SAFE 6</span>
+                        <span class="badge-framework">ZERO-TRUST</span>
+                    </div>
+                    <h1 class="slide-heading">La Brigade d'Agents Archi : Concevoir, Challenger et Outiller à l'Échelle</h1>
+                    <div class="slide-subheading">Plateforme Multi-Agents d'Architecture (AAP) au service de nos études et de nos projets</div>
+                </div>
+                <div class="author-box">
+                    <div class="author-name">Widad SAGHIR</div>
+                    <div class="author-title">Lead Solution & Enterprise Architect</div>
+                    <div class="author-board">Session Échange Entre Pairs • 30 min</div>
+                </div>
+            </div>
+
+            <div class="statement-card">
+                <span class="statement-icon">💡</span>
+                <p class="statement-quote">
+                    « Et si nous divisions par dix la paperasse documentaire pour consacrer l'essentiel de notre énergie aux arbitrages stratégiques et à la résilience des systèmes ? »
+                </p>
+            </div>
+
+            <div class="kpi-row">
+                <div class="metric-pill theme-blue">
+                    <span class="metric-number">9</span>
+                    <span class="metric-label">Agents Spécialisés Rôles Dédiés</span>
+                </div>
+                <div class="metric-pill theme-purple">
+                    <span class="metric-number">10</span>
+                    <span class="metric-label">Artéfacts Produits en 1 Exécution</span>
+                </div>
+                <div class="metric-pill theme-orange">
+                    <span class="metric-number">3</span>
+                    <span class="metric-label">Formats Schémas Draw.io, PUML, MMD</span>
+                </div>
+                <div class="metric-pill theme-green">
+                    <span class="metric-number">48</span>
+                    <span class="metric-label">Tests Fitness AST Validés en < 2s</span>
+                </div>
+                <div class="metric-pill theme-red">
+                    <span class="metric-number">0 Token</span>
+                    <span class="metric-label">Outils Purs Déterministes</span>
+                </div>
+                <div class="metric-pill theme-teal">
+                    <span class="metric-number">100%</span>
+                    <span class="metric-label">Souveraineté Human-in-the-Loop</span>
+                </div>
+            </div>
+
+            <div class="bento-grid">
+                <div class="bento-card">
+                    <div class="bento-card-header">
+                        <span class="bento-title">🎯 Le Déclic de l'Initiative</span>
+                        <span class="bento-badge badge-blue">Vision</span>
+                    </div>
+                    <div class="bento-body">
+                        L'architecture d'entreprise est engluée dans la logistique documentaire : rédaction de DAT fleuves, matrices manuelles, découpage Jira fastidieux. 
+                        <strong>La Brigade AAP</strong> inverse ce paradigme en mobilisant une équipe d'experts virtuels pour pré-rédiger et auditer les dossiers sous notre contrôle souverain.
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-left: 5px solid #f43f5e;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">⚖️ La Clé : Le Débat Contradictoire</span>
+                        <span class="bento-badge badge-red">Différenciant</span>
+                    </div>
+                    <div class="bento-body">
+                        Contrairement aux chatbots passifs, notre système intègre un <strong>Challenger / Red Team</strong> dont l'unique mission est d'attaquer la conception, traquer la sur-ingénierie (KISS, YAGNI) et tuer les SPOF dans l'œuf avant le passage en comité officiel.
+                    </div>
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-card-header">
+                        <span class="bento-title">🏛️ Rigueur des Cadres d'Entreprise</span>
+                        <span class="bento-badge badge-purple">Méthode</span>
+                    </div>
+                    <div class="bento-body">
+                        Alignement intégral sur <strong>TOGAF 10 ADM</strong> (Phases A à H), <strong>SAFe 6</strong> (Enablers & DoD), <strong>Software Craftsmanship</strong> (Hexagonale, DDD, TDD) et <strong>Zero-Trust NIST SP 800-207</strong> (C2 & CMK).
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-left: 5px solid #10b981;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">🛡️ Sécurité & Zéro Hallucination</span>
+                        <span class="bento-badge badge-green">Gouvernance</span>
+                    </div>
+                    <div class="bento-body">
+                        RAG persistant local sur <strong>ChromaDB</strong> contenant notre doctrine d'entreprise. 
+                        Adaptateur <strong>GitPublisher</strong> avec scan anti-secrets et porte <strong>Human-in-the-Loop [O/N]</strong> obligatoire avant tout commit Git.
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">
+                    <span class="footer-tag">⚡ Multi-Agent Architecture Platform</span>
+                    <span>• Python 3.13, CrewAI, Gemini API, ChromaDB Local, Pytest</span>
+                </div>
+                <div class="footer-right">1 / 9</div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 2 : LE CONSTAT & LE PARADOXE
+        =========================================== -->
+        <section class="slide-canvas" id="slide-2">
+            <div class="slide-top">
+                <div>
+                    <div class="brand-eyebrow">
+                        LE PARADOXE DU QUOTIDIEN DE L'ARCHITECTE
+                        <span class="badge-framework">DIAGNOSTIC MÉTIER</span>
+                    </div>
+                    <h2 class="slide-heading">Où s'évapore le temps précieux de l'architecte ?</h2>
+                    <div class="slide-subheading">70% de logistique et de formalisation documentaire contre seulement 30% d'ingénierie stratégique</div>
+                </div>
+                <div class="author-box">
+                    <div class="author-name">Widad SAGHIR</div>
+                    <div class="author-title">Constat Partagé</div>
+                </div>
+            </div>
+
+            <div class="statement-card">
+                <span class="statement-icon">⏳</span>
+                <p class="statement-quote">
+                    « Nous avons choisi ce métier pour résoudre des équations complexes et concevoir des systèmes résilients, mais la moitié de nos semaines se résume à formater du Word et redessiner des boîtes. »
+                </p>
+            </div>
+
+            <div class="bento-grid">
+                <div class="bento-card" style="border-left: 5px solid #f43f5e;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">📉 La Réalité Subie (70% du temps)</span>
+                        <span class="bento-badge badge-red">Fardeau</span>
+                    </div>
+                    <div class="bento-body">
+                        <ul class="bento-list">
+                            <li><strong>DAT volumineux :</strong> Rédaction de 30 à 60 pages où les deux tiers sont des paraphrases de contexte.</li>
+                            <li><strong>Déclinaison Jira :</strong> Découper manuellement la cible en dizaines de tickets et d'Epics.</li>
+                            <li><strong>Formulaires SSI :</strong> Remplir à la main des matrices de risques et dossiers d'homologation.</li>
+                            <li><strong>Redondance des schémas :</strong> Redessiner les mêmes flux en Visio, Draw.io et PlantUML.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-left: 5px solid #10b981;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">🌟 Notre Véritable Valeur Ajoutée (30%)</span>
+                        <span class="bento-badge badge-green">Impact Pur</span>
+                    </div>
+                    <div class="bento-body">
+                        <ul class="bento-list">
+                            <li><strong>Arbitrage et Vision Cible :</strong> Trancher entre synchronisme et asynchronisme, monolithique ou distribué.</li>
+                            <li><strong>Accompagnement Terrain :</strong> Guider les tech leads et développeurs sur l'architecture hexagonale et le DDD.</li>
+                            <li><strong>Dialogue Métier :</strong> Co-construire la trajectoire avec les directions et le Product Management.</li>
+                            <li><strong>Résilience & FinOps :</strong> Éprouver les scénarios de panne et optimiser les coûts cloud réels.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-left: 5px solid #f59e0b;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">🏝️ La Solitude Face à sa Copie</span>
+                        <span class="bento-badge badge-orange">Angle Mort</span>
+                    </div>
+                    <div class="bento-body">
+                        Dans la majorité des projets, <strong>l'architecte conçoit seul</strong>. Le premier contradictoire n'intervient que lors du passage en comité officiel (Board L2/L3), souvent trop tard pour pivoter sans heurts.
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-left: 5px solid #a855f7;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">⚠️ Le Gouffre de la Dérive</span>
+                        <span class="bento-badge badge-purple">Dette Invisible</span>
+                    </div>
+                    <div class="bento-body">
+                        Par manque de temps pour inspecter le code, un décalage s'installe entre l'architecture cible théorique (le DAT) et la réalité de l'implémentation (le code sous Git), générant une dette technique sourde.
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">
+                    <span class="footer-tag">⚡ Diagnostic Métier</span>
+                    <span>• Libérer l'architecte de la saisie manuelle pour démultiplier sa présence au sol</span>
+                </div>
+                <div class="footer-right">2 / 9</div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 3 : LA RUPTURE : CHATBOT VS BRIGADE
+        =========================================== -->
+        <section class="slide-canvas" id="slide-3">
+            <div class="slide-top">
+                <div>
+                    <div class="brand-eyebrow">
+                        LA RUPTURE MÉTHODOLOGIQUE
+                        <span class="badge-framework">INGÉNIERIE IA</span>
+                    </div>
+                    <h2 class="slide-heading">Pourquoi un simple Chatbot LLM échoue en Architecture</h2>
+                    <div class="slide-subheading">Du prompt unique naïf à l'orchestration cognitive d'experts dotés d'outils déterministes</div>
+                </div>
+                <div class="author-box">
+                    <div class="author-name">Widad SAGHIR</div>
+                    <div class="author-title">Paradigme Multi-Agents</div>
+                </div>
+            </div>
+
+            <div class="statement-card">
+                <span class="statement-icon">⚔️</span>
+                <p class="statement-quote">
+                    « Un LLM isolé est un exécutant poli et complaisant. Un architecte n'a pas besoin de flatterie : il a besoin d'un sparring-partner contradictoire et de doctrine d'entreprise. »
+                </p>
+            </div>
+
+            <div class="bento-col-3">
+                <div class="bento-card" style="border-top: 5px solid #f43f5e;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">❌ Le Chatbot Naïf (Isolé)</span>
+                        <span class="bento-badge badge-red">Impasse</span>
+                    </div>
+                    <div class="bento-body">
+                        <ul class="bento-list">
+                            <li><strong>Complaisant :</strong> Vous proposez un cluster Kafka pour un simple batch ? Il applaudit et génère le compose.</li>
+                            <li><strong>Amnésique :</strong> Ignore nos règles PSSI, le chiffrement CMK, les zones C2 et notre catalogue.</li>
+                            <li><strong>Formats corrompus :</strong> Incapable de générer un XML Draw.io ou un CSV Excel sans le casser.</li>
+                            <li><strong>Zéro contradictoire :</strong> Ne traque ni les SPOF, ni les coûts cachés dans le Cloud.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-top: 5px solid #38bdf8;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">🤝 La Brigade Multi-Agents</span>
+                        <span class="bento-badge badge-blue">Solution AAP</span>
+                    </div>
+                    <div class="bento-body">
+                        <ul class="bento-list">
+                            <li><strong>Rôles Étanches :</strong> 9 profils aux mandats stricts (Macro, Red Team, CISO, Crafter, SAFe, FinOps).</li>
+                            <li><strong>Contradictoire Impitoyable :</strong> Le Challenger traque la sur-ingénierie et les verrous techniques.</li>
+                            <li><strong>RAG Doctrinal Local :</strong> Base ChromaDB injectant nos règles Zero-Trust, WAF et Crafting.</li>
+                            <li><strong>Outils Déterministes (0 Token) :</strong> Scripts Python purs garantissant des fichiers valides à 100%.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-top: 5px solid #10b981;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">👑 L'Architecte Souverain</span>
+                        <span class="bento-badge badge-green">Posture</span>
+                    </div>
+                    <div class="bento-body">
+                        <ul class="bento-list">
+                            <li><strong>Chef d'Orchestre :</strong> Injecte le cadrage et fixe les contraintes non négociables.</li>
+                            <li><strong>Juge des Débats :</strong> Observe la joute entre Solution et Challenger, puis tranche.</li>
+                            <li><strong>Gouvernance HITL :</strong> Valide formellement avant tout commit Git ou diffusion.</li>
+                            <li><strong>Gain Massif :</strong> 10 jours de travail documentaire condensés en 5 minutes.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">
+                    <span class="footer-tag">⚡ Paradigme Multi-Agents</span>
+                    <span>• Remplacer l'illusion du chatbot par un collège d'experts virtuels audités</span>
+                </div>
+                <div class="footer-right">3 / 9</div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 4 : SCHÉMA DES 9 AGENTS (SVG VISUEL AUTONOME)
+        =========================================== -->
+        <section class="slide-canvas" id="slide-4">
+            <div class="slide-top">
+                <div>
+                    <div class="brand-eyebrow">
+                        LA BRIGADE MULTI-AGENTS
+                        <span class="badge-framework">COMPOSITION & RÔLES</span>
+                    </div>
+                    <h2 class="slide-heading">La Brigade des 9 Agents : Table Ronde Virtuelle</h2>
+                    <div class="slide-subheading">Chaque profil possède son mandat, sa spécialité méthodologique et son filtre d'évaluation</div>
+                </div>
+                <div class="author-box">
+                    <div class="author-name">Widad SAGHIR</div>
+                    <div class="author-title">Cartographie des Rôles</div>
+                </div>
+            </div>
+
+            <!-- Schéma SVG Radiale Haute Visibilité Dark Theme -->
+            <div class="diagram-container">
+                <svg viewBox="0 0 1350 490" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <filter id="glowCyan" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="6" result="blur" />
+                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                        </filter>
+                        <linearGradient id="gradLeadDark" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#0284c7"/>
+                            <stop offset="100%" stop-color="#0369a1"/>
+                        </linearGradient>
+                        <linearGradient id="gradRedDark" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#be123c"/>
+                            <stop offset="100%" stop-color="#e11d48"/>
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Lignes de liaison orbitales néon -->
+                    <circle cx="675" cy="245" r="215" fill="none" stroke="rgba(56, 189, 248, 0.35)" stroke-width="2" stroke-dasharray="8,8"/>
+                    <circle cx="675" cy="245" r="135" fill="none" stroke="rgba(255, 255, 255, 0.12)" stroke-width="2"/>
+
+                    <!-- CENTRE : Lead Architecture Manager -->
+                    <g transform="translate(535, 180)">
+                        <rect width="280" height="130" rx="18" fill="url(#gradLeadDark)" stroke="#38bdf8" stroke-width="3" filter="url(#glowCyan)"/>
+                        <text x="140" y="32" fill="#e0f2fe" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="1.2">ORCHESTRATEUR TOGAF 10</text>
+                        <text x="140" y="60" fill="#ffffff" font-size="18" font-weight="900" text-anchor="middle">Lead Archi Manager</text>
+                        <text x="140" y="84" fill="#f0f9ff" font-size="13" font-weight="700" text-anchor="middle">Arbitre & Consolide le DAT</text>
+                        <rect x="75" y="96" width="130" height="22" rx="11" fill="#0b172e"/>
+                        <text x="140" y="111" fill="#38bdf8" font-size="11" font-weight="800" text-anchor="middle">gemini-1.5-pro</text>
+                    </g>
+
+                    <!-- HAUT GAUCHE : Solution Architect -->
+                    <g transform="translate(60, 35)">
+                        <rect width="270" height="105" rx="14" fill="#0b172e" stroke="#0284c7" stroke-width="2.5"/>
+                        <rect x="0" y="0" width="270" height="6" rx="3" fill="#38bdf8"/>
+                        <text x="20" y="28" fill="#38bdf8" font-size="12" font-weight="900">1. CONCEPTION MACRO</text>
+                        <text x="20" y="54" fill="#ffffff" font-size="17" font-weight="900">Solution Architect</text>
+                        <text x="20" y="76" fill="#cbd5e1" font-size="13" font-weight="600">Cloud WAF, EDA, Kafka, Résilience</text>
+                        <text x="20" y="94" fill="#38bdf8" font-size="12" font-weight="800">Doctrine RAG Injectée</text>
+                    </g>
+                    <path d="M 330 90 L 535 200" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="6,6"/>
+
+                    <!-- HAUT CENTRE : Challenger / Red Team (ROUGE ÉCLATANT) -->
+                    <g transform="translate(535, 15)">
+                        <rect width="280" height="115" rx="14" fill="#200b14" stroke="#f43f5e" stroke-width="3"/>
+                        <rect x="0" y="0" width="280" height="6" rx="3" fill="url(#gradRedDark)"/>
+                        <text x="20" y="28" fill="#fda4af" font-size="12" font-weight="900">2. AUDIT CONTRADICTOIRE</text>
+                        <text x="20" y="54" fill="#ffffff" font-size="18" font-weight="900">Challenger Red Team</text>
+                        <text x="20" y="76" fill="#fecdd3" font-size="13" font-weight="700">Anti-SPOF, KISS, YAGNI, Zéro complaisance</text>
+                        <text x="20" y="98" fill="#fb7185" font-size="13" font-weight="900">⚡ Traque la sur-ingénierie</text>
+                    </g>
+                    <path d="M 675 130 L 675 180" stroke="#f43f5e" stroke-width="3"/>
+
+                    <!-- HAUT DROITE : CISO & Data Protection -->
+                    <g transform="translate(1020, 35)">
+                        <rect width="270" height="105" rx="14" fill="#180e29" stroke="#a855f7" stroke-width="2.5"/>
+                        <rect x="0" y="0" width="270" height="6" rx="3" fill="#c084fc"/>
+                        <text x="20" y="28" fill="#c084fc" font-size="12" font-weight="900">3. SÉCURITÉ & C2</text>
+                        <text x="20" y="54" fill="#ffffff" font-size="17" font-weight="900">CISO Architect</text>
+                        <text x="20" y="76" fill="#e9d5ff" font-size="13" font-weight="600">NIST SP 800-207, Zero-Trust, CMK</text>
+                        <text x="20" y="94" fill="#d8b4fe" font-size="12" font-weight="800">Homologation DCA & DICT</text>
+                    </g>
+                    <path d="M 1020 90 L 815 200" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="6,6"/>
+
+                    <!-- BAS GAUCHE : Software Crafter -->
+                    <g transform="translate(60, 345)">
+                        <rect width="270" height="105" rx="14" fill="#061c14" stroke="#10b981" stroke-width="2.5"/>
+                        <rect x="0" y="0" width="270" height="6" rx="3" fill="#34d399"/>
+                        <text x="20" y="28" fill="#34d399" font-size="12" font-weight="900">4. CRAFTSMANSHIP & CODE</text>
+                        <text x="20" y="54" fill="#ffffff" font-size="17" font-weight="900">Software Crafter</text>
+                        <text x="20" y="76" fill="#d1fae5" font-size="13" font-weight="600">Archi Hexagonale, DDD, Ports & Adapters</text>
+                        <text x="20" y="94" fill="#6ee7b7" font-size="12" font-weight="800">Testabilité 100% TDD</text>
+                    </g>
+                    <path d="M 330 390 L 535 290" stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,6"/>
+
+                    <!-- BAS CENTRE : SAFe Delivery Enabler -->
+                    <g transform="translate(535, 345)">
+                        <rect width="280" height="105" rx="14" fill="#08182b" stroke="#38bdf8" stroke-width="2.5"/>
+                        <rect x="0" y="0" width="280" height="6" rx="3" fill="#0284c7"/>
+                        <text x="20" y="28" fill="#38bdf8" font-size="12" font-weight="900">5. DELIVERY AGILE</text>
+                        <text x="20" y="54" fill="#ffffff" font-size="17" font-weight="900">SAFe System Archi</text>
+                        <text x="20" y="76" fill="#e0f2fe" font-size="13" font-weight="600">Enabler Epics, Features, US Jira, DoD</text>
+                        <text x="20" y="94" fill="#7dd3fc" font-size="12" font-weight="800">Export CSV Excel Français</text>
+                    </g>
+                    <path d="M 675 345 L 675 310" stroke="#38bdf8" stroke-width="2.5"/>
+
+                    <!-- BAS DROITE : FinOps & Migration TCO -->
+                    <g transform="translate(1020, 345)">
+                        <rect width="270" height="105" rx="14" fill="#241407" stroke="#f59e0b" stroke-width="2.5"/>
+                        <rect x="0" y="0" width="270" height="6" rx="3" fill="#fbbf24"/>
+                        <text x="20" y="28" fill="#fbbf24" font-size="12" font-weight="900">6. ÉCONOMIE CLOUD</text>
+                        <text x="20" y="54" fill="#ffffff" font-size="17" font-weight="900">FinOps Specialist</text>
+                        <text x="20" y="76" fill="#fef3c7" font-size="13" font-weight="600">Calcul TCO On-Prem vs Cloud, ROI</text>
+                        <text x="20" y="94" fill="#fcd34d" font-size="12" font-weight="800">Plan de bascule progressif</text>
+                    </g>
+                    <path d="M 1020 390 L 815 290" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6,6"/>
+                </svg>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">
+                    <span class="footer-tag">⚡ Organisation de la Brigade</span>
+                    <span>• 9 profils modélisés sous CrewAI avec mandats bornés et contradictoire permanent</span>
+                </div>
+                <div class="footer-right">4 / 9</div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 5 : ARCHITECTURE SOUS LE CAPOT (SVG HEXAGONAL AUTONOME)
+        =========================================== -->
+        <section class="slide-canvas" id="slide-5">
+            <div class="slide-top">
+                <div>
+                    <div class="brand-eyebrow">
+                        INGÉNIERIE LOGICIELLE & SOUS LE CAPOT
+                        <span class="badge-framework">HEXAGONALE</span>
+                        <span class="badge-framework">CHROMA DB</span>
+                    </div>
+                    <h2 class="slide-heading">L'Architecture Technique du Framework AAP</h2>
+                    <div class="slide-subheading">Isolation hexagonale, base vectorielle doctrinale et adaptateurs déterministes à 0 token</div>
+                </div>
+                <div class="author-box">
+                    <div class="author-name">Widad SAGHIR</div>
+                    <div class="author-title">Architecture Logicielle</div>
+                </div>
+            </div>
+
+            <!-- Schéma SVG Framework Hexagonal Dark Mode -->
+            <div class="diagram-container">
+                <svg viewBox="0 0 1350 490" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="20" y="20" width="1310" height="450" rx="20" fill="#070e1e" stroke="rgba(56, 189, 248, 0.3)" stroke-width="2"/>
+                    <text x="45" y="52" fill="#38bdf8" font-size="14" font-weight="900" letter-spacing="1">ARCHITECTURE HEXAGONALE (PORTS & ADAPTERS) DU FRAMEWORK AAP</text>
+
+                    <!-- COLONNE GAUCHE : Adaptateurs Primaires -->
+                    <g transform="translate(45, 75)">
+                        <rect width="250" height="375" rx="14" fill="#0b172e" stroke="#0284c7" stroke-width="2"/>
+                        <rect x="0" y="0" width="250" height="6" rx="3" fill="#38bdf8"/>
+                        <text x="20" y="32" fill="#38bdf8" font-size="13" font-weight="900">ADAPTATEURS PRIMAIRES</text>
+                        <text x="20" y="54" fill="#ffffff" font-size="16" font-weight="900">Entrées & Déclencheur</text>
+                        
+                        <rect x="15" y="75" width="220" height="80" rx="10" fill="#0f2347" stroke="rgba(56, 189, 248, 0.4)"/>
+                        <text x="25" y="100" fill="#38bdf8" font-size="13" font-weight="900">CLI (main.py)</text>
+                        <text x="25" y="122" fill="#e2e8f0" font-size="12">Options : --study-dir, --language</text>
+                        <text x="25" y="140" fill="#7dd3fc" font-size="11" font-weight="700">Fail-fast & Parsing strict</text>
+
+                        <rect x="15" y="170" width="220" height="90" rx="10" fill="#0f2347" stroke="rgba(255, 255, 255, 0.15)"/>
+                        <text x="25" y="195" fill="#ffffff" font-size="13" font-weight="900">Input de Cadrage Métier</text>
+                        <text x="25" y="217" fill="#cbd5e1" font-size="12">00_CAHIER_DES_CHARGES.md</text>
+                        <text x="25" y="235" fill="#94a3b8" font-size="11">Volumétrie, RPO/RTO, Cible</text>
+
+                        <rect x="15" y="275" width="220" height="75" rx="10" fill="#200d2b" stroke="#c084fc"/>
+                        <text x="25" y="300" fill="#e879f9" font-size="13" font-weight="900">Simulateur Interactif</text>
+                        <text x="25" y="322" fill="#f5d0fe" font-size="12">Script démo enregistrement</text>
+                        <text x="25" y="338" fill="#f0abfc" font-size="11" font-weight="700">Capture vidéo sans accroc</text>
+                    </g>
+
+                    <!-- COLONNE CENTRALE : Cœur de Domaine -->
+                    <g transform="translate(325, 75)">
+                        <rect width="665" height="375" rx="14" fill="#081224" stroke="#38bdf8" stroke-width="2.5"/>
+                        <rect x="0" y="0" width="665" height="8" rx="4" fill="#38bdf8"/>
+                        <text x="25" y="34" fill="#38bdf8" font-size="13" font-weight="900">CŒUR DE DOMAINE MÉTIER (ISOLATION STRICTE)</text>
+                        <text x="25" y="58" fill="#ffffff" font-size="18" font-weight="900">Orchestration Cognitive & Doctrine Locale</text>
+
+                        <rect x="25" y="80" width="370" height="180" rx="12" fill="#0f1c38" stroke="rgba(56, 189, 248, 0.3)"/>
+                        <text x="40" y="106" fill="#38bdf8" font-size="14" font-weight="900">CrewAI Orchestration Engine</text>
+                        <text x="40" y="130" fill="#e2e8f0" font-size="12.5">• Pipeline de 8 tâches séquentielles bornées</text>
+                        <text x="40" y="152" fill="#e2e8f0" font-size="12.5">• Injection stricte de langue (--language)</text>
+                        <text x="40" y="174" fill="#fda4af" font-size="12.5" font-weight="800">• Évaluation contradictoire Red Team</text>
+                        <text x="40" y="196" fill="#cbd5e1" font-size="12.5">• LLM Gateways : Gemini 1.5 Flash & Pro</text>
+                        <rect x="40" y="210" width="340" height="40" rx="8" fill="#091326"/>
+                        <text x="50" y="234" fill="#38bdf8" font-size="11.5" font-weight="800">Agent Architectes Factory (9 Profils)</text>
+
+                        <rect x="415" y="80" width="225" height="180" rx="12" fill="#061f38" stroke="#38bdf8"/>
+                        <text x="430" y="106" fill="#38bdf8" font-size="14" font-weight="900">ChromaDB RAG Local</text>
+                        <text x="430" y="130" fill="#7dd3fc" font-size="12" font-weight="800">Doctrine Persistante :</text>
+                        <text x="430" y="150" fill="#e2e8f0" font-size="11.5">1. Zero-Trust NIST SP 800-207</text>
+                        <text x="430" y="168" fill="#e2e8f0" font-size="11.5">2. Craft & Architecture Hexa</text>
+                        <text x="430" y="186" fill="#e2e8f0" font-size="11.5">3. Cloud WAF & Résilience</text>
+                        <text x="430" y="204" fill="#e2e8f0" font-size="11.5">4. Gouvernance SAFe & DoD</text>
+                        <text x="430" y="222" fill="#e2e8f0" font-size="11.5">5. Conformité & Anti-dérive</text>
+                        <text x="430" y="246" fill="#38bdf8" font-size="11" font-weight="900">0 Dépendance Réseau Externe</text>
+
+                        <rect x="25" y="275" width="615" height="80" rx="12" fill="#042316" stroke="#10b981"/>
+                        <text x="40" y="302" fill="#34d399" font-size="14" font-weight="900">🛡️ Architectural Fitness Functions (Pytest Suite)</text>
+                        <text x="40" y="324" fill="#e2e8f0" font-size="12.5">48 tests unitaires stricts analysant le code par AST (Arbre Syntaxique Abstrait)</text>
+                        <text x="40" y="344" fill="#6ee7b7" font-size="12" font-weight="800">Vérifie l'isolation des ports, 0 secret en clair (.env) et l'anti-dérive en < 2s</text>
+                    </g>
+
+                    <!-- COLONNE DROITE : Adaptateurs Secondaires Déterministes -->
+                    <g transform="translate(1015, 75)">
+                        <rect width="285" height="375" rx="14" fill="#0b172e" stroke="#10b981" stroke-width="2"/>
+                        <rect x="0" y="0" width="285" height="6" rx="3" fill="#10b981"/>
+                        <text x="20" y="32" fill="#34d399" font-size="13" font-weight="900">ADAPTATEURS SECONDAIRES</text>
+                        <text x="20" y="54" fill="#ffffff" font-size="16" font-weight="900">Outils Purs (0 Token)</text>
+
+                        <rect x="15" y="75" width="255" height="80" rx="10" fill="#092618" stroke="#34d399"/>
+                        <text x="25" y="100" fill="#6ee7b7" font-size="13" font-weight="900">DiagramExporter</text>
+                        <text x="25" y="122" fill="#e2e8f0" font-size="12">Génération triple format synchrone</text>
+                        <text x="25" y="140" fill="#a7f3d0" font-size="11.5" font-weight="800">.drawio (XML), .puml, .mmd</text>
+
+                        <rect x="15" y="165" width="255" height="80" rx="10" fill="#291a05" stroke="#f59e0b"/>
+                        <text x="25" y="190" fill="#fbbf24" font-size="13" font-weight="900">JiraBacklogExporter</text>
+                        <text x="25" y="212" fill="#e2e8f0" font-size="12">Export CSV avec point-virgule</text>
+                        <text x="25" y="230" fill="#fde68a" font-size="11.5" font-weight="800">Directement compatible Excel FR</text>
+
+                        <rect x="15" y="255" width="255" height="95" rx="10" fill="#0d1f3d" stroke="#38bdf8"/>
+                        <text x="25" y="280" fill="#38bdf8" font-size="13" font-weight="900">GitPublisher (HITL)</text>
+                        <text x="25" y="302" fill="#e2e8f0" font-size="12">Scan anti-secrets (.env, clés, IP)</text>
+                        <text x="25" y="320" fill="#7dd3fc" font-size="12" font-weight="900">Porte souveraine [O/N]</text>
+                        <text x="25" y="336" fill="#94a3b8" font-size="11">Commit conventionnel automatique</text>
+                    </g>
+                </svg>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">
+                    <span class="footer-tag">⚡ Architecture Hexagonale</span>
+                    <span>• Zéro couplage technologique, logique pure protégée et adaptateurs remplaçables</span>
+                </div>
+                <div class="footer-right">5 / 9</div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 6 : WORKFLOW DU CADRAGE AUX LIVRABLES (SVG PIPELINE)
+        =========================================== -->
+        <section class="slide-canvas" id="slide-6">
+            <div class="slide-top">
+                <div>
+                    <div class="brand-eyebrow">
+                        WORKFLOW OPÉRATIONNEL DU FRAMEWORK
+                        <span class="badge-framework">DU CADRAGE AU COMMIT</span>
+                    </div>
+                    <h2 class="slide-heading">La Chaîne de Production : Du Cadrage aux 10 Livrables</h2>
+                    <div class="slide-subheading">Un enchaînement fluide garantissant qualité doctrinale, challenge contradictoire et sécurité</div>
+                </div>
+                <div class="author-box">
+                    <div class="author-name">Widad SAGHIR</div>
+                    <div class="author-title">Pipeline d'Exécution</div>
+                </div>
+            </div>
+
+            <!-- Schéma SVG Pipeline Haute Visibilité Dark Theme -->
+            <div class="diagram-container">
+                <svg viewBox="0 0 1350 490" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(35, 45)">
+                        <rect width="215" height="395" rx="16" fill="#0b172e" stroke="#0284c7" stroke-width="2"/>
+                        <rect x="0" y="0" width="215" height="6" rx="3" fill="#38bdf8"/>
+                        <circle cx="35" cy="35" r="18" fill="#0284c7"/>
+                        <text x="35" y="42" fill="#ffffff" font-size="15" font-weight="900" text-anchor="middle">1</text>
+                        <text x="65" y="42" fill="#ffffff" font-size="16" font-weight="900">Cadrage</text>
+                        
+                        <rect x="15" y="75" width="185" height="90" rx="10" fill="#0f2347"/>
+                        <text x="25" y="100" fill="#38bdf8" font-size="12.5" font-weight="900">Input Markdown</text>
+                        <text x="25" y="120" fill="#cbd5e1" font-size="11">00_CAHIER_CHARGES.md</text>
+                        <text x="25" y="138" fill="#94a3b8" font-size="11">Volumétrie 4 To,</text>
+                        <text x="25" y="154" fill="#94a3b8" font-size="11">RPO &lt; 1h, RTO &lt; 4h</text>
+
+                        <rect x="15" y="180" width="185" height="100" rx="10" fill="#081b33" stroke="rgba(56, 189, 248, 0.3)"/>
+                        <text x="25" y="205" fill="#38bdf8" font-size="12.5" font-weight="900">RAG ChromaDB</text>
+                        <text x="25" y="225" fill="#e2e8f0" font-size="11">Injection de doctrine :</text>
+                        <text x="25" y="242" fill="#cbd5e1" font-size="11">• Zero-Trust NIST</text>
+                        <text x="25" y="258" fill="#cbd5e1" font-size="11">• Craft Hexagonale</text>
+                        <text x="25" y="274" fill="#cbd5e1" font-size="11">• Cloud WAF EDF</text>
+
+                        <rect x="15" y="295" width="185" height="80" rx="10" fill="#0f2347"/>
+                        <text x="25" y="322" fill="#38bdf8" font-size="12.5" font-weight="900">Déclencheur CLI</text>
+                        <text x="25" y="342" fill="#e2e8f0" font-size="11">Instanciation CrewAI</text>
+                        <text x="25" y="360" fill="#7dd3fc" font-size="11" font-weight="700">9 Profils mobilisés</text>
+                    </g>
+                    <path d="M 255 240 L 295 240" stroke="#38bdf8" stroke-width="3.5"/>
+
+                    <g transform="translate(300, 45)">
+                        <rect width="235" height="395" rx="16" fill="#081224" stroke="#38bdf8" stroke-width="2"/>
+                        <rect x="0" y="0" width="235" height="6" rx="3" fill="#38bdf8"/>
+                        <circle cx="35" cy="35" r="18" fill="#38bdf8"/>
+                        <text x="35" y="42" fill="#081224" font-size="15" font-weight="900" text-anchor="middle">2</text>
+                        <text x="65" y="42" fill="#ffffff" font-size="16" font-weight="900">Conception</text>
+
+                        <rect x="15" y="75" width="205" height="90" rx="10" fill="#0f1c38"/>
+                        <text x="25" y="100" fill="#38bdf8" font-size="12.5" font-weight="900">Lead Archi Manager</text>
+                        <text x="25" y="120" fill="#e2e8f0" font-size="11.5">Cadrage TOGAF Phase A</text>
+                        <text x="25" y="138" fill="#cbd5e1" font-size="11">Vision stratégique,</text>
+                        <text x="25" y="154" fill="#cbd5e1" font-size="11">objectifs cibles TCO</text>
+
+                        <rect x="15" y="180" width="205" height="110" rx="10" fill="#0f2347" stroke="rgba(56, 189, 248, 0.4)"/>
+                        <text x="25" y="205" fill="#38bdf8" font-size="12.5" font-weight="900">Solution Architect</text>
+                        <text x="25" y="225" fill="#e2e8f0" font-size="11.5">Phases B, C & D TOGAF</text>
+                        <text x="25" y="243" fill="#7dd3fc" font-size="11" font-weight="800">Proposition Cible :</text>
+                        <text x="25" y="260" fill="#cbd5e1" font-size="11">• Microservices & K8s</text>
+                        <text x="25" y="276" fill="#cbd5e1" font-size="11">• Cluster Kafka (Initial)</text>
+
+                        <rect x="15" y="305" width="205" height="75" rx="10" fill="#0f1c38"/>
+                        <text x="25" y="330" fill="#c084fc" font-size="12.5" font-weight="900">Pré-Schémas C4</text>
+                        <text x="25" y="352" fill="#e2e8f0" font-size="11">Ébauche AS-IS et TO-BE</text>
+                    </g>
+                    <path d="M 540 240 L 580 240" stroke="#f43f5e" stroke-width="3.5"/>
+
+                    <g transform="translate(585, 45)">
+                        <rect width="255" height="395" rx="16" fill="#200b14" stroke="#f43f5e" stroke-width="3"/>
+                        <rect x="0" y="0" width="255" height="6" rx="3" fill="#f43f5e"/>
+                        <circle cx="35" cy="35" r="18" fill="#f43f5e"/>
+                        <text x="35" y="42" fill="#ffffff" font-size="15" font-weight="900" text-anchor="middle">3</text>
+                        <text x="65" y="42" fill="#fda4af" font-size="16" font-weight="900">Contradictoire</text>
+
+                        <rect x="15" y="75" width="225" height="125" rx="10" fill="#2e0f1d" stroke="#f43f5e"/>
+                        <text x="25" y="100" fill="#f43f5e" font-size="13" font-weight="900">Challenger Red Team</text>
+                        <text x="25" y="122" fill="#fda4af" font-size="11.5" font-weight="800">Attaque sans concession :</text>
+                        <text x="25" y="140" fill="#fecdd3" font-size="11">1. Refus de Kafka (surcoût 850€)</text>
+                        <text x="25" y="156" fill="#fecdd3" font-size="11">2. Alerte SPOF infrastructure</text>
+                        <text x="25" y="172" fill="#fecdd3" font-size="11">3. Injonction KISS / YAGNI</text>
+                        <text x="25" y="190" fill="#fb7185" font-size="11" font-weight="900">Rapport d'audit contradictoire</text>
+
+                        <rect x="15" y="215" width="225" height="100" rx="10" fill="#180e29" stroke="#a855f7"/>
+                        <text x="25" y="240" fill="#c084fc" font-size="13" font-weight="900">CISO Audit Sécurité</text>
+                        <text x="25" y="260" fill="#e9d5ff" font-size="11">Contrôle Zero-Trust NIST :</text>
+                        <text x="25" y="276" fill="#d8b4fe" font-size="11">• Données C2 sensibles</text>
+                        <text x="25" y="292" fill="#d8b4fe" font-size="11">• Chiffrement CMK requis</text>
+                        <text x="25" y="308" fill="#e879f9" font-size="11" font-weight="800">Avis d'homologation DCA</text>
+
+                        <rect x="15" y="325" width="225" height="55" rx="10" fill="#2e0f1d"/>
+                        <text x="25" y="348" fill="#fda4af" font-size="12" font-weight="900">Arbitrage du Lead</text>
+                        <text x="25" y="366" fill="#ffffff" font-size="11">Serverless & CMK retenus</text>
+                    </g>
+                    <path d="M 845 240 L 885 240" stroke="#10b981" stroke-width="3.5"/>
+
+                    <g transform="translate(890, 45)">
+                        <rect width="215" height="395" rx="16" fill="#061c14" stroke="#10b981" stroke-width="2"/>
+                        <rect x="0" y="0" width="215" height="6" rx="3" fill="#10b981"/>
+                        <circle cx="35" cy="35" r="18" fill="#10b981"/>
+                        <text x="35" y="42" fill="#ffffff" font-size="15" font-weight="900" text-anchor="middle">4</text>
+                        <text x="65" y="42" fill="#6ee7b7" font-size="16" font-weight="900">Crafting</text>
+
+                        <rect x="15" y="75" width="185" height="90" rx="10" fill="#092618"/>
+                        <text x="25" y="100" fill="#34d399" font-size="12.5" font-weight="900">Software Crafter</text>
+                        <text x="25" y="120" fill="#e2e8f0" font-size="11.5">Archi Hexagonale</text>
+                        <text x="25" y="138" fill="#a7f3d0" font-size="11">Ports & Adapters, DDD,</text>
+                        <text x="25" y="154" fill="#6ee7b7" font-size="11" font-weight="800">Stratégie 100% TDD</text>
+
+                        <rect x="15" y="180" width="185" height="90" rx="10" fill="#241407"/>
+                        <text x="25" y="205" fill="#fbbf24" font-size="12.5" font-weight="900">FinOps Specialist</text>
+                        <text x="25" y="225" fill="#e2e8f0" font-size="11.5">Modélisation TCO</text>
+                        <text x="25" y="243" fill="#fde68a" font-size="11">142k€/an vs 94.5k€/an</text>
+                        <text x="25" y="259" fill="#f59e0b" font-size="11" font-weight="800">-33.4% d'économie Cloud</text>
+
+                        <rect x="15" y="285" width="185" height="90" rx="10" fill="#08182b"/>
+                        <text x="25" y="310" fill="#38bdf8" font-size="12.5" font-weight="900">SAFe Enabler</text>
+                        <text x="25" y="330" fill="#e2e8f0" font-size="11">Découpage Backlog</text>
+                        <text x="25" y="348" fill="#7dd3fc" font-size="11">1 Epic, 3 Features,</text>
+                        <text x="25" y="364" fill="#38bdf8" font-size="11" font-weight="800">12 US Jira & DoD</text>
+                    </g>
+                    <path d="M 1110 240 L 1150 240" stroke="#a855f7" stroke-width="3.5"/>
+
+                    <g transform="translate(1155, 45)">
+                        <rect width="165" height="395" rx="16" fill="#130b21" stroke="#a855f7" stroke-width="2"/>
+                        <rect x="0" y="0" width="165" height="6" rx="3" fill="#a855f7"/>
+                        <circle cx="30" cy="35" r="18" fill="#a855f7"/>
+                        <text x="30" y="42" fill="#ffffff" font-size="15" font-weight="900" text-anchor="middle">5</text>
+                        <text x="56" y="42" fill="#d8b4fe" font-size="16" font-weight="900">Livrables</text>
+
+                        <rect x="10" y="75" width="145" height="85" rx="10" fill="#1f1136"/>
+                        <text x="18" y="98" fill="#c084fc" font-size="12" font-weight="900">Pack 10 Fichiers</text>
+                        <text x="18" y="118" fill="#e2e8f0" font-size="11">DAT, DCA, FinOps,</text>
+                        <text x="18" y="134" fill="#e2e8f0" font-size="11">Draw.io & PUML,</text>
+                        <text x="18" y="150" fill="#e879f9" font-size="11" font-weight="800">Jira CSV Excel FR</text>
+
+                        <rect x="10" y="175" width="145" height="105" rx="10" fill="#092618" stroke="#10b981"/>
+                        <text x="18" y="198" fill="#34d399" font-size="12" font-weight="900">Anti-Secrets</text>
+                        <text x="18" y="218" fill="#e2e8f0" font-size="10.5">Scan GitPublisher</text>
+                        <text x="18" y="234" fill="#e2e8f0" font-size="10.5">0 IP privée RFC 1918</text>
+                        <text x="18" y="250" fill="#e2e8f0" font-size="10.5">0 clé ou jeton</text>
+                        <text x="18" y="268" fill="#6ee7b7" font-size="10.5" font-weight="900">Souveraineté</text>
+
+                        <rect x="10" y="295" width="145" height="80" rx="10" fill="#291a05" stroke="#f59e0b"/>
+                        <text x="18" y="320" fill="#fbbf24" font-size="12" font-weight="900">Porte HITL [O/N]</text>
+                        <text x="18" y="340" fill="#fde68a" font-size="11">Accord humain</text>
+                        <text x="18" y="358" fill="#f59e0b" font-size="11" font-weight="900">avant commit Git</text>
+                    </g>
+                </svg>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">
+                    <span class="footer-tag">⚡ Pipeline d'Ingénierie</span>
+                    <span>• De la réception du besoin à la publication Git sous contrôle humain strict (Human-in-the-Loop)</span>
+                </div>
+                <div class="footer-right">6 / 9</div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 7 : LES ÉTUDES RÉELLES MENÉES (CAS PRATIQUES)
+        =========================================== -->
+        <section class="slide-canvas" id="slide-7">
+            <div class="slide-top">
+                <div>
+                    <div class="brand-eyebrow">
+                        APPLICATION TERRAIN & ÉTUDES D'ARCHITECTURE
+                        <span class="badge-framework">RÉSULTATS PROUVÉS</span>
+                    </div>
+                    <h2 class="slide-heading">Cas d'Usage Réels : Les Études Concrètes Menées</h2>
+                    <div class="slide-subheading">La preuve par l'impact sur nos périmètres applicatifs complexes et nos grands chantiers SI</div>
+                </div>
+                <div class="author-box">
+                    <div class="author-name">Widad SAGHIR</div>
+                    <div class="author-title">Études Réalisées</div>
+                </div>
+            </div>
+
+            <div class="bento-grid">
+                <div class="bento-card" style="border-top: 4px solid #38bdf8;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">📊 Étude 1 : Migration Décisionnelle Cloud (NovaAnalytics)</span>
+                        <span class="bento-badge badge-blue">Pack 10 Livrables</span>
+                    </div>
+                    <div class="bento-body">
+                        <ul class="bento-list">
+                            <li><strong>Problème :</strong> Monolithe décisionnel historique 4 To à basculer sur un socle Cloud managé C2.</li>
+                            <li><strong>Choc Contradictoire :</strong> Le Challenger refuse Kafka (surcoût 850€/m) et impose un pipeline serverless.</li>
+                            <li><strong>Impact :</strong> TCO réduit de <strong>-33.4%</strong> (94.5k€ vs 142k€/an) et 12 User Stories Jira générées en CSV.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-top: 4px solid #f43f5e;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">⚡ Étude 2 : Félix / GESMA (Flux Kafka 9096)</span>
+                        <span class="bento-badge badge-red">Haute Volumétrie</span>
+                    </div>
+                    <div class="bento-body">
+                        <ul class="bento-list">
+                            <li><strong>Problème :</strong> Cartographie des flux asynchrones entre PERF et RISPI/INT sur le cluster GESMA (80 000 factures/nuit).</li>
+                            <li><strong>Apport Brigade :</strong> Modélisation des contrats d'interface, analyse de comportement et isolation réseau stricte.</li>
+                            <li><strong>Impact :</strong> Détection des verrous de latence et sécurisation des échanges sans impact sur le train SAFe.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-top: 4px solid #10b981;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">🗄️ Étude 3 : PostgreSQL vers DBaaS (Wispr & GOC)</span>
+                        <span class="bento-badge badge-green">Ops & Rationalisation</span>
+                    </div>
+                    <div class="bento-body">
+                        <ul class="bento-list">
+                            <li><strong>Problème :</strong> Charge opérationnelle lourde sur les VM unitaires gérées manuellement par scripts Ansible.</li>
+                            <li><strong>Apport Brigade :</strong> Étude d'opportunité DBaaS managé pour GOC (audit Kafka/JMS) et Wispr (configuration applicative).</li>
+                            <li><strong>Impact :</strong> Centralisation de l'administration, automatisation des sauvegardes et division par 3 du coût de maintien.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-top: 4px solid #a855f7;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">🌐 Étude 4 : Far&Co (ESIP & Serveurs ODI)</span>
+                        <span class="bento-badge badge-purple">Urbanisation</span>
+                    </div>
+                    <div class="bento-body">
+                        <ul class="bento-list">
+                            <li><strong>Problème :</strong> Cadrage des ouvertures de flux et intégration des serveurs de traitement batchs ODI.</li>
+                            <li><strong>Apport Brigade :</strong> Modélisation triple format (Draw.io, PlantUML, Mermaid) et dossier de sécurité DCA.</li>
+                            <li><strong>Impact :</strong> Validation en commission d'architecture sans aller-retour documentaire fastidieux.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">
+                    <span class="footer-tag">⚡ Retours d'Expérience Concrets</span>
+                    <span>• La brigade est directement appliquée aux problématiques réelles de production et d'architecture</span>
+                </div>
+                <div class="footer-right">7 / 9</div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 8 : DÉMO VIDÉO & SCÉNARIO TIMECODÉ
+        =========================================== -->
+        <section class="slide-canvas" id="slide-8">
+            <div class="slide-top">
+                <div>
+                    <div class="brand-eyebrow">
+                        DÉMONSTRATION EN CONDITIONS RÉELLES
+                        <span class="badge-framework">8 MINUTES CHRONO</span>
+                    </div>
+                    <h2 class="slide-heading">La Démonstration Vidéo : Voir la Brigade en Action</h2>
+                    <div class="slide-subheading">Séquence préenregistrée commentée en direct pour contourner l'effet démo et apprécier les détails</div>
+                </div>
+                <div class="author-box">
+                    <div class="author-name">Widad SAGHIR</div>
+                    <div class="author-title">Démonstration Produit</div>
+                </div>
+            </div>
+
+            <div class="statement-card">
+                <span class="statement-icon">🎬</span>
+                <p class="statement-quote">
+                    « Pour vous épargner les temps de latence réseau et d'API, la démonstration est préenregistrée. Vous allez assister à la joute contradictoire et à la restitution des livrables. »
+                </p>
+            </div>
+
+            <div class="bento-grid">
+                <div class="bento-card">
+                    <div class="bento-card-header">
+                        <span class="bento-title">⏱️ 00:00 - 02:45 | Le Cadrage & Démarrage</span>
+                        <span class="bento-badge badge-blue">Séquence 1</span>
+                    </div>
+                    <div class="bento-body">
+                        • <strong>L'Input de cadrage :</strong> Examen de <code>00_CAHIER_DES_CHARGES_INPUT.md</code> (monolithe 4 To, cible cloud C2).<br>
+                        • <strong>Lancement CLI :</strong> <code>python src/main.py --study-dir docs/etudes/migration_ssas_cloud --language fr</code><br>
+                        • <strong>Initialisation :</strong> Les 9 agents s'activent et chargent la doctrine RAG ChromaDB.
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-left: 5px solid #f43f5e;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">⏱️ 02:45 - 04:30 | Le Clou : Le Débat Contradictoire</span>
+                        <span class="bento-badge badge-red">Temps Fort</span>
+                    </div>
+                    <div class="bento-body">
+                        • <strong>Proposition Solution Architect :</strong> Cluster Kafka 3 nœuds et microservices.<br>
+                        • <strong>Alerte Challenger Red Team :</strong> Refus formel de Kafka (sur-ingénierie pour du batch, surcoût 850€/m).<br>
+                        • <strong>Injonction CISO :</strong> Chiffrement CMK obligatoire pour données C2.<br>
+                        • <strong>Arbitrage Lead Archi :</strong> Remplacement par pipeline serverless managé.
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-left: 5px solid #a855f7;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">⏱️ 04:30 - 06:45 | Inspection des Livrables</span>
+                        <span class="bento-badge badge-purple">Restitution</span>
+                    </div>
+                    <div class="bento-body">
+                        • <strong>Le DAT :</strong> 35 pages structurées selon les 8 phases TOGAF 10.<br>
+                        • <strong>Schémas Draw.io :</strong> Fichier <code>.drawio</code> vectoriel modifiable directement.<br>
+                        • <strong>Schémas PUML & MMD :</strong> Rendu visuel immédiat dans la documentation Git.
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-left: 5px solid #10b981;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">⏱️ 06:45 - 08:00 | Excel Jira & Porte HITL</span>
+                        <span class="bento-badge badge-green">Gouvernance</span>
+                    </div>
+                    <div class="bento-body">
+                        • <strong>Jira sous Excel :</strong> CSV avec point-virgule et encodage parfait sans corruption d'accents.<br>
+                        • <strong>Scan GitPublisher :</strong> 0 secret détecté et invite <code>[O/N]</code> avant push.<br>
+                        • <strong>Bilan Pytest :</strong> 48 tests validés en 1.84s (contrôle anti-dérive).
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">
+                    <span class="footer-tag">⚡ Démonstration Vidéo</span>
+                    <span>• Script simulateur prêt : <code>python docs/presentation/enregistrer_demo_interactive.py</code></span>
+                </div>
+                <div class="footer-right">8 / 9</div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 9 : SYNTHÈSE & DÉBAT Q/R
+        =========================================== -->
+        <section class="slide-canvas" id="slide-9">
+            <div class="slide-top">
+                <div>
+                    <div class="brand-eyebrow">
+                        SYNTHÈSE EXÉCUTIVE & QUESTIONS / RÉPONSES
+                        <span class="badge-framework">ÉCHANGE ENTRE PAIRS</span>
+                    </div>
+                    <h2 class="slide-heading">L'Architecte de Demain : De Scribe à Pilote Stratégique</h2>
+                    <div class="slide-subheading">Ouvrons le débat sur l'intégration de la brigade d'architecture dans nos pratiques quotidiennes</div>
+                </div>
+                <div class="author-box">
+                    <div class="author-name">Widad SAGHIR</div>
+                    <div class="author-title">Session Débat Q/R</div>
+                </div>
+            </div>
+
+            <div class="statement-card">
+                <span class="statement-icon">💬</span>
+                <p class="statement-quote">
+                    « L'IA ne remplace pas l'architecte : elle le libère de la corvée de rédaction pour lui redonner son rôle premier d'arbitre, de stratège et de coach technique auprès des équipes. »
+                </p>
+            </div>
+
+            <div class="bento-col-3">
+                <div class="bento-card" style="border-top: 5px solid #38bdf8;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">⚡ Les 3 Bénéfices Majeurs</span>
+                        <span class="bento-badge badge-blue">Valeur</span>
+                    </div>
+                    <div class="bento-body">
+                        <ul class="bento-list">
+                            <li><strong>Productivité x10 :</strong> Passer de 15 jours de rédaction à quelques heures d'arbitrage critique.</li>
+                            <li><strong>Contradictoire Permanent :</strong> Zéro sur-ingénierie grâce au filtre impitoyable de la Red Team.</li>
+                            <li><strong>Continuité de Chaîne :</strong> De la stratégie TOGAF jusqu'à la User Story Jira prête pour le sprint.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-top: 5px solid #10b981;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">🛡️ Ce que Nous Conservons</span>
+                        <span class="bento-badge badge-green">Souveraineté</span>
+                    </div>
+                    <div class="bento-body">
+                        <ul class="bento-list">
+                            <li><strong>Le Discernement Métier :</strong> La sensibilité aux enjeux politiques, contractuels et humains.</li>
+                            <li><strong>L'Arbitrage Final :</strong> La machine propose des variantes, l'humain tranche et engage sa signature.</li>
+                            <li><strong>La Présence Terrain :</strong> Le coaching et la proximité avec les développeurs.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bento-card" style="border-top: 5px solid #a855f7;">
+                    <div class="bento-card-header">
+                        <span class="bento-title">❓ Questions pour le Débat</span>
+                        <span class="bento-badge badge-purple">Discussion</span>
+                    </div>
+                    <div class="bento-body">
+                        <ul class="bento-list">
+                            <li>Dans vos projets actuels, quel livrable vous prend le plus de temps ?</li>
+                            <li>Comment verriez-vous un rôle "Red Team / Challenger" dans vos revues d'architecture ?</li>
+                            <li>Quelles règles de doctrine devrions-nous injecter en priorité dans notre base vectorielle ?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">
+                    <span class="footer-tag">⚡ Place aux Échanges</span>
+                    <span>• Merci pour votre attention — Session de Questions / Réponses ouverte</span>
+                </div>
+                <div class="footer-right">9 / 9</div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Script de Navigation Diaporama Clavier & Boutons -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 9;
+
+        function showSlide(index) {
+            if (index < 1 || index > totalSlides) return;
+            currentSlide = index;
+
+            document.querySelectorAll('.slide-canvas').forEach((el, idx) => {
+                if (idx + 1 === currentSlide) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+
+            document.querySelectorAll('.nav-slide-btn').forEach((btn, idx) => {
+                if (idx + 1 === currentSlide) {
+                    btn.classList.add('btn-active');
+                } else {
+                    btn.classList.remove('btn-active');
+                }
+            });
+
+            document.getElementById('slide-counter').textContent = `Slide ${currentSlide} / ${totalSlides}`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Plein écran non disponible : ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key.toLowerCase() === 'f') {
+                toggleFullScreen();
+            }
+        });
+    </script>
+</body>
+</html>

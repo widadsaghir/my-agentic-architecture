@@ -51,7 +51,8 @@ def test_all_operational_tasks_exist_and_exported():
         "create_finops_task",
         "create_meta_maintenance_task",
         "create_career_branding_task",
-        "create_convergence_reconciliation_task"
+        "create_convergence_reconciliation_task",
+        "create_executive_restitution_task"
     ]
 
     for task_func_name in operational_tasks:
@@ -64,7 +65,7 @@ def test_all_operational_tasks_exist_and_exported():
 
 def test_deterministic_tools_exist_and_exported():
     """
-    Vérifie que les adaptateurs déterministes (RAG, GitPublisher, JiraExporter, DiagramExporter) sont exportés.
+    Vérifie que les adaptateurs déterministes (RAG, GitPublisher, JiraExporter, DiagramExporter, PresentationExporter) sont exportés.
     """
     expected_tools = [
         "ArchitectureRAGManager",
@@ -73,7 +74,8 @@ def test_deterministic_tools_exist_and_exported():
         "JiraBacklogExporter",
         "DiagramExporter",
         "LogAnalyzer",
-        "CareerExporter"
+        "CareerExporter",
+        "ExecutivePresentationExporter"
     ]
     for tool_name in expected_tools:
         assert hasattr(tools_module, tool_name), f"Composant déterministe '{tool_name}' manquant dans src/tools/"

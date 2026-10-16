@@ -34,7 +34,8 @@ from src.tools import (
     JiraBacklogExporter,
     DiagramExporter,
     LogAnalyzer,
-    CareerExporter
+    CareerExporter,
+    ExecutivePresentationExporter
 )
 from crewai import Crew, Process
 
@@ -297,6 +298,29 @@ def main():
             base_name="architecture_cible_omniclaim"
         )
         print(f"🖼️ Schémas d'architecture (Draw.io, PlantUML, Mermaid) générés et extraits dans : {diagrams_dir}")
+
+        # Restitution Exécutive ARB & Slide Deck 16:9 Bento Grid Haute Couture
+        presentation_exporter = ExecutivePresentationExporter()
+        presentation_slides_file = study_path / "10_SYNTHESE_EXECUTIVE_RESTITUTION_SLIDES.html"
+        
+        # Collecter les schémas existants (AS-IS et TO-BE)
+        diagrams_map = {}
+        for mmd_file in diagrams_dir.glob("*.mmd"):
+            if "as_is" in mmd_file.stem.lower():
+                diagrams_map["AS-IS"] = mmd_file.read_text(encoding="utf-8")
+            elif "l2_container" in mmd_file.stem.lower() or "cible" in mmd_file.stem.lower():
+                diagrams_map["TO-BE"] = mmd_file.read_text(encoding="utf-8")
+
+        convergence_output = str(convergence_task.output.raw) if hasattr(convergence_task, "output") and convergence_task.output else ""
+        restitution_source = convergence_output or design_output or input_content
+
+        presentation_exporter.export_presentation(
+            study_title=study_title,
+            study_content=restitution_source,
+            diagrams=diagrams_map,
+            output_file=presentation_slides_file
+        )
+        print(f"📽️ Slide Deck Exécutif 16:9 Bento Grid généré : {presentation_slides_file}")
 
         print(f"📦 Pack d'architecture complet (Livrables, Schémas, Observabilité & Carrière) généré dans : {study_path}")
 

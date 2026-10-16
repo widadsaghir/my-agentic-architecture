@@ -122,6 +122,19 @@ def test_convergence_reconciliation_task_language_and_doctrine(agent):
     assert "arbitrage" in desc_lower or "réconciliation" in desc_lower or "convergence" in desc_lower
     assert task.context == []
 
+def test_executive_restitution_task_language_and_doctrine(agent):
+    """Vérifie que la tâche de restitution exécutive intègre AS-IS, TO-BE et le storyboard de slides."""
+    from src.tasks.architecture_tasks import create_executive_restitution_task
+    task = create_executive_restitution_task(agent, context_tasks=[], language="French")
+
+    assert "[French]" in task.description
+    assert "[French]" in task.expected_output
+    desc_lower = task.description.lower()
+    assert "as-is" in desc_lower or "to-be" in desc_lower
+    assert "storyboard" in desc_lower or "slide" in desc_lower or "restitution" in desc_lower
+    assert task.context == []
+
+
 
 
 

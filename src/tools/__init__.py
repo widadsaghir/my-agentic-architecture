@@ -7,6 +7,7 @@ from .jira_exporter import JiraBacklogExporter
 from .diagram_exporter import DiagramExporter
 from .log_analyzer import LogAnalyzer
 from .career_exporter import CareerExporter
+from .presentation_exporter import ExecutivePresentationExporter
 
 __all__ = [
     "ArchitectureRAGManager",
@@ -15,5 +16,6 @@ __all__ = [
     "JiraBacklogExporter",
     "DiagramExporter",
     "LogAnalyzer",
-    "CareerExporter"
+    "CareerExporter",
+    "ExecutivePresentationExporter"
 ]

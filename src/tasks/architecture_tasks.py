@@ -312,6 +312,43 @@ def create_convergence_reconciliation_task(agent: Agent, context_tasks: list, la
         context=context_tasks
     )
 
+def create_executive_restitution_task(agent: Agent, context_tasks: list, language: str) -> Task:
+    """
+    Crée la tâche de restitution exécutive d'architecture devant l'Architecture Review Board (ARB) et le C-Level.
+    Produit la synthèse stratégique comparant AS-IS et TO-BE, extrait les KPIs majeurs et prépare
+    le storyboard pour l'exportation du Slide Deck HTML 16:9 au standard Haute Couture Bento Grid.
+    """
+    description = (
+        f"En tant que Lead Solution Architect et responsable de la restitution devant l'Architecture Review Board (ARB) et le C-Level :\n"
+        f"1. Analyser l'ensemble des livrables de l'étude (DAT, décision d'arbitrage ARB, audit CISO, brique Craft et analyse FinOps).\n"
+        f"2. Formaliser un storyboard exécutif de restitution d'architecture à fort impact visuel :\n"
+        f"   - Une accroche exécutive stratégique (Executive Statement).\n"
+        f"   - Les 6 indicateurs de performance clés (KPIs chiffrés : ROI, SLA, latence, TCO, etc.).\n"
+        f"   - La comparaison directe AS-IS vs TO-BE intégrant les schémas d'architecture Mermaid de l'étude.\n"
+        f"   - Les 4 arbitrages et décisions structurantes validés lors de la convergence.\n"
+        f"   - Un plan d'action d'exécution et de trajectoire (Sprints / PI Planning SAFe).\n"
+        f"3. Rédiger le script de discours oral minuté pour le présentateur (avec version en Français et en Anglais).\n"
+        f"Ce storyboard servira de socle pour générer le Slide Deck HTML 16:9 interactif au standard Haute Couture Bento Grid.\n\n"
+        f"IMPORTANT : Rédiger votre storyboard de restitution exécutive en langue [{language}]."
+    )
+
+    expected_output = (
+        f"Un dossier de restitution exécutive d'architecture en Markdown rédigé en [{language}], comprenant :\n"
+        f"1. Executive Statement & Vision stratégique de transformation\n"
+        f"2. Les 6 KPIs d'architecture et de valeur business (Format clé: valeur)\n"
+        f"3. Synthèse comparative AS-IS vs TO-BE avec schémas Mermaid intégrés\n"
+        f"4. Matrice des 4 décisions d'arbitrage majeures (ADRs) et compromis associés\n"
+        f"5. Plan de trajectoire de delivery et ROI FinOps\n"
+        f"6. Script de discours oral minuté pour la soutenance ARB."
+    )
+
+    return Task(
+        description=description,
+        expected_output=expected_output,
+        agent=agent,
+        context=context_tasks
+    )
+
 
 
 

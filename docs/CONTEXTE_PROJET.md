@@ -96,4 +96,20 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 ## 📍 Bilan & Perspectives
 🏆 **Les 5 Briques de la feuille de route d'implémentation sont désormais 100% terminées et validées en Built-in Quality.**
 
+### 🎙️ Kit de Présentation & Restitution Communauté d'Architecture (Session de 30 min)
+Un kit complet de restitution professionnelle a été formalisé sous `docs/presentation/` :
+- `01_SLIDES_PRESENTATION_ARCHI_AUGMENTE.md` : Support visuel de 9 diapositives épurées.
+- `02_SCRIPT_DISCOURS_ORAL_MOT_A_MOT.md` : Discours oral mot à mot daté du jour (15 min chrono).
+- `03_STORYBOARD_ET_SCENARIO_DEMO_VIDEO.md` : Scénario timecodé pour l'enregistrement de la démo vidéo de 8 minutes.
+- `04_GUIDE_QUESTIONS_REPONSES_ET_OBJECTIONS.md` : Réponses argumentées aux 5 questions et objections récurrentes des pairs.
+- `enregistrer_demo_interactive.py` : Script Python interactif permettant de rejouer la démo à l'écran en haute fidélité pour une capture vidéo parfaite.
+
+### 📽️ Brique Restitution Exécutive ARB & Slide Deck 16:9 Haute Couture
+Chaque étude d'architecture génère désormais automatiquement :
+- `10_SYNTHESE_EXECUTIVE_RESTITUTION.md` : Le storyboard exécutif, comparatif AS-IS vs TO-BE, matrice des 4 décisions d'arbitrage et discours oral minuté bilingue.
+- `10_SYNTHESE_EXECUTIVE_RESTITUTION_SLIDES.html` : La présentation interactive 16:9 au standard Haute Couture Bento Grid (schémas Mermaid AS-IS et TO-BE embarqués, capsules KPI, mode Single-Slide et navigation clavier).
+- Outil déterministe sous `src/tools/presentation_exporter.py` (`ExecutivePresentationExporter`) validé par 3 tests unitaires déterministes (0 token).
+
+
+
 

@@ -10,7 +10,8 @@ from .architecture_tasks import (
     create_finops_task,
     create_meta_maintenance_task,
     create_career_branding_task,
-    create_convergence_reconciliation_task
+    create_convergence_reconciliation_task,
+    create_executive_restitution_task
 )
 
 __all__ = [
@@ -22,5 +23,6 @@ __all__ = [
     "create_finops_task",
     "create_meta_maintenance_task",
     "create_career_branding_task",
-    "create_convergence_reconciliation_task"
+    "create_convergence_reconciliation_task",
+    "create_executive_restitution_task"
 ]
