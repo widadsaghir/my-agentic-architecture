@@ -7,20 +7,28 @@ def test_cli_argument_parsing_with_all_flags(monkeypatch):
     """Vérifie que la CLI parse correctement l'ensemble des arguments sans exception."""
     test_args = [
         "main.py",
+        "--mode", "committee",
         "--language", "French",
         "--input", "Notes de cadrage test",
         "--output", "test_out.md",
         "--study-dir", "docs/etudes/test_study",
+        "--min-score", "90.0",
+        "--max-loops", "5",
+        "--audience", "Jury L2",
         "--log-file", "logs/test.log",
         "--publish-git"
     ]
     monkeypatch.setattr(sys, "argv", test_args)
     args = parse_arguments()
 
+    assert args.mode == "committee"
     assert args.language == "French"
     assert args.input == "Notes de cadrage test"
     assert args.output == "test_out.md"
     assert args.study_dir == "docs/etudes/test_study"
+    assert args.min_score == 90.0
+    assert args.max_loops == 5
+    assert args.audience == "Jury L2"
     assert args.log_file == "logs/test.log"
     assert args.publish_git is True
 

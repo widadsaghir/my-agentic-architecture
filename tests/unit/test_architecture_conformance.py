@@ -15,6 +15,7 @@ def test_all_operational_agents_exist_and_exported():
     sont effectivement implémentés en Python et exportés dans __all__.
     """
     operational_agents = [
+        # Brigade TOGAF / SAFe / CISO
         "create_manager_agent",
         "create_solution_architect_agent",
         "create_challenger_agent",
@@ -23,7 +24,23 @@ def test_all_operational_agents_exist_and_exported():
         "create_safe_enabler_agent",
         "create_finops_agent",
         "create_meta_agent",
-        "create_career_branding_agent"
+        "create_career_branding_agent",
+        # Comité d'Architecture Virtuel des 5 Maîtres & Green/FinOps
+        "create_martin_fowler_agent",
+        "create_uncle_bob_agent",
+        "create_werner_vogels_agent",
+        "create_alistair_cockburn_agent",
+        "create_sam_newman_agent",
+        "create_greenops_finops_agent",
+        "create_architecture_quality_gate_agent",
+        # Conseil des 5 Grands Orateurs & Éloquence TEDx
+        "create_hassan_ii_agent",
+        "create_steve_jobs_agent",
+        "create_martin_luther_king_agent",
+        "create_winston_churchill_agent",
+        "create_barack_obama_agent",
+        "create_stage_director_agent",
+        "create_eloquence_judge_agent"
     ]
 
     for agent_func_name in operational_agents:
@@ -43,6 +60,7 @@ def test_all_operational_tasks_exist_and_exported():
     Vérifie que chaque agent opérationnel possède sa fonction de tâche associée dans src/tasks/.
     """
     operational_tasks = [
+        # Tâches Brigade TOGAF / SAFe / CISO
         "create_preliminary_design_task",
         "create_challenge_task",
         "create_security_audit_task",
@@ -52,7 +70,23 @@ def test_all_operational_tasks_exist_and_exported():
         "create_meta_maintenance_task",
         "create_career_branding_task",
         "create_convergence_reconciliation_task",
-        "create_executive_restitution_task"
+        "create_executive_restitution_task",
+        # Tâches Comité d'Architecture Virtuel & Quality Gate
+        "create_initial_architecture_draft_task",
+        "create_fowler_review_task",
+        "create_uncle_bob_review_task",
+        "create_vogels_review_task",
+        "create_cockburn_review_task",
+        "create_newman_review_task",
+        "create_greenops_finops_review_task",
+        "create_quality_gate_evaluation_task",
+        "create_committee_synthesis_task",
+        # Tâches Conseil des Grands Orateurs & Éloquence TEDx
+        "create_orator_context_analysis_task",
+        "create_roundtable_propositions_task",
+        "create_stage_director_synthesis_task",
+        "create_eloquence_judge_evaluation_task",
+        "create_final_speech_pack_task"
     ]
 
     for task_func_name in operational_tasks:
@@ -65,7 +99,7 @@ def test_all_operational_tasks_exist_and_exported():
 
 def test_deterministic_tools_exist_and_exported():
     """
-    Vérifie que les adaptateurs déterministes (RAG, GitPublisher, JiraExporter, DiagramExporter, PresentationExporter) sont exportés.
+    Vérifie que les adaptateurs déterministes (RAG, GitPublisher, JiraExporter, DiagramExporter, PresentationExporter, PrompterExporter) sont exportés.
     """
     expected_tools = [
         "ArchitectureRAGManager",
@@ -75,7 +109,8 @@ def test_deterministic_tools_exist_and_exported():
         "DiagramExporter",
         "LogAnalyzer",
         "CareerExporter",
-        "ExecutivePresentationExporter"
+        "ExecutivePresentationExporter",
+        "ExecutivePrompterExporter"
     ]
     for tool_name in expected_tools:
         assert hasattr(tools_module, tool_name), f"Composant déterministe '{tool_name}' manquant dans src/tools/"
@@ -84,8 +119,7 @@ def test_deterministic_tools_exist_and_exported():
 def test_documentation_drift_conformance():
     """
     Vérifie la cohérence documentaire : le fichier CONTEXTE_PROJET.md doit lister
-    les 8 agents et expliciter le statut des agents futurs (Meta-Agent, Carrière)
-    afin qu'aucun composant ne soit oublié ou prétendu disponible à tort.
+    les composants majeurs du système.
     """
     contexte_file = BASE_DIR / "docs" / "CONTEXTE_PROJET.md"
     assert contexte_file.exists(), "Le fichier docs/CONTEXTE_PROJET.md est introuvable !"
@@ -98,7 +132,5 @@ def test_documentation_drift_conformance():
     assert "software crafter" in content
     assert "safe system architect" in content
     assert "migration & finops" in content
-
-    # Vérification des agents futurs explicites (pas oubliés !)
     assert "meta-agent" in content
     assert "agent carrière & personal branding" in content

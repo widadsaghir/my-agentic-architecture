@@ -8,6 +8,7 @@ from .diagram_exporter import DiagramExporter
 from .log_analyzer import LogAnalyzer
 from .career_exporter import CareerExporter
 from .presentation_exporter import ExecutivePresentationExporter
+from .executive_prompter_exporter import ExecutivePrompterExporter
 
 __all__ = [
     "ArchitectureRAGManager",
@@ -17,5 +18,6 @@ __all__ = [
     "DiagramExporter",
     "LogAnalyzer",
     "CareerExporter",
-    "ExecutivePresentationExporter"
+    "ExecutivePresentationExporter",
+    "ExecutivePrompterExporter"
 ]
