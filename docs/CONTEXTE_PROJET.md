@@ -132,15 +132,16 @@ Chaque étude d'architecture génère désormais automatiquement :
 ---
 
 ### 🚀 Nouvelle Initiative au Backlog : Brigade Multi-Agents « Executive Presentations, TEDx Storytelling & Speech Coaching »
-- **Vision globale :** Générer de manière entièrement automatisée le **package complet et indissociable de soutenance exécutive** à très fort enjeu (Board de certification L2/L3, Keynotes TEDx/Tech Summits, soutenances d'avant-vente C-Level) :
-  1. **Le Support Visuel Interactif (Le Deck) :** Diaporama 16:9 au standard Haute Couture Bento Grid (HTML Single-Slide interactif, schémas vectoriels SVG/Mermaid embarqués, capsules KPI et export PPTX/PDF).
-  2. **Le Discours Scénarisé (Le Pitch) :** Prompter mot à mot minuté à la seconde près avec annotations scéniques (`[PAUSE 2s]`, `[BREATHE]`, `[SOURIRE]`, `[REGARD CAMÉRA]`, `[↘ INTONATION DESCENDANTE]`).
-  3. **Le Coaching de Préparation Mentale :** Guide de sophrologie complet (respiration 4-4-6, ancrage corporel, visualisation guidée et bouclier anti-doute en Q&A).
-- **Architecture de la Brigade envisagée (CrewAI) :**
-  1. `Executive Slide Designer & Visual Architect Agent` : Génère le support visuel de présentation (HTML 16:9 Bento Grid, mode Single-Slide, injection des schémas d'architecture vectoriels et élimination stricte de la surcharge cognitive).
-  2. `Executive Storyteller Agent` : Scénarise l'épopée d'architecture (The Hook magnétique TEDx, The Hero's Journey, problème sous contrainte et arbitrage d'impact).
-  3. `TEDx Stage & Vocal Coach Agent` : Produit le prompter mot à mot chronométré avec pauses scéniques, intonations d'autorité et gestion du timing.
-  4. `Sophrology & Mental Prep Coach Agent` : Élabore les protocoles de respiration, d'ancrage corporel, de visualisation du succès et de désamorçage des questions pièges du jury.
+- **Vision globale :** Générer de manière entièrement automatisée le **package complet et indissociable de soutenance exécutive** à très fort enjeu (Board de certification L2/L3, Keynotes TEDx/Tech Summits, soutenances d'avant-vente C-Level).
+
+---
+
+### 👑 Nouvelle Étude Stratégique Carrière : Objectif Recrutement AWS CDI (Assessment Technique Senior/Principal SA L6-L7)
+- **Objectif Ultime :** Décrocher une offre ferme en CDI chez AWS au plus haut niveau de rémunération du marché (Fourchette Total Compensation : 180 k€ - 240 k€+ en Base + Sign-on + RSUs).
+- **Livrables d'entraînement sous `docs/etudes/aws_assessment_senior_sa_cdi/` :**
+  - `00_CAHIER_DES_CHARGES_INPUT.md` : Cadrage stratégique, cas pratique « Global Mission-Critical Fintech & Billing », 6 Piliers Well-Architected et Leadership Principles.
+  - Entraînement interactif au System Design Whiteboard, Deep-Dive questions pièges et simulation Bar Raiser avec le Comité des 5 Maîtres (Werner Vogels, Martin Fowler, Uncle Bob, Sam Newman, Alistair Cockburn).
+
 
 
 
