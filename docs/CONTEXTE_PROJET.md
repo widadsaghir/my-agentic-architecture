@@ -48,37 +48,56 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 | **3** | Base Vectorielle & RAG (ChromaDB) | 🟢 Terminé | ChromaDB local persistant (`chroma_db/`), doctrine d'entreprise (`knowledge/`), `ArchitectureRAGManager`, et `KnowledgeSearchTool` injecté dans Solution Architect et CISO. |
 | **4** | Génération de Livrables & Outil GitPublisher | 🟢 Terminé | Pack multi-fichiers (`--study-dir`), schémas C4 autonomes (`.drawio`, `.puml`, `.mmd`), adaptateur déterministe `GitPublisher` avec scan anti-secrets & porte HITL, et export Jira CSV point-virgule via `JiraBacklogExporter`. |
 | **5** | Meta-Agent (Self-Healing) & Branding | 🟢 Terminé | Meta-Agent (Agent Zero) avec outil `LogAnalyzer` et Agent Carrière & Branding avec `CareerExporter`. |
+| **6** | Comité d'Architecture Virtuel des 5 Maîtres & Green/FinOps | 🟢 Terminé | 5 Grands Maîtres (Fowler, Uncle Bob, Vogels, Cockburn, Newman), GreenOps/FinOps et Juge Qualité avec `AgenticLoopController`. |
+| **7** | Conseil des Grands Orateurs & Prompter TEDx | 🟢 Terminé | 5 Orateurs Légendaires (Hassan II, Jobs, MLK, Churchill, Obama), Metteur en Scène, Juge d'Éloquence et `ExecutivePrompterExporter`. |
 
 ---
 
-## 📁 Pack Documentaire d'Architecture Produit (`docs/etudes/migration_ssas_cloud/`)
+## 🏛️ Comité d'Architecture Virtuel des 5 Maîtres & Boucles d'Auto-Correction (Brique 6)
 
-- `00_RESUME_EXECUTIF_ET_DECISION.md` (Fiche de synthèse exécutive One-Pager)
-- `00_SYNTHESE_EXECUTIVE_ET_ROADMAP_TOGAF.md` (👑 Lead Architecture Manager)
-- `01_DOSSIER_ARCHITECTURE_TECHNIQUE_DAT.md` (🏗️ Solution Architect)
-- `02_RAPPORT_AUDIT_CONTRADICTOIRE.md` (🎯 Challenger Red Team)
-- `03_AVIS_HOMOLOGATION_SECURITE_DCA.md` (🛡️ CISO & Data Protection)
-- `04_CONCEPTION_HEXAGONALE_ET_DDD.md` (💎 Software Crafter)
-- `05_STRATEGIE_MIGRATION_ET_FINOPS_TCO.md` (💰 Migration & FinOps)
-- `06_BACKLOG_LIVRAISON_SAFE_JIRA.md` (🚆 SAFe Agile Enabler)
-- `07_ROADMAP_DE_REALISATION_ET_PLANNING.md` (Planning Gantt Mermaid, Sprints, Budget, RACI)
-- `backlog_jira.csv` (Export Jira CSV séparateur point-virgule compatible Excel Français)
-- `diagrams/` : Schémas d'architecture AS-IS et TO-BE complets aux formats Draw.io (`.drawio`), PlantUML (`.puml`) et Mermaid (`.mmd`).
+Un collège d'experts mondiaux incarnant les plus grandes doctrines d'architecture logicielle :
+- **Martin Fowler** : Patterns d'entreprise (*P of EAA*, *Software Architecture: The Hard Parts*), évolutivité et refactoring pragmatique.
+- **Robert C. Martin (Uncle Bob)** : Clean Architecture, principes SOLID, Craftsmanship et étanchéité absolue du domaine métier.
+- **Werner Vogels** : Cloud Resilience, *Design for Failure* (« Everything fails all the time »), haute disponibilité multi-AZ et découplage asynchrone.
+- **Alistair Cockburn** : Architecture Hexagonale (Ports & Adaptateurs), découplage driving/driven et testabilité unitaire sans mock lourd.
+- **Sam Newman** : Décomposition des monolithes, microservices DDD, isolation stricte des bases de données et Loi de Conway.
+- **GreenOps & FinOps Architect** : Sobriété numérique, minimisation de l'empreinte carbone (gCO2eq), modélisation TCO et Right-Sizing.
+- **Architecture Quality Gate Judge** : Arbitre suprême évaluant le livrable sur 100 selon une grille d'excellence stricte.
+- **`AgenticLoopController`** : Moteur déterministe de bouclage d'auto-correction (Self-Correction Loop) réinjectant les critiques tant que le score < seuil requis (défaut : 85/100, max 4 à 5 itérations).
+
+---
+
+## 🎙️ Conseil des 5 Grands Orateurs & Restitution TEDx (Brique 7)
+
+Un collège d'orateurs légendaires pour produire le pitch et la soutenance parfaits :
+- **Hassan II** : Éloquence classique, hauteur de vue philosophique, noblesse métaphorique et précision lexicale souveraine.
+- **Steve Jobs** : Storytelling épuré, simplicité radicale, règle de trois, dramatisation du problème et *One More Thing*.
+- **Martin Luther King Jr.** : Émotion profonde (Pathos), rythme anaphorique, appel vibrant aux valeurs universelles et vision d'avenir.
+- **Winston Churchill** : Formules martiales d'impact, verbes d'action au présent, concision et courage face à l'adversité.
+- **Barack Obama** : Connexion empathique, pont entre récit singulier et vision collective, modulation des silences respiratoires.
+- **Executive Stage Director (Metteur en Scène)** : Harmonise et fusionne les propositions des orateurs en un draft unifié scénarisé.
+- **Supreme Eloquence Judge** : Audite le discours sur 5 axes (Clarté, Émotion, Rythme, Vocabulaire, Impact global) et pilote le rebouclage.
+- **`ExecutivePrompterExporter`** : Outil déterministe générant le prompter Markdown et le téléprompteur interactif Single-Slide HTML avec badges scéniques ([PAUSE 2s], [BREATHE], [SOURIRE], [REGARD], [↘ INTONATION FERME]).
 
 ---
 
 ## 🧪 Bilan d'Exécution des Tests Unitaires & d'Architecture (Pytest)
 
-*Dernière exécution : 45/45 tests validés avec succès (100% de réussite)*
+*Dernière exécution : 65/65 tests validés avec succès (100% de réussite)*
 
+- `tests/unit/test_loop_controller.py` : 🟢 (Contrôleur de boucle d'auto-correction, calcul de scores, coupe-circuit et feedback prompts).
+- `tests/unit/test_virtual_committee.py` : 🟢 (Attributs des 5 Maîtres, GreenOps/FinOps, Juge Qualité et tâches d'audit).
+- `tests/unit/test_orator_committee.py` : 🟢 (Attributs des 5 Orateurs, Metteur en Scène, Juge d'Éloquence et tâches d'éloquence).
+- `tests/unit/test_executive_prompter_exporter.py` : 🟢 (Export prompter Markdown, métriques vocales, pauses scéniques et HTML Single-Slide).
+- `tests/unit/test_e2e_virtual_committee_loop.py` : 🟢 (Simulation E2E de rebouclage d'auto-correction architecture et éloquence).
 - `tests/unit/test_meta_agent.py` : 🟢 (Attributs Meta-Agent Agent Zero et analyseur de traces LogAnalyzer).
 - `tests/unit/test_career_agent.py` : 🟢 (Attributs Agent Carrière & Personal Branding et CareerExporter).
 - `tests/unit/test_diagram_syntax.py` : 🟢 (Syntaxe schémas : PlantUML sans remote !include, Mermaid flowchart sans syntaxe illégale, Draw.io XML valide).
 - `tests/unit/test_data_anonymization.py` : 🟢 (Sécurité & Anonymisation : zéro fuite d'adresses IP réelles RFC 1918 et zéro jeton d'API en clair).
-- `tests/unit/test_cli_resilience.py` : 🟢 (Résilience CLI : chargement transparent fichier/texte, arborescences imbriquées et parsing d'arguments).
+- `tests/unit/test_cli_resilience.py` : 🟢 (Résilience CLI : support modes togaf/committee/speech/full, flags min-score, max-loops et audience).
 - `tests/unit/test_e2e_mocked_crew.py` : 🟢 (Exécution E2E Niveau 2 : chaîne complète 6 agents/6 tâches avec Mock LLM déterministe à 0 token en < 2s).
-- `tests/unit/test_hexagonal_architecture.py` : 🟢 (Tests d'Architecture : isolation stricte des outils déterministes, inversion de contrôle, indépendance de la configuration et scan anti-secrets).
-- `tests/unit/test_architecture_conformance.py` : 🟢 (Fitness functions : présence et export des 9 agents, 8 tâches et 7 adaptateurs déterministes).
+- `tests/unit/test_hexagonal_architecture.py` : 🟢 (Tests d'Architecture : isolation stricte des 7 outils déterministes, inversion de contrôle, scan anti-secrets).
+- `tests/unit/test_architecture_conformance.py` : 🟢 (Fitness functions : présence et export de 100% des 23 agents, 24 tâches et 9 outils déterministes).
 - `tests/unit/test_config.py` : 🟢 (Chargement variables, détection clé manquante/placeholder).
 - `tests/unit/test_ciso_agent.py` : 🟢 (Rôle, Zero-Trust, C2 massif, non-délégation).
 - `tests/unit/test_crafter_safe_agents.py` : 🟢 (Hexagonale, TDD, Clean Code, Jira, DoD, ART).
@@ -88,7 +107,7 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
 - `tests/unit/test_git_publisher.py` : 🟢 (Scan anti-secrets, Conventional Commits, arbitrage HITL).
 - `tests/unit/test_jira_exporter.py` : 🟢 (Parsing Markdown et export CSV avec point-virgule et UTF-8-sig).
 - `tests/unit/test_diagram_exporter.py` : 🟢 (Génération des 3 formats Draw.io, PlantUML et Mermaid).
-- `tests/unit/test_tasks.py` : 🟢 (8 tâches testées : Conception, Challenge, Audit CISO, Craft Hexagonal, Delivery SAFe, FinOps, Meta-Gouvernance, Carrière).
+- `tests/unit/test_tasks.py` : 🟢 (Tâches opérationnelles de base testées).
 - `tests/unit/test_pipeline_integration.py` : 🟢 (Assemblage séquentiel complet de la Crew).
 
 ---
@@ -109,6 +128,19 @@ Chaque étude d'architecture génère désormais automatiquement :
 - `10_SYNTHESE_EXECUTIVE_RESTITUTION.md` : Le storyboard exécutif, comparatif AS-IS vs TO-BE, matrice des 4 décisions d'arbitrage et discours oral minuté bilingue.
 - `10_SYNTHESE_EXECUTIVE_RESTITUTION_SLIDES.html` : La présentation interactive 16:9 au standard Haute Couture Bento Grid (schémas Mermaid AS-IS et TO-BE embarqués, capsules KPI, mode Single-Slide et navigation clavier).
 - Outil déterministe sous `src/tools/presentation_exporter.py` (`ExecutivePresentationExporter`) validé par 3 tests unitaires déterministes (0 token).
+
+---
+
+### 🚀 Nouvelle Initiative au Backlog : Brigade Multi-Agents « Executive Presentations, TEDx Storytelling & Speech Coaching »
+- **Vision globale :** Générer de manière entièrement automatisée le **package complet et indissociable de soutenance exécutive** à très fort enjeu (Board de certification L2/L3, Keynotes TEDx/Tech Summits, soutenances d'avant-vente C-Level) :
+  1. **Le Support Visuel Interactif (Le Deck) :** Diaporama 16:9 au standard Haute Couture Bento Grid (HTML Single-Slide interactif, schémas vectoriels SVG/Mermaid embarqués, capsules KPI et export PPTX/PDF).
+  2. **Le Discours Scénarisé (Le Pitch) :** Prompter mot à mot minuté à la seconde près avec annotations scéniques (`[PAUSE 2s]`, `[BREATHE]`, `[SOURIRE]`, `[REGARD CAMÉRA]`, `[↘ INTONATION DESCENDANTE]`).
+  3. **Le Coaching de Préparation Mentale :** Guide de sophrologie complet (respiration 4-4-6, ancrage corporel, visualisation guidée et bouclier anti-doute en Q&A).
+- **Architecture de la Brigade envisagée (CrewAI) :**
+  1. `Executive Slide Designer & Visual Architect Agent` : Génère le support visuel de présentation (HTML 16:9 Bento Grid, mode Single-Slide, injection des schémas d'architecture vectoriels et élimination stricte de la surcharge cognitive).
+  2. `Executive Storyteller Agent` : Scénarise l'épopée d'architecture (The Hook magnétique TEDx, The Hero's Journey, problème sous contrainte et arbitrage d'impact).
+  3. `TEDx Stage & Vocal Coach Agent` : Produit le prompter mot à mot chronométré avec pauses scéniques, intonations d'autorité et gestion du timing.
+  4. `Sophrology & Mental Prep Coach Agent` : Élabore les protocoles de respiration, d'ancrage corporel, de visualisation du succès et de désamorçage des questions pièges du jury.
 
 
 

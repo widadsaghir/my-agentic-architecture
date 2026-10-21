@@ -103,21 +103,21 @@ Le pipeline suit cinq étapes rigoureuses :
 
 ---
 
-## Slide 7 : Les Études Concrètes Menées sur le Terrain (Minute 12:00 - 14:00)
+## Slide 7 : L'Écosystème des Projets Développés sous Git (Minute 12:00 - 14:00)
 
-Cette brigade n'est pas un concept théorique de laboratoire. Nous l'avons directement éprouvée sur nos problématiques d'architecture et de production les plus exigeantes.
+Cette brigade s'inscrit au cœur d'un écosystème cohérent de projets d'ingénierie logicielle que nous avons conçus, codés et éprouvés ensemble sous Git.
 
-Voici quatre cas d'usage emblématiques où elle a fait ses preuves :
+Voici les quatre briques majeures de notre portfolio technique :
 
-Premièrement, sur la modernisation et la migration décisionnelle Cloud NovaAnalytics. C'est le cas complet qui a généré notre pack de dix livrables. Le Challenger y a refusé un cluster Kafka surdimensionné au profit d'un pipeline serverless, permettant de démontrer une réduction de coût de trente-trois pour cent et de produire douze User Stories prêtes pour Jira.
+Premièrement, l'étude de référence NovaAnalytics au sein de notre plateforme d'architecture multi-agents. C'est l'étude complète qui valide notre chaîne de bout en bout. Face au cahier des charges de migration d'un socle décisionnel de quatre téraoctets, le Challenger a refusé un cluster Kafka surdimensionné au profit d'un pipeline serverless, permettant de démontrer une réduction de coût d'hébergement de trente-trois pour cent et de produire automatiquement dix artéfacts structurés, dont le DAT de trente-cinq pages et douze User Stories prêtes pour Jira.
 
-Deuxièmement, sur Félix et les flux GESMA sur le port 9096. Sur un périmètre qui traite quatre-vingts mille factures chaque nuit, la brigade a permis de cartographier avec précision les échanges asynchrones entre PERF et RISPI/INT, d'analyser le comportement des flux et de verrouiller l'isolation réseau sans perturber le train SAFe.
+Deuxièmement, le projet CareerFleet AI. C'est un système multi-agents spécialisé dans la gestion de carrière et le personal branding d'architecte. Des agents dédiés, comme le Career Coach et le Tech Lead Profiler, analysent en continu nos réalisations sous Git pour mettre à jour nos synthèses de compétences et valoriser nos certifications d'architecture.
 
-Troisièmement, sur l'étude de migration de PostgreSQL vers DBaaS. La problématique n'était pas un simple sujet technique, mais une lourde charge opérationnelle liée à la maintenance manuelle de machines virtuelles via Ansible. La brigade a instruit l'opportunité DBaaS managée pour les deux cas d'usage clés : GOC pour l'audit des messages asynchrones Kafka et JMS, et Wispr pour le référentiel de configuration applicative.
+Troisièmement, le projet Agentic Notes Assistant. C'est notre assistant agentique pour la captation de réunions et la transcription structurée d'ateliers de cadrage. Il extrait automatiquement les décisions d'architecture majeures sous forme d'Architecture Decision Records et consolide les plans d'action immédiats.
 
-Quatrièmement, sur Far&Co et l'ESIP. La brigade a instruit les ouvertures de flux pour les serveurs batchs ODI, en générant immédiatement les schémas d'architecture et le dossier de sécurité DCA.
+Quatrièmement, notre bibliothèque AI Prompts & Doctrine Library. C'est notre référentiel de doctrine d'entreprise as code regroupant nos règles de Craftsmanship, d'architecture hexagonale et de sécurité Zero-Trust. Ce corpus alimente directement la base vectorielle locale ChromaDB qui guide les décisions de la brigade.
 
-Dans chacun de ces cas, la brigade a apporté un gain de temps massif et une traçabilité d'arbitrage irréprochable.
+Ces projets démontrent la puissance d'une approche d'ingénierie outillée, 100% maîtrisée, documentée et testée sous Git.
 
 ---
 

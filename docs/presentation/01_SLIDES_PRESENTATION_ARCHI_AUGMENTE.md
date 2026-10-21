@@ -114,26 +114,34 @@ Software Crafter             SAFe System Architect         FinOps & Migration TC
 
 ---
 
-## Slide 6 : Le Résultat Concret : Un Pack d'Étude Complet
+## Slide 6 : Le Workflow Opérationnel : Du Cadrage aux Livrables
 
 ### Éléments Visuels
-- Tableau synoptique présentant les 10 artéfacts générés automatiquement lors d'une étude réelle (Exemple : Migration analytique NovaAnalytics).
+- Schéma pipeline en 5 étapes séquentielles : Cadrage Markdown -> Conception Macro -> CHOC CONTRADICTOIRE (Red Team & CISO) -> Craft & Delivery -> Sortie Déterministe & HITL.
 
-### Contenu Textuel
-| Phase TOGAF | Livrable Produit par la Brigade | Format | Bénéfice Direct |
-| :--- | :--- | :--- | :--- |
-| **Phase A** | Synthèse Exécutive & Roadmap | `.md` | Prêt pour le comité de direction |
-| **Phases B-C-D** | Dossier d'Architecture Technique (DAT) | `.md` | 30 pages de conception détaillée |
-| **Audit** | Rapport d'Audit Contradictoire (Challenger) | `.md` | Analyse d'impact des SPOF et verrous |
-| **Sécurité** | Avis d'Homologation Sécurité (DCA) | `.md` | Analyse DICT, conformité NIST Zero-Trust |
-| **Design** | Conception Hexagonale & Modèle DDD | `.md` | Cartographie des agrégats et ports |
-| **FinOps** | Modèle TCO & Stratégie de Migration | `.md` | Comparatif des coûts On-Premise vs Cloud |
-| **Delivery** | Backlog SAFe & Fichier d'Import Jira | `.csv` | 15 User Stories prêtes au sprint |
-| **Visualisation** | Cartographie AS-IS et TO-BE | `.drawio`, `.puml`, `.mmd` | Modifiables directement dans les outils usuels |
+### Points Clés
+- Injection de la doctrine locale depuis ChromaDB.
+- Étape charnière : Le Challenger traque la sur-ingénierie et le CISO audite les données sensibles (C2 & CMK).
+- SAS de sécurité GitPublisher avec confirmation humaine obligatoire `[O/N]`.
 
 ---
 
-## Slide 7 : Transition vers la Démonstration Vidéo
+## Slide 7 : Le Portfolio des Projets Développés sous Git
+
+### Éléments Visuels
+- Grille 2x2 présentant les 4 projets du portfolio d'ingénierie logicielle sous Git.
+
+### Contenu Textuel
+| Projet Git | Nature & Cadre | Rôle & Innovation Majeure |
+| :--- | :--- | :--- |
+| **NovaAnalytics (AAP)** | `my-agentic-architecture` | Étude pilote de migration décisionnelle Cloud : 10 livrables produits, Red Team refusant Kafka pour du serverless, TCO -33.4%, 12 US Jira. |
+| **CareerFleet AI** | `career-fleet-ai` | Système multi-agents dédié au personal branding et à la valorisation de carrière d'architecte (Coach, Profiler, Portfolio Builder). |
+| **Agentic Notes Assistant** | `agentic-notes-assistant` | Assistant de captation de réunions et d'extraction automatique des Architecture Decision Records (ADR). |
+| **AI Prompts & Doctrine Library** | `ai-prompts-library` | Référentiel de doctrine as code (Clean Code, Hexagonale, Zero-Trust) alimentant la base vectorielle locale ChromaDB. |
+
+---
+
+## Slide 8 : Transition vers la Démonstration Vidéo
 
 ### Éléments Visuels
 - Capture d'écran du terminal en action montrant les logs colorés et la collaboration entre agents.
@@ -153,10 +161,11 @@ Software Crafter             SAFe System Architect         FinOps & Migration TC
 
 ---
 
-## Slide 8 : Synthèse & Posture : L'Architecte de Demain
+## Slide 9 : Synthèse & Débat Ouvert : L'Architecte de Demain
 
 ### Éléments Visuels
 - Formule visuelle marquante : `Architecte Humain (Discernement) + Brigade IA (Formalisation) = Impact Décuplé`.
+
 
 ### Contenu Textuel
 - **Ce que la brigade apporte :**

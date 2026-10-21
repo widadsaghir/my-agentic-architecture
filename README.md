@@ -2,13 +2,13 @@
 
 [![CI Quality Pipeline](https://github.com/widadsaghir/my-agentic-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/widadsaghir/my-agentic-architecture/actions/workflows/ci.yml)
 ![Python Version](https://img.shields.io/badge/python-3.13-blue.svg)
-![Tests](https://img.shields.io/badge/tests-48%20passed-brightgreen.svg)
+![Tests](https://img.shields.io/badge/tests-65%20passed-brightgreen.svg)
 ![Architecture](https://img.shields.io/badge/architecture-hexagonal%20%7C%20TOGAF%2010-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-**Multi-Agent Architecture Platform (AAP)** is a 100% open-source, autonomous multi-agent engineering platform designed to act as an expert **Lead Solution & Enterprise Architect**. 
+**Multi-Agent Architecture Platform (AAP)** is a 100% open-source, autonomous multi-agent engineering platform designed to act as an expert **Lead Solution & Enterprise Architect** and an executive **Speech & Presentation Restitution Board**.
 
-Orchestrated with **CrewAI** and powered by **Google Gemini API**, it mobilizes a specialized brigade of 9 agents adhering to the highest industry standards: **TOGAF 10 ADM**, **SAFe 6 for Architects**, **Software Craftsmanship (Hexagonal / DDD / TDD)**, **Zero-Trust Security (NIST SP 800-207)**, and **FinOps Cloud Economics**.
+Orchestrated with **CrewAI** and powered by **Google Gemini API**, it mobilizes 3 specialized colleges adhering to the highest industry standards: **TOGAF 10 ADM**, **SAFe 6 for Architects**, **Software Craftsmanship (Hexagonal / DDD / TDD)**, **Zero-Trust Security (NIST SP 800-207)**, **GreenOps & FinOps Cloud Economics**, and **TEDx Executive Prompter Storytelling**.
 
 ---
 
@@ -16,27 +16,36 @@ Orchestrated with **CrewAI** and powered by **Google Gemini API**, it mobilizes 
 
 ```text
 my-agentic-architecture/
-├── .github/workflows/          # ⚙️ Pipeline CI/CD GitHub Actions (45 tests auto)
+├── .github/workflows/          # ⚙️ Pipeline CI/CD GitHub Actions (65 tests auto)
 │   └── ci.yml                  #    Déclenchement automatique à chaque push / PR
 ├── src/                        # 💎 Cœur applicatif (Architecture Hexagonale)
-│   ├── agents/                 # 👥 La Brigade des 9 agents d'architecture (TOGAF/SAFe)
-│   │   ├── architect_agents.py #    Fabrique des agents (Manager, Solution, Challenger, CISO...)
-│   │   └── __init__.py         #    Exposition des fabriques d'agents
-│   ├── tasks/                  # 📋 Les 8 tâches séquentielles paramétrées
-│   │   ├── architecture_tasks.py#   Définition des tâches avec injection stricte de langue
-│   │   └── __init__.py         #    Exposition des tâches d'architecture
-│   ├── tools/                  # 🛠️ Adaptateurs déterministes (0 Token / Outils purs)
-│   │   ├── knowledge_rag.py    #    Moteur RAG ChromaDB & outil KnowledgeSearchTool
-│   │   ├── diagram_exporter.py #    Générateur de schémas (Draw.io, PlantUML, Mermaid)
-│   │   ├── jira_exporter.py    #    Exportateur de backlog Jira en CSV (Excel FR)
-│   │   ├── git_publisher.py    #    Publication Git sécurisée & arbitrage HITL [O/N]
-│   │   ├── log_analyzer.py     #    Observabilité et analyse des traces d'exécution
-│   │   ├── career_exporter.py  #    Mise à jour CV et génération de posts LinkedIn REX
-│   │   └── __init__.py         #    Exposition des adaptateurs d'infrastructure
-│   ├── config/                 # ⚙️ Configuration & Gestion des Environnements
-│   │   ├── settings.py         #    Chargement fail-fast du .env et mapping Gemini
+│   ├── agents/                 # 👥 Les Brigades d'Agents Spécialisés
+│   │   ├── architect_agents.py         # Brigade TOGAF / SAFe (Manager, Solution, Challenger, CISO...)
+│   │   ├── virtual_committee_agents.py # Les 5 Maîtres (Fowler, Uncle Bob, Vogels, Cockburn, Newman) + GreenOps/FinOps + Juge Qualité
+│   │   ├── orator_agents.py            # Les 5 Orateurs Légendaires (Hassan II, Jobs, MLK, Churchill, Obama) + Metteur en Scène + Juge
+│   │   └── __init__.py                 # Exposition unifiée des fabriques d'agents
+│   ├── orchestration/          # 🔄 Moteur Déterministe de Bouclage (Self-Correction Loops)
+│   │   ├── loop_controller.py  # Contrôle des cycles de révision, scoring sur 100, feedback prompts & coupe-circuit
 │   │   └── __init__.py
-│   └── main.py                 # 🚀 Orchestrateur CLI (support --language, --study-dir, HITL)
+│   ├── tasks/                  # 📋 Définitions des Tâches Spécialisées
+│   │   ├── architecture_tasks.py       # Tâches DAT TOGAF (Conception, Challenge, DCA, Craft, FinOps...)
+│   │   ├── virtual_committee_tasks.py  # Tâches d'audit des 5 Maîtres, scoring Quality Gate et synthèse
+│   │   ├── orator_tasks.py             # Tâches de table ronde oratoire, fusion scénique, jugement et pack prompter
+│   │   └── __init__.py                 # Exposition unifiée des tâches
+│   ├── tools/                  # 🛠️ Adaptateurs déterministes (0 Token / Outils purs)
+│   │   ├── knowledge_rag.py            # Moteur RAG ChromaDB & outil KnowledgeSearchTool
+│   │   ├── diagram_exporter.py         # Générateur de schémas (Draw.io, PlantUML, Mermaid)
+│   │   ├── presentation_exporter.py    # Générateur de slides 16:9 Haute Couture Bento Grid
+│   │   ├── executive_prompter_exporter.py # Téléprompteur interactif HTML Single-Slide & Prompter Markdown
+│   │   ├── jira_exporter.py            # Exportateur de backlog Jira en CSV (Excel FR avec ;)
+│   │   ├── git_publisher.py            # Publication Git sécurisée & arbitrage HITL [O/N]
+│   │   ├── log_analyzer.py             # Observabilité Meta-Agent et santé système
+│   │   ├── career_exporter.py          # Mise à jour CV et génération de posts LinkedIn REX
+│   │   └── __init__.py                 # Exposition des adaptateurs d'infrastructure
+│   ├── config/                 # ⚙️ Configuration & Gestion des Environnements
+│   │   ├── settings.py         # Chargement fail-fast du .env et mapping Gemini
+│   │   └── __init__.py
+│   └── main.py                 # 🚀 Orchestrateur CLI (modes togaf, committee, speech, full)
 ├── knowledge/doctrine/         # 📚 Base de connaissances doctrinale indexée en RAG
 │   ├── 01_principes_securite_zero_trust_c2.md      # Doctrine SSI & Homologation DCA
 │   ├── 02_principes_craftsmanship_hexagonale.md     # Architecture Hexagonale & DDD
@@ -44,87 +53,97 @@ my-agentic-architecture/
 │   ├── 04_gouvernance_safe_enablers_dod.md         # Découpage Jira & Definition of Done
 │   └── 05_conformite_et_non_derive_architecture.md # Contrôle anti-dérive & RTM
 ├── docs/                       # 📖 Dossiers d'architecture & gouvernance
-│   ├── etudes/                 # 📁 Packs d'études complets produits (10 artéfacts par étude)
-│   │   └── migration_ssas_cloud/#   Étude témoin NovaAnalytics (DAT, DCA, FinOps, Jira...)
-│   ├── diagrams/               # 🖼️ Schémas sources multi-formats (.drawio, .puml, .mmd)
-│   ├── architecture-cible-togaf.md           # 🏛️ Dossier d'Architecture Cible TOGAF 10
-│   ├── craftsmanship-safe-testing-strategy.md # 🧪 Référentiel des 45 tests & 5 patterns
-│   ├── dossier-architecture-visuelle.md       # 🎨 Dossier visuel C4 et living doc
-│   └── roadmap-implementation.md              # 🗺️ Feuille de route (Briques 1 à 5 terminées)
-├── tests/unit/                 # 🛡️ Pyramide des 45 tests unitaires et d'architecture (0 token)
+│   ├── etudes/                 # 📁 Packs d'études complets produits (DAT, DCA, FinOps, Jira...)
+│   ├── presentation/           # 🎙️ Kit de restitution exécutif (Slides Haute Couture & Prompter)
+│   └── CONTEXTE_PROJET.md      # 📋 Journal de bord et spécifications vivantes du projet
+├── tests/unit/                 # 🛡️ Pyramide des 65 tests unitaires et d'architecture (0 token)
+│   ├── test_loop_controller.py           # Tests du contrôleur de boucle d'auto-correction
+│   ├── test_virtual_committee.py         # Tests des agents et tâches du Comité des 5 Maîtres
+│   ├── test_orator_committee.py          # Tests des agents et tâches du Conseil des Orateurs
+│   ├── test_executive_prompter_exporter.py # Tests de l'exportateur prompter TEDx
+│   ├── test_e2e_virtual_committee_loop.py # Simulation E2E du rebouclage d'auto-correction
 │   ├── test_hexagonal_architecture.py    # Tests d'Architecture par AST (isolation des couches)
-│   ├── test_architecture_conformance.py # Architectural Fitness Functions (anti-dérive)
-│   ├── test_diagram_syntax.py           # Anti-régression syntaxe schémas (Mermaid, PlantUML)
-│   ├── test_data_anonymization.py       # Privacy Guard (0 IP privée RFC 1918, 0 secret)
-│   ├── test_cli_resilience.py           # Résilience CLI et arborescences imbriquées
-│   ├── test_e2e_mocked_crew.py          # Exécution E2E complète Mockée (0 token en < 2s)
-│   └── ...                              # Tests des agents, tâches, config et adaptateurs
+│   ├── test_architecture_conformance.py  # Architectural Fitness Functions (anti-dérive)
+│   └── ...
 ├── setup.ps1                   # ⚡ Script d'installation automatisée en 1 clic (PowerShell)
 └── requirements.txt            # 📦 Dépendances Python (CrewAI, ChromaDB, Pytest)
 ```
 
 ---
 
-## 👥 La Brigade Complète des 9 Agents Spécialisés
+## 🏛️ Les Trois Collèges d'Experts Disponibles
 
-| Rôle Agent | Type | Framework | Mission Principale |
-| :--- | :--- | :--- | :--- |
-| **👑 Lead Architecture Manager** | Orchestrateur | TOGAF 10 & SAFe 6 | Pilote le cycle de vie, répartit les tâches et rédige la synthèse exécutive. |
-| **🏗️ Solution & Infra Architect** | Constructif (Macro) | Cloud WAF & EDA | Conçoit les macro-patterns (Kafka, Outbox, Private Endpoints) avec le RAG. |
-| **🎯 Challenger / Red Team** | Évaluateur | Heuristiques SRE | Traque la sur-ingénierie (*Golden Hammer*), les SPOF et impose KISS/YAGNI. |
-| **🛡️ CISO & Data Protection** | Garde Sécurité | Zero-Trust & RGPD | Audit de classification C2 MASSIF, chiffrement CMK et avis d'homologation DCA. |
-| **💎 Software Crafter & DDD** | Constructif (Micro) | Hexagonale & Clean Code | Isole le domaine métier (Ports & Adapters) et garantit la testabilité unitaire. |
-| **🚆 SAFe Agile Delivery Enabler** | Delivery Agile | SAFe 6 ART | Découpe l'architecture en Enabler Epics, Features et User Stories Jira avec DoD. |
-| **💰 Migration & FinOps / TCO** | Économiste Cloud | FinOps Foundation | Chiffre le TCO comparatif (Cloud vs On-Premise) et le calendrier de bascule. |
-| **🔧 Meta-Agent (Agent Zero)** | Méta-Supervision | Self-Healing / SRE | Supervise les logs d'exécution, détecte les dérives et propose des patchs. |
-| **📈 Agent Carrière & Branding** | Valorisation | Career Management | Met à jour le CV de l'architecte et rédige des brouillons de posts LinkedIn (REX). |
+### 1. La Brigade Opérationnelle TOGAF & SAFe (Mode `--mode togaf`)
+9 agents spécialisés pour produire le Dossier d'Architecture Technique (DAT) complet, le DCA de sécurité, la conception hexagonale, l'audit contradictoire, le TCO FinOps et le backlog Jira.
 
----
+### 2. Le Comité d'Architecture Virtuel des 5 Maîtres & Green/FinOps (Mode `--mode committee`)
+Un collège de référence mondiale challengeant l'architecture en boucle itérative jusqu'à l'excellence :
+- **Martin Fowler** : Patterns d'entreprise (*P of EAA*), évolutivité et trajectoire de refactoring.
+- **Robert C. Martin (Uncle Bob)** : Clean Architecture, principes SOLID et étanchéité absolue du domaine métier.
+- **Werner Vogels** : Cloud Resilience, *Design for Failure* (« Everything fails all the time ») et anti-SPOF.
+- **Alistair Cockburn** : Architecture Hexagonale (Ports & Adaptateurs) et testabilité sans mocks.
+- **Sam Newman** : Décomposition des monolithes, microservices DDD et Loi de Conway.
+- **GreenOps & FinOps Architect** : Sobriété numérique (gCO2eq), modélisation TCO et Right-Sizing.
+- **Juge Qualité Technique** : Grille de scoring sur 100 et verdict binaire (`VALIDÉ` / `À REPRENDRE`).
 
-## 🚀 Prise en Main Rapide (Installation & Exécution)
-
-### Option A : Installation Automatisée en 1 Clic (PowerShell)
-```powershell
-.\setup.ps1
-```
-Renseignez votre clé API Gemini dans le fichier `.env` généré :
-```ini
-GEMINI_API_KEY=votre_cle_gemini_ici
-```
-
-### Option B : Exécution d'une Étude d'Architecture
-```powershell
-# 1. Activer l'environnement virtuel
-.\.venv\Scripts\Activate.ps1
-
-# 2. Lancer la brigade en français avec export du pack documentaire complet
-python src/main.py --language "French" --input "docs/exemples/cadrage_migration_ssas_cloud.md" --study-dir "docs/etudes/ma_nouvelle_etude" --publish-git
-```
+### 3. Le Conseil d'Éloquence & Restitution TEDx (Mode `--mode speech`)
+Un conseil d'administration virtuel d'orateurs légendaires pour composer le pitch parfait :
+- **Hassan II** : Éloquence classique, hauteur de vue philosophique et noblesse métaphorique.
+- **Steve Jobs** : Storytelling épuré, simplicité radicale, règle de trois et *One More Thing*.
+- **Martin Luther King Jr.** : Émotion profonde (Pathos), rythme anaphorique et vision d'avenir.
+- **Winston Churchill** : Formules martiales d'impact, verbes d'action et courage face à l'adversité.
+- **Barack Obama** : Connexion empathique, fluidité et modulation des silences respiratoires.
+- **Metteur en Scène & Juge d'Éloquence** : Fusion unifiée annotée (`[PAUSE 2s]`, `[BREATHE]`, `[SOURIRE]`, `[REGARD]`, `[↘ INTONATION FERME]`) et contrôle qualité sur 100.
 
 ---
 
-## 🧪 Built-in Quality & Pytest (48 Tests Déterministes à 0 Token)
+## 🔄 Le Moteur de Bouclage Déterministe (`AgenticLoopController`)
 
-La suite de tests automatisée s'exécute en **moins de 36 secondes** sans consommer le moindre jeton LLM :
+Pour éviter les livrables tièdes ou incomplets, la plateforme applique le patron **Self-Correction Loop** :
+
+```text
+  [1. Production Initiale] ➔ [2. Table Ronde & Audit Croisé] ➔ [3. Juge Qualité (Score /100)]
+                                                                           │
+                                              ┌────────────────────────────┴──────────────────────────┐
+                                              ▼                                                       ▼
+                                    Score >= Seuil (ex: 85)                                 Score < Seuil (max 4 itérations)
+                                  [Validation du Rapport Final]                         [Réinjection des Gaps dans le Prompt]
+```
+
+---
+
+## 🚀 Prise en Main & Commandes CLI
+
+### 1. Mode DAT TOGAF (Standard)
+```powershell
+python src/main.py --mode togaf --language "French" --input "docs/exemples/cadrage_migration_ssas_cloud.md" --study-dir "docs/etudes/mon_etude"
+```
+
+### 2. Mode Comité d'Architecture Virtuel (Les 5 Maîtres avec Boucle Qualité)
+```powershell
+python src/main.py --mode committee --min-score 85.0 --max-loops 4 --input "Cadrage de refonte du système de facturation" --study-dir "docs/etudes/comite_facturation"
+```
+
+### 3. Mode Conseil d'Éloquence (Pitch TEDx & Prompter Interactif)
+```powershell
+python src/main.py --mode speech --audience "Comité de Direction & Investisseurs" --input "docs/etudes/mon_etude/01_DOSSIER_ARCHITECTURE_TECHNIQUE_DAT.md" --study-dir "docs/etudes/speech_dir"
+```
+
+### 4. Mode Intégral Bout en Bout
+```powershell
+python src/main.py --mode full --min-score 88.0 --input "Cadrage plateforme événementielle" --study-dir "docs/etudes/full_pack"
+```
+
+---
+
+## 🧪 Built-in Quality & Pytest (65 Tests Déterministes à 0 Token)
+
+La suite de tests automatisée s'exécute en local sans consommer le moindre jeton LLM :
 
 ```powershell
 pytest -v
 ```
 
 ```text
-======================= 48 passed, 153 warnings in 35.77s =======================
+======================= 65 passed, 210 warnings in 79.17s =======================
 ```
-
-Pour consulter le détail des 5 patterns d'ingénierie logicielle (Architectural Fitness Functions, Defect-Driven Testing, Mock E2E, Privacy Guard, Contract Validation), référez-vous au document :  
-👉 **`docs/craftsmanship-safe-testing-strategy.md`**.
-
----
-
-## 🛠️ Instancier votre Propre Brigade (Framework AAP Meta-Prompt)
-
-Vous souhaitez créer une flotte d'agents spécialisés sur un autre domaine d'entreprise (Cybersécurité / SOC, Audit RGPD / DORA, Plateforme MLOps, Cadrage FinOps Cloud) ?  
-
-Le méta-moule industriel complet du **Framework AAP (V3)** est disponible dans :  
-👉 **`docs/templates/meta_prompt_generateur_brigade.md`**
-
-Il contient le cahier des charges, la structure modulaire, les 10 piliers d'ingénierie logicielle, les contrats de tests et le prompt prêt à l'emploi avec comparatif des gains de temps (~97.9% d'économie).
