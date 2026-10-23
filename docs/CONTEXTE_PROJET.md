@@ -142,6 +142,13 @@ Chaque étude d'architecture génère désormais automatiquement :
   - `00_CAHIER_DES_CHARGES_INPUT.md` : Cadrage stratégique, cas pratique « Global Mission-Critical Fintech & Billing », 6 Piliers Well-Architected et Leadership Principles.
   - Entraînement interactif au System Design Whiteboard, Deep-Dive questions pièges et simulation Bar Raiser avec le Comité des 5 Maîtres (Werner Vogels, Martin Fowler, Uncle Bob, Sam Newman, Alistair Cockburn).
 
+---
+
+### 📌 Reste à Faire Prioritaire (Backlog Actif)
+- [ ] **Mise à niveau du Kit de Présentation Communauté d'Architecture (GARI / DIO)** (`docs/presentation/`) :
+  - Aligner les supports visuels (`slides_presentation_brigade_archi.html` et `01_SLIDES_PRESENTATION_ARCHI_AUGMENTE.md`) sur la réalité du code : passage de 9 à **23 agents**, intégration du **Conseil des 5 Grands Orateurs**, présentation des **4 modes CLI** et affichage des **65 tests TDD déterministes**.
+  - Synchroniser le simulateur vidéo interactif (`demo_video_interactive.html`) et le discours mot à mot (`02_SCRIPT_DISCOURS_ORAL_MOT_A_MOT.md`).
+
 
 
 
