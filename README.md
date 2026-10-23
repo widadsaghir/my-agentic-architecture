@@ -145,5 +145,46 @@ pytest -v
 ```
 
 ```text
-======================= 65 passed, 210 warnings in 79.17s =======================
+============================== 65 passed in ~50s ==============================
+```
+
+---
+
+## 📂 Structure Détaillée du Projet
+
+L'arborescence du projet applique une **Architecture Hexagonale stricte** séparant le domaine métier pur, les adaptateurs déterministes et l'orchestration cognitive :
+
+```text
+my-agentic-architecture/
+├── .github/workflows/ci.yml       # Pipeline CI/CD GitHub Actions (65 tests)
+├── .gitlab-ci.yml                 # Pipeline CI/CD GitLab (python:3.13-slim)
+├── .gitignore                     # Exclusion des artefacts temporaires et caches
+├── .geminiignore                  # Protection des clés et secrets
+├── .aiexclude                     # Règle d'étanchéité des données
+├── pytest.ini                     # Configuration de test ciblant tests/ (0 warning)
+├── conftest.py                    # Injection automatique de la racine au sys.path
+├── requirements.txt               # Dépendances déclarées (CrewAI, Pydantic, PyYAML...)
+├── README.md                      # Documentation vitrine du projet
+│
+├── src/                           # Code source de la plateforme (Architecture Hexagonale)
+│   ├── main.py                    # Point d'entrée de la CLI multi-modes (togaf, committee, speech, full)
+│   ├── config/                    # Configuration et Circuit Breaker résilient (Google Gemini)
+│   ├── domain/                    # Modèles purs et contrats d'interfaces (0 dépendance IA)
+│   ├── tools/                     # 9 Adaptateurs déterministes à 0 token (RAG, Exporters, GitPublisher)
+│   ├── agents/                    # 23 Personas d'élite (5 Maîtres, 5 Orateurs, FinOps, CISO...)
+│   ├── tasks/                     # 24 Tâches séquentielles distillées
+│   └── core/                      # Contrôleurs de boucle d'auto-correction (AgenticLoopController)
+│
+├── tests/                         # Suite de 65 tests TDD déterministes (0 Token)
+│   └── unit/                      # Tests unitaires, fitness functions et simulations E2E
+│
+├── knowledge/                     # Base de connaissances RAG déterministe locale (sections Markdown)
+│
+└── docs/                          # Living Documentation & Restitutions d'Architecture
+    ├── CONTEXTE_PROJET.md         # Journal de bord et état d'avancement des briques
+    ├── architecture-cible-togaf.md # Spécification d'architecture cible
+    ├── dossier-architecture-visuelle.md # Cartographie des flux et schémas C4
+    ├── presentation/              # Slides interactives 16:9 et supports de démo vidéo
+    ├── etudes/                    # Cas d'études réels (Billing, Migration Cloud, AWS Assessment)
+    └── templates/                 # Modèles de livrables et méta-prompts d'ingénierie
 ```
