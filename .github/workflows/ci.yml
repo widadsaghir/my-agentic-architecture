@@ -29,6 +29,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🧪 Run Pytest Suite (39 Tests Craftsmanship)
+      - name: 🧪 Run Pytest Suite (65 Tests Craftsmanship)
         run: |
-          pytest -v --tb=short
+          pytest tests/ -v --tb=short
