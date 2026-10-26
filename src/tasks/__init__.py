@@ -11,7 +11,8 @@ from .architecture_tasks import (
     create_meta_maintenance_task,
     create_career_branding_task,
     create_convergence_reconciliation_task,
-    create_executive_restitution_task
+    create_executive_restitution_task,
+    create_presales_bid_audit_task
 )
 
 from .virtual_committee_tasks import (
@@ -35,7 +36,7 @@ from .orator_tasks import (
 )
 
 __all__ = [
-    # Tâches Brigade TOGAF / SAFe / CISO
+    # Tâches Brigade TOGAF / SAFe / CISO / AVV
     "create_preliminary_design_task",
     "create_security_audit_task",
     "create_challenge_task",
@@ -46,6 +47,7 @@ __all__ = [
     "create_career_branding_task",
     "create_convergence_reconciliation_task",
     "create_executive_restitution_task",
+    "create_presales_bid_audit_task",
     # Tâches Comité d'Architecture Virtuel & Quality Gate
     "create_initial_architecture_draft_task",
     "create_fowler_review_task",

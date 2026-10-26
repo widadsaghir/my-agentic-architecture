@@ -10,7 +10,8 @@ from .architect_agents import (
     create_challenger_agent,
     create_finops_agent,
     create_meta_agent,
-    create_career_branding_agent
+    create_career_branding_agent,
+    create_presales_bid_director_agent
 )
 
 from .virtual_committee_agents import (
@@ -34,7 +35,7 @@ from .orator_agents import (
 )
 
 __all__ = [
-    # Brigade TOGAF / SAFe / CISO
+    # Brigade TOGAF / SAFe / CISO / AVV
     "create_manager_agent",
     "create_solution_architect_agent",
     "create_ciso_agent",
@@ -44,6 +45,7 @@ __all__ = [
     "create_finops_agent",
     "create_meta_agent",
     "create_career_branding_agent",
+    "create_presales_bid_director_agent",
     # Comité d'Architecture Virtuel des 5 Maîtres & Green/FinOps
     "create_martin_fowler_agent",
     "create_uncle_bob_agent",

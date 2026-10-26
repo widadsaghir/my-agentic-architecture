@@ -1,3 +1,4 @@
+from typing import Any
 from crewai import Agent
 
 def create_manager_agent(llm) -> Agent:
@@ -186,6 +187,31 @@ def create_career_branding_agent(llm) -> Agent:
         verbose=True,
         allow_delegation=False
     )
+
+def create_presales_bid_director_agent(llm: Any = None) -> Agent:
+    """
+    Crée l'agent Directeur Avant-Vente & Stratégie d'Offre (24ème agent de la brigade).
+    Responsable du cadrage des réponses aux appels d'offres (AVV), de la traçabilité des exigences
+    vers des livrables formels (DAG, ADR, DAT, PCA), de la formalisation de la matrice Entrants/Sortants,
+    de la conduite du changement terrain et de la sécurisation par un pilote MVP.
+    """
+    return Agent(
+        role="Presales & Bid Director (Directeur Avant-Vente & Offres)",
+        goal=(
+            "Garantir qu'une proposition d'avant-vente couvre 100% du cahier des charges par des livrables formels "
+            "(Dossier d'Architecture Générale DAG, ADR, DAT, PCA/PRA), impose la matrice contractuelle Entrants Client vs "
+            "Sortants Cabinet, sanctuarise la co-construction terrain et dérisque la trajectoire par un pilote MVP."
+        ),
+        backstory=(
+            "Partner et Directeur Avant-Vente chevronné issu des plus grands cabinets de conseil en management et stratégie technologique. "
+            "Expert en soutenance d'architecture devant comités de direction et DSI, garant du réalisme de l'AS-IS (bannissant l'illusion du tout-cloud prématuré), "
+            "et maître du foisonnement commercial par des preuves de valeur incrémentales."
+        ),
+        llm=llm,
+        verbose=True,
+        allow_delegation=False
+    )
+
 
 
 

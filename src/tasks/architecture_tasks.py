@@ -349,6 +349,42 @@ def create_executive_restitution_task(agent: Agent, context_tasks: list, languag
         context=context_tasks
     )
 
+def create_presales_bid_audit_task(agent: Agent, context_tasks: list = None, language: str = "Français") -> Task:
+    """
+    Tâche d'audit et de cadrage d'avant-vente (AVV) et réponse à appel d'offres.
+    Vérifie la couverture à 100% du cahier des charges par des livrables formels,
+    formalise la matrice Entrants vs Sortants, la co-construction terrain et le pilote MVP.
+    """
+    description = (
+        f"En tant que Directeur Avant-Vente & Stratégie d'Offre (Presales & Bid Director) :\n"
+        f"1. Analyser le cahier des charges / appel d'offres d'architecture (RFP / Tender Specification).\n"
+        f"2. Auditer la réalité de l'existant (AS-IS) : bannir formellement toute hallucination de Cloud prématuré dans les systèmes industriels historiques et exiger l'ancrage On-Premise / Datacenter d'entreprise.\n"
+        f"3. Structurer la réponse d'architecture en 4 piliers contractuels d'excellence :\n"
+        f"   - La matrice biunivoque Entrants Requis Client vs Sortants Fournis Cabinet.\n"
+        f"   - Le Pack des 5 Livrables Formels d'Architecture (DAG, ADR, DAT, PCA/PRA Déconnecté, Kit d'Adoption).\n"
+        f"   - Le volet Conduite du Changement & Co-Construction Terrain (immersion quai/métier, fiches réflexes, ergonomie IHM validée avec les opérateurs).\n"
+        f"   - La trajectoire sécurisante en 4 étapes cadencée par un Pilote MVP (1 Ligne / 3 Sites en 3 mois) pour prouver la résilience par l'épreuve.\n"
+        f"4. Définir le calibrage temporel strict de la soutenance (20 min de pitch d'architecture + 20 min d'échange collaboratif et Q&A sur un créneau de 45 min).\n\n"
+        f"IMPORTANT : Rédiger votre dossier de stratégie d'avant-vente en langue [{language}]."
+    )
+
+    expected_output = (
+        f"Un dossier stratégique d'avant-vente et d'architecture en Markdown rédigé en [{language}], comprenant :\n"
+        f"1. Diagnostic AS-IS Réaliste et Cartographie des Fractures (On-Premise vérifié)\n"
+        f"2. Matrice Contractuelle : Entrants Requis Client vs Sortants Fournis Cabinet\n"
+        f"3. Le Pack des 5 Livrables Formels d'Architecture (DAG, ADR, DAT, PCA/PRA, Adoption Kit)\n"
+        f"4. Trajectoire de Prestation Post-Attribution en 4 phases avec jalon MVP de validation terrain\n"
+        f"5. Protocole de Co-Conception & Conduite du Changement avec les équipes utilisatrices\n"
+        f"6. Cadrage du timing de soutenance (20 min pitch + 20 min Q&A sur 45 min total)."
+    )
+
+    return Task(
+        description=description,
+        expected_output=expected_output,
+        agent=agent,
+        context=context_tasks
+    )
+
 
 
 
