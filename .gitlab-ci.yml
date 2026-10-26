@@ -3,6 +3,7 @@ stages:
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PYTHONPATH: "$CI_PROJECT_DIR"
   GEMINI_API_KEY: "ci-dummy-key-for-testing"
 
 cache:
@@ -11,8 +12,9 @@ cache:
 
 test:
   stage: test
-  image: python:3.13-slim
+  image: python:3.11-slim
   before_script:
+    - apt-get update && apt-get install -y --no-install-recommends build-essential gcc g++ || true
     - python -m pip install --upgrade pip
     - pip install -r requirements.txt
   script:
