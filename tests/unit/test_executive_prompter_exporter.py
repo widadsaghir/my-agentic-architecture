@@ -56,3 +56,28 @@ def test_export_prompter_markdown_and_html(tmp_path: Path):
     assert "<!DOCTYPE html>" in content_html
     assert "prompter-card" in content_html
     assert "badge-pause" in content_html
+
+
+def test_validate_pocket_guide_structure():
+    exporter = ExecutivePrompterExporter()
+
+    incomplete_html = '<div class="action-bar"></div><div class="kpi-grid"></div>'
+    res_incomplete = exporter.validate_pocket_guide_structure(incomplete_html)
+    assert not res_incomplete["is_valid"]
+    assert "star_guide" in res_incomplete["missing_elements"]
+    assert "acting_masterclass" in res_incomplete["missing_elements"]
+
+    complete_html = """
+    <div class="action-bar">PDF, STAR, Coaching, Pitch, QA, Mental</div>
+    <div class="kpi-grid">KPI Chips</div>
+    <div id="star-guide">STAR Masterclass</div>
+    <div id="acting-masterclass">Acting & Orator Masterclass</div>
+    <div id="sophro">Sophrology & Mindset</div>
+    <div id="speech">Pitch Mot a Mot</div>
+    <div id="qa">Top 10 QA Questions</div>
+    """
+    res_complete = exporter.validate_pocket_guide_structure(complete_html)
+    assert res_complete["is_valid"]
+    assert res_complete["pillars_count"] == 7
+    assert len(res_complete["missing_elements"]) == 0
+

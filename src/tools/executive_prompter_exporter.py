@@ -346,3 +346,29 @@ class ExecutivePrompterExporter:
 """
         output_file.write_text(html_template, encoding="utf-8")
         return output_file
+
+    def validate_pocket_guide_structure(self, html_content: str) -> Dict[str, object]:
+        """
+        Vérifie qu'un livrable Pocket Guide Mobile respecte scrupuleusement les 7 piliers d'élite.
+        Piliers : action_bar, kpi_grid, star_guide, acting_masterclass, sophro_mental, speech_star, qa_section.
+        """
+        required_elements = {
+            "action_bar": "action-bar",
+            "kpi_grid": "kpi-grid",
+            "star_guide": "star-guide",
+            "acting_masterclass": "acting-masterclass",
+            "sophro_mental": "sophro",
+            "speech_star": "speech",
+            "qa_section": "qa"
+        }
+
+        missing = [key for key, marker in required_elements.items() if marker not in html_content]
+        is_valid = len(missing) == 0
+
+        return {
+            "is_valid": is_valid,
+            "missing_elements": missing,
+            "pillars_count": len(required_elements) - len(missing),
+            "total_pillars": len(required_elements)
+        }
+

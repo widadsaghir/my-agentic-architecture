@@ -6,6 +6,10 @@
 ![Architecture](https://img.shields.io/badge/architecture-hexagonal%20%7C%20TOGAF%2010-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
+<p align="center">
+  <img src="docs/presentation/brigade_agentic_architecture_social_preview.png" alt="Multi-Agent Architecture Platform (AAP) — Brigade d'Architecture Augmentée" width="100%">
+</p>
+
 **Multi-Agent Architecture Platform (AAP)** is a 100% open-source, autonomous multi-agent engineering platform designed to act as an expert **Lead Solution & Enterprise Architect** and an executive **Speech & Presentation Restitution Board**.
 
 Orchestrated with **CrewAI** and powered by **Google Gemini API**, it mobilizes 3 specialized colleges adhering to the highest industry standards: **TOGAF 10 ADM**, **SAFe 6 for Architects**, **Software Craftsmanship (Hexagonal / DDD / TDD)**, **Zero-Trust Security (NIST SP 800-207)**, **GreenOps & FinOps Cloud Economics**, and **TEDx Executive Prompter Storytelling**.
