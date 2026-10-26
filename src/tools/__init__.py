@@ -9,6 +9,7 @@ from .log_analyzer import LogAnalyzer
 from .career_exporter import CareerExporter
 from .presentation_exporter import ExecutivePresentationExporter
 from .executive_prompter_exporter import ExecutivePrompterExporter
+from .presales_linters import AsIsRealityLinter, BidComplianceGate, ZeroTofuViewportGate
 
 __all__ = [
     "ArchitectureRAGManager",
@@ -19,5 +20,8 @@ __all__ = [
     "LogAnalyzer",
     "CareerExporter",
     "ExecutivePresentationExporter",
-    "ExecutivePrompterExporter"
+    "ExecutivePrompterExporter",
+    "AsIsRealityLinter",
+    "BidComplianceGate",
+    "ZeroTofuViewportGate"
 ]
