@@ -83,8 +83,9 @@ Un collège d'orateurs légendaires pour produire le pitch et la soutenance parf
 
 ## 🧪 Bilan d'Exécution des Tests Unitaires & d'Architecture (Pytest)
 
-*Dernière exécution : 75/75 tests validés avec succès (100% de réussite)*
+*Dernière exécution : 82/82 tests validés avec succès (100% de réussite)*
 
+- `tests/unit/test_presentation_executive_deck.py` : 🟢 (Intégrité JS, navigabilité fluide, équilibre des balises DOM, câblage des boutons et typographie adaptative).
 - `tests/unit/test_presales_agent_and_task.py` : 🟢 (Attributs du 24ème agent Presales & Bid Director et tâche d'audit AVV).
 - `tests/unit/test_as_is_reality_linter.py` : 🟢 (Linter Anti-Hallucination : détection et blocage du Cloud ou Kafka dans l'AS-IS).
 - `tests/unit/test_bid_compliance_gate.py` : 🟢 (Quality Gate AVV : audit des livrables DAG/ADR/DAT, entrants/sortants et co-construction).
