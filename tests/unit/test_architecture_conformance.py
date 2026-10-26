@@ -25,6 +25,7 @@ def test_all_operational_agents_exist_and_exported():
         "create_finops_agent",
         "create_meta_agent",
         "create_career_branding_agent",
+        "create_presales_bid_director_agent",
         # Comité d'Architecture Virtuel des 5 Maîtres & Green/FinOps
         "create_martin_fowler_agent",
         "create_uncle_bob_agent",
@@ -71,6 +72,7 @@ def test_all_operational_tasks_exist_and_exported():
         "create_career_branding_task",
         "create_convergence_reconciliation_task",
         "create_executive_restitution_task",
+        "create_presales_bid_audit_task",
         # Tâches Comité d'Architecture Virtuel & Quality Gate
         "create_initial_architecture_draft_task",
         "create_fowler_review_task",
@@ -110,7 +112,10 @@ def test_deterministic_tools_exist_and_exported():
         "LogAnalyzer",
         "CareerExporter",
         "ExecutivePresentationExporter",
-        "ExecutivePrompterExporter"
+        "ExecutivePrompterExporter",
+        "AsIsRealityLinter",
+        "BidComplianceGate",
+        "ZeroTofuViewportGate"
     ]
     for tool_name in expected_tools:
         assert hasattr(tools_module, tool_name), f"Composant déterministe '{tool_name}' manquant dans src/tools/"
