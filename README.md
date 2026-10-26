@@ -41,6 +41,7 @@ my-agentic-architecture/
 │   │   ├── git_publisher.py            # Publication Git sécurisée & arbitrage HITL [O/N]
 │   │   ├── log_analyzer.py             # Observabilité Meta-Agent et santé système
 │   │   ├── career_exporter.py          # Mise à jour CV et génération de posts LinkedIn REX
+│   │   ├── presales_linters.py         # 🛡️ Linters AVV (AsIsRealityLinter, BidComplianceGate, ZeroTofuViewportGate)
 │   │   └── __init__.py                 # Exposition des adaptateurs d'infrastructure
 │   ├── config/                 # ⚙️ Configuration & Gestion des Environnements
 │   │   ├── settings.py         # Chargement fail-fast du .env et mapping Gemini
@@ -56,10 +57,14 @@ my-agentic-architecture/
 │   ├── etudes/                 # 📁 Packs d'études complets produits (DAT, DCA, FinOps, Jira...)
 │   ├── presentation/           # 🎙️ Kit de restitution exécutif (Slides Haute Couture & Prompter)
 │   └── CONTEXTE_PROJET.md      # 📋 Journal de bord et spécifications vivantes du projet
-├── tests/unit/                 # 🛡️ Pyramide des 65 tests unitaires et d'architecture (0 token)
+├── tests/unit/                 # 🛡️ Pyramide des 75 tests unitaires et d'architecture (0 token)
 │   ├── test_loop_controller.py           # Tests du contrôleur de boucle d'auto-correction
 │   ├── test_virtual_committee.py         # Tests des agents et tâches du Comité des 5 Maîtres
 │   ├── test_orator_committee.py          # Tests des agents et tâches du Conseil des Orateurs
+│   ├── test_presales_agent_and_task.py   # Tests du Presales & Bid Director et de la tâche d'audit AVV
+│   ├── test_as_is_reality_linter.py      # Tests du Linter Anti-Hallucination Cloud AS-IS
+│   ├── test_bid_compliance_gate.py       # Tests du Quality Gate de conformité d'offre de conseil
+│   ├── test_zero_tofu_viewport_gate.py   # Tests de la Quality Gate graphique Zéro-Tofu et résilience Viewport
 │   ├── test_executive_prompter_exporter.py # Tests de l'exportateur prompter TEDx
 │   ├── test_e2e_virtual_committee_loop.py # Simulation E2E du rebouclage d'auto-correction
 │   ├── test_hexagonal_architecture.py    # Tests d'Architecture par AST (isolation des couches)
@@ -71,10 +76,10 @@ my-agentic-architecture/
 
 ---
 
-## 🏛️ Les Trois Collèges d'Experts Disponibles
+## 🏛️ Les Trois Collèges d'Experts Disponibles (24 Agents)
 
-### 1. La Brigade Opérationnelle TOGAF & SAFe (Mode `--mode togaf`)
-9 agents spécialisés pour produire le Dossier d'Architecture Technique (DAT) complet, le DCA de sécurité, la conception hexagonale, l'audit contradictoire, le TCO FinOps et le backlog Jira.
+### 1. La Brigade Opérationnelle TOGAF, SAFe & AVV (Mode `--mode togaf`)
+10 agents spécialisés pour produire le Dossier d'Architecture Technique (DAT) complet, le DCA de sécurité, la conception hexagonale, l'audit contradictoire, le TCO FinOps, le backlog Jira, ainsi que le cadrage des réponses aux appels d'offres (AVV) avec matrice Entrants/Sortants, co-construction et dérisquage MVP par le **Presales & Bid Director**.
 
 ### 2. Le Comité d'Architecture Virtuel des 5 Maîtres & Green/FinOps (Mode `--mode committee`)
 Un collège de référence mondiale challengeant l'architecture en boucle itérative jusqu'à l'excellence :

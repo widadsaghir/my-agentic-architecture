@@ -83,8 +83,12 @@ Un collège d'orateurs légendaires pour produire le pitch et la soutenance parf
 
 ## 🧪 Bilan d'Exécution des Tests Unitaires & d'Architecture (Pytest)
 
-*Dernière exécution : 65/65 tests validés avec succès (100% de réussite)*
+*Dernière exécution : 75/75 tests validés avec succès (100% de réussite)*
 
+- `tests/unit/test_presales_agent_and_task.py` : 🟢 (Attributs du 24ème agent Presales & Bid Director et tâche d'audit AVV).
+- `tests/unit/test_as_is_reality_linter.py` : 🟢 (Linter Anti-Hallucination : détection et blocage du Cloud ou Kafka dans l'AS-IS).
+- `tests/unit/test_bid_compliance_gate.py` : 🟢 (Quality Gate AVV : audit des livrables DAG/ADR/DAT, entrants/sortants et co-construction).
+- `tests/unit/test_zero_tofu_viewport_gate.py` : 🟢 (Quality Gate Ergonomie : détection des glyphes tofu et résilience viewport).
 - `tests/unit/test_loop_controller.py` : 🟢 (Contrôleur de boucle d'auto-correction, calcul de scores, coupe-circuit et feedback prompts).
 - `tests/unit/test_virtual_committee.py` : 🟢 (Attributs des 5 Maîtres, GreenOps/FinOps, Juge Qualité et tâches d'audit).
 - `tests/unit/test_orator_committee.py` : 🟢 (Attributs des 5 Orateurs, Metteur en Scène, Juge d'Éloquence et tâches d'éloquence).
@@ -97,7 +101,7 @@ Un collège d'orateurs légendaires pour produire le pitch et la soutenance parf
 - `tests/unit/test_cli_resilience.py` : 🟢 (Résilience CLI : support modes togaf/committee/speech/full, flags min-score, max-loops et audience).
 - `tests/unit/test_e2e_mocked_crew.py` : 🟢 (Exécution E2E Niveau 2 : chaîne complète 6 agents/6 tâches avec Mock LLM déterministe à 0 token en < 2s).
 - `tests/unit/test_hexagonal_architecture.py` : 🟢 (Tests d'Architecture : isolation stricte des 7 outils déterministes, inversion de contrôle, scan anti-secrets).
-- `tests/unit/test_architecture_conformance.py` : 🟢 (Fitness functions : présence et export de 100% des 23 agents, 24 tâches et 9 outils déterministes).
+- `tests/unit/test_architecture_conformance.py` : 🟢 (Fitness functions : présence et export de 100% des 24 agents, 25 tâches et 12 outils déterministes et linters).
 - `tests/unit/test_config.py` : 🟢 (Chargement variables, détection clé manquante/placeholder).
 - `tests/unit/test_ciso_agent.py` : 🟢 (Rôle, Zero-Trust, C2 massif, non-délégation).
 - `tests/unit/test_crafter_safe_agents.py` : 🟢 (Hexagonale, TDD, Clean Code, Jira, DoD, ART).
