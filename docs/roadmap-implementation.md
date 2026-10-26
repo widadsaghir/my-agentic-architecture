@@ -8,7 +8,7 @@
 ---
 
 ## 🎯 Objectif du Projet
-Construire une plateforme open-source autonome d'ingénierie d'architecture basée sur une brigade de 8 agents spécialisés coordonnés par un orchestrateur, capable de générer des dossiers d'architecture (DAT), des schémas C4 PlantUML, des backlogs Jira avec DoD et d'assurer sa propre maintenance via un Meta-Agent.
+Construire une plateforme open-source autonome d'ingénierie d'architecture basée sur une flotte de 24 agents spécialisés répartis en 3 collèges (Brigade TOGAF/SAFe/AVV, Comité des 5 Maîtres & Green/FinOps, Conseil des 5 Grands Orateurs), capable de générer des dossiers d'architecture (DAT), des réponses d'avant-vente (AVV), des schémas C4 multi-formats, des backlogs Jira avec DoD, des decks 16:9 Haute Couture et d'assurer sa propre qualité par 82 tests déterministes.
 
 ---
 

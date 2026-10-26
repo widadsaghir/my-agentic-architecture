@@ -12,8 +12,9 @@
 
 Le système est désormais modélisé de façon rigoureusement identique entre la cible TOGAF (`docs/architecture-cible-togaf.md`), la living documentation visuelle (`docs/dossier-architecture-visuelle.md`), la feuille de route (`docs/roadmap-implementation.md`) et les diagrammes C4 / Séquence.
 
-### 👥 La Brigade Complète des 8 Agents Spécialisés
+### 👥 La Flotte Complète des 24 Agents Spécialisés (3 Collèges)
 
+#### Collège 1 : La Brigade Opérationnelle TOGAF, SAFe & AVV (10 Agents)
 1. **Lead Architecture Manager (Orchestrateur TOGAF 10 & SAFe 6)** :
    - Pilote le workflow, répartit les rôles et rédige la synthèse finale du DAT (`gemini-1.5-pro`).
 2. **Solution & Infrastructure Architect (Worker Macro)** :
@@ -32,6 +33,26 @@ Le système est désormais modélisé de façon rigoureusement identique entre l
    - Observabilité des logs, détection des dérives d'agents/hallucinations, affinage dynamique des prompts et correctifs code.
 9. **Agent Carrière & Personal Branding (Valorisation Professionnelle)** :
    - Mise à jour continue du CV, génération de brouillons de posts LinkedIn (REX) et veille certifications (TOGAF, SAFe, Cloud).
+10. **Presales & Bid Director (Directeur Avant-Vente & Offres)** :
+   - Cadrage des réponses aux appels d'offres (AVV), matrice Entrants/Sortants, co-construction terrain et dérisquage MVP.
+
+#### Collège 2 : Le Comité d'Architecture Virtuel des 5 Maîtres & Green/FinOps (7 Agents)
+11. **Martin Fowler** : Patterns d'entreprise, évolutivité et refactoring pragmatique.
+12. **Robert C. Martin (Uncle Bob)** : Clean Architecture, principes SOLID, Craftsmanship et étanchéité du domaine.
+13. **Werner Vogels** : Cloud Resilience, *Design for Failure* (« Everything fails all the time ») et anti-SPOF.
+14. **Alistair Cockburn** : Architecture Hexagonale (Ports & Adaptateurs) et testabilité sans mocks.
+15. **Sam Newman** : Décomposition des monolithes, microservices DDD et Loi de Conway.
+16. **GreenOps & FinOps Architect** : Sobriété numérique (gCO2eq), modélisation TCO et Right-Sizing.
+17. **Architecture Quality Gate Judge** : Arbitre suprême évaluant le livrable sur 100 selon une grille d'excellence stricte.
+
+#### Collège 3 : Le Conseil des 5 Grands Orateurs & Restitution TEDx (7 Agents)
+18. **Hassan II** : Éloquence classique, hauteur de vue philosophique, noblesse métaphorique et autorité souveraine.
+19. **Steve Jobs** : Storytelling épuré, simplicité radicale, règle de trois et *One More Thing*.
+20. **Martin Luther King Jr.** : Émotion profonde (Pathos), rythme anaphorique et vision d'avenir.
+21. **Winston Churchill** : Formules martiales d'impact, concision et courage face à l'adversité.
+22. **Barack Obama** : Connexion empathique, modulation des silences respiratoires et cadence oratoire.
+23. **Executive Stage Director (Metteur en Scène)** : Fusion unifiée scénarisée du discours oral.
+24. **Supreme Eloquence Judge** : Évaluation du discours sur 5 axes et pilotage du rebouclage d'éloquence.
 
 ### 🛠️ L'Adaptateur Déterministe : `GitPublisher` (Tooling non-IA)
 - Traité comme un **outil Python déterministe** et non comme un agent LLM (anti-pattern de sur-ingénierie évité).

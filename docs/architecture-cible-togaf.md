@@ -166,8 +166,9 @@ flowchart TB
 
 *(Note : Les fichiers sources éditables complémentaires sous format **Draw.io (`.drawio`)** et **PlantUML (`.puml`)** sont disponibles dans le dossier `docs/diagrams/`).*
 
-### 2. Matrice Rôles & Responsabilités de la Flotte d'Agents
+### 2. Matrice Rôles & Responsabilités de la Flotte des 24 Agents (3 Collèges)
 
+#### Collège 1 : Brigade Opérationnelle TOGAF, SAFe & AVV (10 Agents)
 | Rôle Agent | Type | Framework d'Appartenance | Responsabilité Majeure |
 | :--- | :--- | :--- | :--- |
 | **Lead Architecture Manager** | Orchestrateur | TOGAF 10 ADM & SAFe 6 | Réceptionne les consignes, pilote le workflow séquentiel/hiérarchique, consolide le DAT final. |
@@ -179,7 +180,41 @@ flowchart TB
 | **Agent Migration & FinOps / TCO** | Spécialiste | FinOps Foundation & Cloud Economics | Chiffrage TCO comparatif (Cloud vs On-premise), ROI et trajectoire de bascule progressive. |
 | **Meta-Agent (Agent Zero)** | Méta-Supervision | NIST AI RMF & Self-Healing | Observabilité des logs, détection des dérives d'agents, affinage dynamique des prompts et correctifs code. |
 | **Agent Carrière & Personal Branding** | Valorisation Humaine | Career Management & Certifications | Mise à jour du CV, brouillons de posts LinkedIn (REX) et veille certifications (TOGAF, SAFe, Cloud). |
-| **GitPublisher** | **Outil Déterministe** | Tooling / Adapter (Non-IA) | Script Python pur : contrôle anti-secrets (.env), `git add`, `git commit` conventionnel, `git push`. |
+| **Presales & Bid Director** | Constructif (Avant-Vente) | Stratégie d'Offre & RFP | Cadrage des réponses aux appels d'offres (AVV), matrice Entrants/Sortants, co-construction et dérisquage MVP. |
+
+#### Collège 2 : Le Comité d'Architecture Virtuel des 5 Maîtres & Green/FinOps (7 Agents)
+| Rôle Agent | Doctrine / Spécialité | Responsabilité Majeure |
+| :--- | :--- | :--- |
+| **Martin Fowler** | Enterprise Patterns & Evolutionary Archi | Évolutivité, patterns d'intégration d'entreprise et refactoring pragmatique. |
+| **Robert C. Martin (Uncle Bob)** | Clean Architecture & SOLID | Étanchéité absolue du domaine métier, découplage des frameworks et Software Craftsmanship. |
+| **Werner Vogels** | Cloud Resilience & Design for Failure | Résilience multi-zones (« Everything fails all the time »), anti-SPOF et découplage asynchrone. |
+| **Alistair Cockburn** | Ports & Adapters (Hexagonale) | Isolation driving/driven, bouchons de testabilité unitaire déterministes à 0 token. |
+| **Sam Newman** | Monolith to Microservices & DDD | Décomposition des domaines, isolation des données transactionnelles et Loi de Conway. |
+| **GreenOps & FinOps Architect** | Éco-Conception & Cloud Economics | Réduction carbone (gCO2eq), modélisation TCO et Right-Sizing capacitaire. |
+| **Architecture Quality Gate Judge** | Arbitrage Qualité & Scoring | Scoring formel sur 100, verdict binaire et pilotage du rebouclage d'auto-correction. |
+
+#### Collège 3 : Le Conseil des 5 Grands Orateurs & Restitution TEDx (7 Agents)
+| Rôle Agent | Signature Oratoire | Responsabilité Majeure |
+| :--- | :--- | :--- |
+| **Hassan II** | Éloquence Royale & Hauteur de Vue | Noblesse métaphorique, silences habités de 3 secondes, intonation descendante souveraine. |
+| **Steve Jobs** | Storytelling Épuré & Rule of Three | Dramatisation du problème (Hero vs Villain), règle de trois et formule One More Thing. |
+| **Martin Luther King Jr.** | Émotion Profonde (Pathos) & Anaphore | Rythme ternaire anaphorique, élévation morale et vision collective mobilisatrice. |
+| **Winston Churchill** | Formules Martiales & Concision | Verbes d'action au présent, détermination sans faille face aux contraintes critiques. |
+| **Barack Obama** | Cadence Respiratoire & Empathie | Respiration diaphragmatique, modulation des pauses [BREATHE] et connexion humaine. |
+| **Executive Stage Director** | Mise en Scène Exécutive | Fusion unifiée du draft de discours en prompter scénarisé avec repères mot-à-mot. |
+| **Supreme Eloquence Judge** | Arbitrage d'Éloquence | Évaluation de la soutenance sur 5 axes et pilotage du rebouclage d'impact. |
+
+#### Adaptateurs Déterministes & Architectural Fitness Functions (12 Outils Purs)
+- **`GitPublisher`** : Contrôle anti-secrets (.env), formatage Conventional Commits, publication sécurisée HITL.
+- **`JiraBacklogExporter`** : Parsing Markdown et export CSV conforme Excel FR (délimiteur point-virgule `;`).
+- **`DiagramExporter`** : Modélisation triple format simultané (Draw.io XML, PlantUML sans !include, Mermaid).
+- **`ExecutivePresentationExporter`** : Déploiement de decks HTML 16:9 Haute Couture Bento Grid avec typographie adaptative `clamp()`.
+- **`ExecutivePrompterExporter`** : Téléprompteur interactif Single-Slide et script Markdown minuté.
+- **`AsIsRealityLinter`** : Détection et blocage de toute hallucination de Cloud prématuré dans l'existant (AS-IS).
+- **`BidComplianceGate`** : Audit de conformité des réponses d'avant-vente (DAG, ADR, DAT, PCA, Entrants/Sortants, Co-construction).
+- **`ZeroTofuViewportGate`** : Détection des glyphes Unicode tofu (`□□□`) et verrouillage vertical viewport (`min(94vh)`).
+- **`KnowledgeSearchTool` & `ArchitectureRAGManager`** : Indexation et recherche vectorielle ChromaDB locale.
+- **`CareerExporter` & `LogAnalyzer`** : Observabilité des traces et valorisation de carrière.
 
 ---
 

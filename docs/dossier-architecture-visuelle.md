@@ -86,6 +86,7 @@ Dans un environnement d'entreprise moderne, aucun cadre unique ne peut couvrir l
 | **Agent Migration & FinOps**| Spécialiste IA | FinOps Foundation | Dimensionnement économique, TCO comparatif (Cloud vs On-Premise), trajectoire de bascule. |
 | **Meta-Agent (Agent Zero)** | Méta-Supervision IA| NIST AI RMF / Self-Healing | Observabilité des logs, détection des dérives d'agents, affinage prompts et patch du code. |
 | **Agent Carrière & Branding**| Spécialiste IA | Career Growth | Mise à jour du CV, brouillons de posts LinkedIn (REX), veille certifications (TOGAF, SAFe). |
+| **Presales & Bid Director** | Spécialiste IA (AVV) | Stratégie d'Offre & Conseil | Cadrage des réponses aux appels d'offres (AVV), matrice Entrants/Sortants, co-construction et dérisquage MVP. |
 | **GitPublisher** | **Outil Déterministe** | Python / Git CLI | Contrôle anti-secrets, `git add`, `git commit` conventionnel et `git push` après accord HITL. |
 
 ---
@@ -95,7 +96,7 @@ Dans un environnement d'entreprise moderne, aucun cadre unique ne peut couvrir l
 ```mermaid
 flowchart TD
     User["👤 Lead Architect (Human-in-the-Loop)"]
-    AAP["🖥️ Multi-Agent Architecture Platform (AAP)<br/><i>Orchestration CrewAI & Flotte de 8 Agents</i>"]
+    AAP["🖥️ Multi-Agent Architecture Platform (AAP)<br/><i>Orchestration CrewAI & Flotte de 24 Agents</i>"]
     Knowledge["📚 Doctrine & Sources de Connaissance<br/><i>ChromaDB Local : Blueprints, DAT templates, TOGAF</i>"]
     GeminiAPI["☁️ Google Gemini API<br/><i>Gemini 1.5 Pro (Manager) & 1.5 Flash (Workers)</i>"]
     GitPublisherTool["🛠️ GitPublisher (Outil Déterministe)<br/><i>Scan anti-secrets & Wrapper Git CLI</i>"]
@@ -288,9 +289,9 @@ sequenceDiagram
 * **Décision :** Les interactions Git (`git add`, `git commit`, `git push`) sont gérées par une classe utilitaire Python pure (`GitPublisher`) et non par un agent LLM.
 * **Justification :** Lancer une commande Git est une action déterministe et critique. Déléguée à un LLM, elle consomme des tokens inutilement et introduit un risque d'erreurs d'exécution ou d'inventions de commandes destructrices. Le script garantit également un scan anti-secrets avant tout commit.
 
-### ADR-02 : Pourquoi une brigade de 8 agents plutôt qu'un gros prompt unique ?
-* **Décision :** Séparer les expertises (Solution, CISO, Crafter, SAFe, Challenger, FinOps, Meta-Agent, Branding) sous la direction d'un Manager.
-* **Justification :** Un prompt unique souffre d'attention dispersée et oublie les contraintes spécifiques (ex. la testabilité TDD ou la classification C2). Chaque agent spécialisé applique son référentiel de manière intransigeante.
+### ADR-02 : Pourquoi une brigade de 24 agents plutôt qu'un gros prompt unique ?
+* **Décision :** Répartir les expertises en 3 collèges d'élite (Brigade TOGAF/SAFe/AVV de 10 agents, Comité d'Architecture Virtuel des 5 Maîtres & Green/FinOps de 7 agents, Conseil des 5 Grands Orateurs de 7 agents) sous la direction d'orchestrateurs dédiés.
+* **Justification :** Un prompt unique souffre d'attention dispersée et oublie les contraintes spécifiques (ex. la classification C2, l'éco-conception GreenOps, ou le réalisme On-Premise dans l'AS-IS). Chaque agent spécialisé applique son référentiel de manière intransigeante et challenge les autres par des boucles de critique constructive.
 
 ### ADR-03 : Pourquoi dissocier Gemini Flash et Gemini Pro ?
 * **Décision :** Utiliser `gemini-1.5-flash` pour les 6 agents ouvriers et réserver `gemini-1.5-pro` pour le Manager Orchestrateur.
